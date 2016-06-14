@@ -1,0 +1,3 @@
+ged_homepage:
+    path:     /
+    defaults: { _controller: GedBundle:Default:index }

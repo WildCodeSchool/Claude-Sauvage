@@ -1,7 +1,4 @@
-ClaudeSauvage
-=============
+Claude-Sauvage
+==============
 
-A Symfony project created on June 13, 2016, 11:41 am.
-=======
-# Claude-Sauvage
-Projet n°4 WCS-Chartres
+A Symfony project created on June 14, 2016, 12:01 pm.

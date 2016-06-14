@@ -1,0 +1,3 @@
+grc_homepage:
+    path:     /
+    defaults: { _controller: GrcBundle:Default:index }
