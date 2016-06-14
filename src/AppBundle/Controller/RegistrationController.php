@@ -9,7 +9,7 @@
  * file that was distributed with this source code.
  */
 
-namespace CS\GrcBundle\Controller;
+namespace AppBundle\Controller;
 
 use FOS\UserBundle\FOSUserEvents;
 use FOS\UserBundle\Event\FormEvent;
@@ -70,7 +70,7 @@ class RegistrationController extends Controller
             return $response;
         }
 
-        return $this->render('GrcBundle::register.html.twig', array(
+        return $this->render('AppBundle::register.html.twig', array(
             'form' => $form->createView(),
         ));
     }

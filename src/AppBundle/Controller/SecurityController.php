@@ -9,7 +9,7 @@
  * file that was distributed with this source code.
  */
 
-namespace CS\GedBundle\Controller;
+namespace AppBundle\Controller;
 
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Symfony\Component\HttpFoundation\Request;
@@ -76,7 +76,7 @@ class SecurityController extends Controller
      */
     protected function renderLogin(array $data)
     {
-        return $this->render('GedBundle::login.html.twig', $data);
+        return $this->render('AppBundle::login.html.twig', $data);
     }
 
     public function checkAction()
