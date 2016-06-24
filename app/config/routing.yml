@@ -22,3 +22,7 @@ login:
 
 fos_user:
     resource: "@FOSUserBundle/Resources/config/routing/all.xml"
+
+new_profile:
+    path:     /user/newprofile
+    defaults: { _controller: AppBundle:Profile:new }
