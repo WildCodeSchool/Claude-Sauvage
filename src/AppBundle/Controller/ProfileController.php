@@ -13,6 +13,7 @@ class ProfileController extends Controller
     public function newAction(Request $request)
     {
     	//datauser=product et brochure=profileimage
+        $em=$this->getDoctrine()->getManager();
         $datauser = new Datauser();
         $form = $this->createForm('AppBundle\Form\DatauserType', $datauser);
         $form->handleRequest($request);
@@ -35,6 +36,8 @@ class ProfileController extends Controller
             $datauser->setProfileimage($fileName);
 
             // ... persist the $product variable or any other work
+            $em->persist($datauser);
+            $em->flush();
 
             return $this->redirect($this->generateUrl('new_profile'));
         }
