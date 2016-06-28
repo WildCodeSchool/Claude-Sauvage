@@ -1,1 +1,24 @@
-Hello World!
+{% extends 'GrcBundle::layout.html.twig' %}
+
+{% block body %}
+
+<div class= "grc_dashboard">
+	<div class="searchbar">
+		<div class="input-group search">
+    		<input type="text" class="form-control">
+    		<span class="input-group-btn"><button class="btn btn-default" type="button">ok</button></span>
+    	</div>
+	</div>
+	<h1>Bienvenue sur votre outil de gestion de ticket</h1>
+	<div class="row dashboard">
+		<div class="col-md-2 col-md-offset-2 tableau"></div>
+		<div class="col-md-2 col-md-offset-1 tableau"></div>
+		<div class="col-md-2 col-md-offset-1 tableau"></div>
+	</div>
+
+
+
+	</br></br></br>
+</div>
+
+{% endblock %}
