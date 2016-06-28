@@ -1,0 +1,88 @@
+/* Navbar top*/
+
+.navbar{
+	margin-bottom:0;
+	background-color:#bababa;
+	border:0;
+	border-radius:0;
+}
+
+.ajout-fichier{
+	margin-left: 20px;
+}
+
+.lien-user a{
+	color:#000 !important;
+	font-size: 20px;
+	padding:8px !important;
+}
+.image-user{
+	width:34px;
+	height:34px;
+	border-radius:5px;
+	border:1px solid black;
+}
+
+.navbar-btn:hover{
+	background-color:#1a8ab3;
+	border:#1a8ab3 1px solid;
+}
+
+/* Search bar */
+
+.search-bar{
+	padding:10px 0;
+	background-color:#1a8ab3;
+
+}
+
+.search-select{
+	width: 100%;
+}
+
+/* Navbar left */
+
+.nav-left{
+	padding: 20px 0 0 0;
+	background-color:#bababa; 
+	
+}
+
+.nav-left .glyphicon{
+	margin-right: 20px;
+	font-size: 20px;
+}
+
+.nav-left li:hover .glyphicon-star{
+	color:yellow;
+}
+
+.nav-left ul{
+	padding-left: 0;
+}
+
+.nav-left li{
+	padding: 10px;
+	width:200px;
+	margin:10px 0;
+}
+
+.nav-left a{
+	color:#000;
+	text-decoration:none;
+	font-size:17px;
+}
+
+.nav-left li:hover{
+	padding: 10px;
+	width:200px;
+	background-color:#1a8ab3;
+}
+
+.corbeille{
+	margin-top: 50px;
+}
+
+.corbeille span:nth-child(2){
+	font-size: 10px;
+}
