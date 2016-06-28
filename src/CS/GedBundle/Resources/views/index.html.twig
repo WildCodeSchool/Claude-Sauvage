@@ -1,0 +1,63 @@
+{% extends "GedBundle::layout.html.twig" %}
+{% block body %}
+{% include "GedBundle::search.html.twig" %}
+{% include "GedBundle::nav.html.twig" %}
+<div class="col-md-5">
+	<h3 style="text-align:center;">Mes Favoris</h3>
+	<table class="table" id="example">
+		<thead> 
+			<tr> 
+				<th></th> 
+				<th>file name</th>
+				<th>category</th> 
+				<th>tags</th> 
+				<th>coms</th>
+				<th>carameters</th>
+			</tr> 
+		</thead> 
+		<tbody>
+			<tr> 
+				<td>ico</td> 
+				<td>nom du fichier super long !</td>
+				<td>la catégorie</td> 
+				<td>tags, tags, tags,</td>
+				<td>8</td>
+				<td>P</td> 
+			</tr> 
+		</tbody>
+	</table>
+</div>
+<div class="col-md-5">
+	<h3 style="text-align:center;">Mes Favoris</h3>
+	<table class="table" id="example2">
+		<thead> 
+			<tr> 
+				<th></th> 
+				<th>file name</th>
+				<th>category</th> 
+				<th>tags</th> 
+				<th>coms</th>
+				<th>carameters</th>
+			</tr> 
+		</thead> 
+		<tbody>
+			<tr> 
+				<td>ico</td> 
+				<td>nom du fichier super long !</td>
+				<td>la catégorie</td> 
+				<td>tags, tags, tags,</td>
+				<td>8</td>
+				<td>P</td> 
+			</tr> 
+		</tbody>
+	</table>
+</div>
+<script type="text/javascript">
+$(document).ready(function() {
+$('#example').dataTable();
+} );</script>
+<script type="text/javascript">
+$(document).ready(function() {
+$('#example2').dataTable();
+} );</script>
+{% endblock body %}
