@@ -9,11 +9,11 @@
 			<thead> 
 				<tr> 
 					<th></th> 
-					<th>file name</th>
-					<th>category</th> 
-					<th>tags</th> 
-					<th>coms</th>
-					<th>parameters</th>
+					<th>Nom du fichier</th>
+					<th>Catégorie</th> 
+					<th>Tags</th> 
+					<th>Coms.</th>
+					<th>Paramètres</th>
 				</tr> 
 			</thead> 
 			<tbody>
@@ -43,11 +43,11 @@
 			<thead> 
 				<tr> 
 					<th></th> 
-					<th>file name</th>
-					<th>category</th> 
-					<th>tags</th> 
-					<th>coms</th>
-					<th>parameters</th>
+					<th>Nom du fichier</th>
+					<th>Catégorie</th> 
+					<th>Tags</th> 
+					<th>Coms.</th>
+					<th>Paramètres</th>
 				</tr> 
 			</thead> 
 			<tbody>
@@ -77,11 +77,11 @@
 			<thead> 
 				<tr> 
 					<th></th> 
-					<th>file name</th>
-					<th>category</th> 
-					<th>tags</th> 
-					<th>coms</th>
-					<th>parameters</th>
+					<th>Nom du fichier</th>
+					<th>Catégorie</th> 
+					<th>Tags</th> 
+					<th>Coms.</th>
+					<th>Paramètres</th>
 				</tr> 
 			</thead> 
 			<tbody>
@@ -111,11 +111,11 @@
 			<thead> 
 				<tr> 
 					<th></th> 
-					<th>file name</th>
-					<th>category</th> 
-					<th>tags</th> 
-					<th>coms</th>
-					<th>parameters</th>
+					<th>Nom du fichier</th>
+					<th>Catégorie</th> 
+					<th>Tags</th> 
+					<th>Coms.</th>
+					<th>Paramètres</th>
 				</tr> 
 			</thead> 
 			<tbody>
@@ -140,6 +140,14 @@
 		</table>
 	</div>
 </div>
-<script type="text/javascript"> $(document).ready(function() { $('table').DataTable( { "paging": false, "info": false, "sDom": '<"H"lr>t<"F"ip>' } ); } );
+<script type="text/javascript"> 
+$(document).ready(function() { 
+	$('table').DataTable( { 
+		"paging": false,
+		"info": false,
+		"sDom": '<"H"lr>t<"F"ip>',
+		"columnDefs": [{ "orderable": false, "targets": [3,5] }]
+	} );
+} );
 </script>
 {% endblock body %}
