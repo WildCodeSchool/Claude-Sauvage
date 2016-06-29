@@ -12,6 +12,11 @@ src: url('../fonts/glyphicons-halflings-regular.eot?#iefix') format('embedded-op
 /** GRC Navbar
  */
 
+.navbar{
+	background-color: #DCDCDC;
+	margin-bottom: 0px;
+}
+
 #username{
 	font-size: 20px;
 	font-weight: bold;
@@ -31,18 +36,12 @@ src: url('../fonts/glyphicons-halflings-regular.eot?#iefix') format('embedded-op
 
 .searchbar{
 	height: 50px;
-	background-color: #007FFF;
+	background-color: #00BFFF;
 	padding-top: 7px;
+	margin-right: 0px;
+	margin-left: 0px;
 }
 
-.search{
-	width:300px;
-	margin-left: 40px;
-}
-
-.navbarbottom{
-	margin-bottom: 0px;
-}
 
 /** GRC Dashboard 
  */
@@ -53,13 +52,48 @@ src: url('../fonts/glyphicons-halflings-regular.eot?#iefix') format('embedded-op
 	margin-bottom: 20px;
 }
 
+.grc_dashboard h2{
+	font-size: 25px;
+	font-weight: bold;
+	text-align: center;
+	margin-top: 10px;
+}
+
 .dashboard{
 }
 
 .tableau{
 	height: 200px;
 	border: black 1px solid;
-	background-color: #007FFF;
+	background-color: #00BFFF;
 	margin-bottom: 10px;
 }
 
+.tableau p{
+	font-size: 17px;
+	margin-bottom: 5px;
+	font-weight: bold;
+}
+
+.rouge{
+	color:red;
+}
+.orange{
+	color:#ff4500;
+}
+.vert{
+	color:green;
+}
+.gris{
+	color:#696969;
+}
+.bleu{
+	color:blue;
+}
+
+/** GRC Listes 
+ */
+
+.liste h3{
+	font-weight: bold;
+}
