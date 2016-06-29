@@ -4,60 +4,60 @@
         <meta charset="UTF-8" />
         <link rel="stylesheet" type="text/css" href="{{ asset('css/bootstrap.min.css') }}">
         <link rel="stylesheet" type="text/css" href="{{ asset('css/style.css') }}">
+        <link rel="stylesheet" type="text/css" href="https://cdn.datatables.net/v/dt/jqc-1.12.3/dt-1.10.12/datatables.min.css"/>
         <script type="text/javascript" src="{{ asset('js/jquery-1.12.2.js') }}"></script>
+        <script type="text/javascript" src="https://cdn.datatables.net/v/dt/jqc-1.12.3/dt-1.10.12/datatables.min.js"></script>
         <script type="text/javascript" src="{{ asset('js/bootstrap.min.js') }}"></script>
-        <link rel="stylesheet" type="text/css" href="https://cdn.datatables.net/1.10.12/css/jquery.dataTables.min.css"/>
-        <script type="text/javascript" src="https://cdn.datatables.net/u/bs-3.3.6/jqc-1.12.3,dt-1.10.12/datatables.min.js"></script>
     </head>
     <body>
-<header>
-    <nav class="navbar navbar-default">
-        <div class="container-fluid">
-            <div class="navbar-header">
-                <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#bs-example-navbar-collapse-1" aria-expanded="false">
-                    <span class="sr-only">Toggle navigation</span>
-                    <span class="icon-bar"></span>
-                    <span class="icon-bar"></span>
-                    <span class="icon-bar"></span>
-                </button>
-                <button type="button" class="ajout-fichier btn btn-default navbar-btn" data-toggle="modal" data-target="#addfile"><span class="glyphicon glyphicon-plus" aria-hidden="true"></span> Ajouter un document</button>
-            </div>
-{# Modal ajout fichier #}
-            <div class="modal fade" id="addfile" tabindex="-1" role="dialog" aria-labelledby="myModalLabel">
-                <div class="modal-dialog" role="document">
-                    <div class="modal-content">
-                        <div class="modal-header">
-                            <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
-                            <h4 class="modal-title" id="myModalLabel">Veuiller selectionner vos fichiers</h4>
-                        </div>
-                        <div class="modal-body">
-                            {# {{ form_start(form) }}
-                                {{ form_label(form.profileimage) }}{{ form_widget(form.profileimage) }}
-                                {{ form_row(form.username) }}
-                                {{ form_row(form.email) }}   #}         
-                        </div>
-                        <div class="modal-footer">
-                            <button type="button" class="btn btn-default" data-dismiss="modal">Annuler</button>
-                            <button type="submit" value="send" class="btn btn-primary">Comfirmer</button>
-                            {# {{ form_end(form) }} #}
+    <header>
+        <nav class="navbar navbar-default">
+            <div class="container-fluid">
+                <div class="navbar-header">
+                    <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#bs-example-navbar-collapse-1" aria-expanded="false">
+                        <span class="sr-only">Toggle navigation</span>
+                        <span class="icon-bar"></span>
+                        <span class="icon-bar"></span>
+                        <span class="icon-bar"></span>
+                    </button>
+                    <button type="button" class="ajout-fichier btn btn-default navbar-btn" data-toggle="modal" data-target="#addfile"><span class="glyphicon glyphicon-plus" aria-hidden="true"></span> Ajouter un document</button>
+                </div>
+    {# Modal ajout fichier #}
+                <div class="modal fade" id="addfile" tabindex="-1" role="dialog" aria-labelledby="myModalLabel">
+                    <div class="modal-dialog" role="document">
+                        <div class="modal-content">
+                            <div class="modal-header">
+                                <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                                <h4 class="modal-title" id="myModalLabel">Veuiller selectionner vos fichiers</h4>
+                            </div>
+                            <div class="modal-body">
+                                {# {{ form_start(form) }}
+                                    {{ form_label(form.profileimage) }}{{ form_widget(form.profileimage) }}
+                                    {{ form_row(form.username) }}
+                                    {{ form_row(form.email) }}   #}         
+                            </div>
+                            <div class="modal-footer">
+                                <button type="button" class="btn btn-default" data-dismiss="modal">Annuler</button>
+                                <button type="submit" value="send" class="btn btn-primary">Comfirmer</button>
+                                {# {{ form_end(form) }} #}
+                            </div>
                         </div>
                     </div>
                 </div>
-            </div>
- {# Fin Modal ajout fichier #}
-            <div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
-                <ul class="nav navbar-nav navbar-right">
-                    <li class="lien-user">
-                        <a class="lien-user" href="#" >Bienvenu User
-                        <img class="image-user" alt="Default-User" src='{{ asset('uploads/profileimages/default/de5d596f0373130509ec704c95b7dfba.png') }}'>
-                        </a>
-                    </li>
-                    <li><button type="button" class="btn btn-default navbar-btn"><span class="glyphicon glyphicon-cog" aria-hidden="true"></span></button>
-                </ul>
-            </div>
-        </div>  
-    </nav>
-</header>
+     {# Fin Modal ajout fichier #}
+                <div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
+                    <ul class="nav navbar-nav navbar-right">
+                        <li class="lien-user">
+                            <a class="lien-user" href="#" >Bienvenue User
+                            <img class="image-user" alt="Default-User" src='{{ asset('uploads/profileimages/default/de5d596f0373130509ec704c95b7dfba.png') }}'>
+                            </a>
+                        </li>
+                        <li><button type="button" class="btn btn-default navbar-btn"><span class="glyphicon glyphicon-cog" aria-hidden="true"></span></button>
+                    </ul>
+                </div>
+            </div>  
+        </nav>
+    </header>
         <div>
             {% block body %}
             {% endblock body %}

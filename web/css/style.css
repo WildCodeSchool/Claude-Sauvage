@@ -44,7 +44,7 @@
 
 .nav-left{
 	padding: 20px 0 0 0;
-	background-color:#bababa; 
+	background-color:#bababa;
 	
 }
 
@@ -59,30 +59,81 @@
 
 .nav-left ul{
 	padding-left: 0;
+	list-style: none;
 }
 
 .nav-left li{
-	padding: 10px;
 	width:200px;
-	margin:10px 0;
+	margin: 10px 0 0 0;
 }
 
 .nav-left a{
 	color:#000;
 	text-decoration:none;
 	font-size:17px;
+	display: block;
+	padding: 10px 0 10px 10px ;
 }
 
 .nav-left li:hover{
-	padding: 10px;
 	width:200px;
 	background-color:#1a8ab3;
 }
 
+.drop-content{
+	display:none;
+	margin-left: 85%;
+	z-index: 2;
+	float: left;
+	background-color:#dbdbdb	;
+	padding: 0;
+}
+
+.drop-content li:hover{
+	background-color:#1a8ab3;
+	width:auto;
+}
+
+.drop-content li{
+	margin:0;
+	width:auto;
+	min-width: 120px;
+}
+
+.drop-content a{
+	margin-right:10px;
+}
+
+.drop-btn:hover .drop-content {
+	display: block;
+    position:absolute;
+    top:194px;
+    left: 5%;
+}
+
+.drop-btn .glyphicon{
+	margin-left: 60px;
+}
+
 .corbeille{
-	margin-top: 50px;
+	margin-top: 200px;
 }
 
 .corbeille span:nth-child(2){
 	font-size: 10px;
+}
+
+/* Dashboard */
+
+.tab-cel{
+	padding: 0 5px;
+	text-align:center;
+}
+
+.modal-header{
+	background-color:#1a8ab3;
+}
+
+.modal-title{
+	text-align: center;
 }
