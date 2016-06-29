@@ -4,7 +4,7 @@
 {% include "GedBundle::nav.html.twig" %}
 <div class="col-md-5">
 	<h3 style="text-align:center;">Mes Favoris</h3>
-	<table class="table" id="example">
+	<table class="table display" id="example">
 		<thead> 
 			<tr> 
 				<th></th> 
@@ -29,7 +29,7 @@
 </div>
 <div class="col-md-5">
 	<h3 style="text-align:center;">Mes Favoris</h3>
-	<table class="table" id="example2">
+	<table class="table display" id="example2">
 		<thead> 
 			<tr> 
 				<th></th> 
@@ -54,10 +54,10 @@
 </div>
 <script type="text/javascript">
 $(document).ready(function() {
-$('#example').dataTable();
-} );</script>
-<script type="text/javascript">
-$(document).ready(function() {
-$('#example2').dataTable();
+$('table.display').DataTable( {
+	"paging":   false,
+	"info": false,
+	"sDom": '<"H"lr>t<"F"ip>' 
+	} );
 } );</script>
 {% endblock body %}
