@@ -15,7 +15,7 @@
     </head>
 
     <body>
-            <nav class="navbar navbar-default navbarbottom">
+            <nav class="navbar navbar-default navbarbottom1">
                 <div class="container-fluid">
                     <!-- Brand and toggle get grouped for better mobile display -->
                     <div class="navbar-header">
@@ -30,17 +30,24 @@
                     <!-- Collect the nav links, forms, and other content for toggling -->
                     <div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
                       <ul class="nav navbar-nav navbar-right">
-                        <li><a id = "username" href="#">Jean Dupond</a></li>
+                        <li><a id = "username" href="#">Claude Sauvage</a></li>
                         <li><img id = "profilepic" src="{{ asset('img/profile.png') }}"></li>
                         <li><span class="glyphicon glyphicon-cog"></span></li>
                       </ul>
                     </div><!-- /.navbar-collapse -->
                 </div><!-- /.container-fluid -->
             </nav> 
-            
             {% block body %}
-            <div class="searchbar">
-            </div>
             {% endblock %}
+    <script type="text/javascript"> 
+        $(document).ready(function() { 
+            $('.display').DataTable( {
+                "paging": false,
+                "ordering": false, 
+                "info": false, 
+                "sDom": '<"H"lr>t<"F"ip>' 
+            }); 
+        });
+    </script>
     </body>
 </html>
