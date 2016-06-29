@@ -111,6 +111,10 @@
     left: 5%;
 }
 
+.drop-btn .glyphicon{
+	margin-left: 60px;
+}
+
 .corbeille{
 	margin-top: 200px;
 }
