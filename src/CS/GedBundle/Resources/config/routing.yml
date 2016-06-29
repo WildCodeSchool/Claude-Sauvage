@@ -1,3 +1,7 @@
 ged_homepage:
     path:     /
     defaults: { _controller: GedBundle:Default:index }
+
+# ged_upload:
+#     path:     /upload
+#     defaults: { _controller: GedBundle:Default:upload }
