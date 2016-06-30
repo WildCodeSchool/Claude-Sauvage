@@ -34,27 +34,35 @@
 	<h1>Bienvenue sur votre outil de gestion de ticket</h1>
 	<div class="col-md-12 dashboard">
 		<div class="col-md-2 col-md-offset-2 tableau">
-			<h2>Status</h2>
-			<p>A traiter: <span class="rouge">15</span></p>
-			<p>En cours: <span class="orange">20</span></p>
-			<p>Cloturés: <span class="vert">15</span></p>
-			<p>Archivés: <span class="gris">10</span></p>
+			<div class="tableau-top">
+				<h2>Status</h2>
+			</div>
+			<div class="tableau-low" id="interligne">
+				<p>A traiter: <span class="rouge">15</span></p>
+				<p>En cours: <span class="orange">20</span></p>
+				<p>Cloturés: <span class="vert">15</span></p>
+				<p>Archivés: <span class="gris">10</span></p>
+			</div>
 		</div>
 		<div class="col-md-2 col-md-offset-1 tableau">
-			<h2>Priorités</h2>
-			<p>Très urgent: <span class="rouge">10</span></p>
-			<p>Urgent: <span class="rouge">10</span></p>
-			<p>Bloquant: <span class="orange">20</span></p>
-			<p>Simple: <span class="vert">15</span></p>
-			<p>Basse: <span class="vert">20</span></p>			
+			<div class="tableau-top">				
+				<h2>Priorités</h2>
+			</div>
+			<div class="tableau-low">				
+				<p>Très urgent: <span class="rouge">10</span></p>
+				<p>Urgent: <span class="rouge">10</span></p>
+				<p>Bloquant: <span class="orange">20</span></p>
+				<p>Simple: <span class="vert">15</span></p>
+				<p>Basse: <span class="vert">20</span></p>
+			</div>
 		</div>
 		<div class="col-md-2 col-md-offset-1 tableau">
-			<h2>Catégories</h2>
-			<p>Catégorie 1: <span class="bleu">20</p>
-			<p>Catégorie 2: <span class="bleu">10</p>
-			<p>Catégorie 3: <span class="bleu">20</p>
-			<p>Catégorie 4: <span class="bleu">10</p>
-			<p>Catégorie 5: <span class="bleu">15</p>				
+			<div class="tableau-top">
+				<h2>Catégories</h2>
+			</div>
+			<div class="tableau-low" id="graph">
+				<p><img src="{{ asset('/img/categorie.jpg') }}"></p>
+			</div>
 		</div>
 	</div>
 
@@ -64,44 +72,44 @@
 			<table id="table_id" class="display">
 				<thead>
 					<tr>
-						<th>N° ticket</th>
-						<th>Catégorie</th>
-						<th>Demandeur</th>
-						<th>Dernière action</th>
-						<th>Priorité</th>
+						<th class="col-tic">N° ticket</th>
+						<th class="col-cat">Catégorie</th>
+						<th class="col-dem">Demandeur</th>
+						<th class="col-act">Dernière action</th>
+						<th class="col-prio">Priorité</th>
 					</tr>
 				</thead>
 				<tbody>
 					<tr>
-						<td>N°1</td>
+						<td>1</td>
 						<td>Pièce manquante</td>
 						<td>Claude Sauvage</td>
 						<td>11/06/16</td>
 						<td>Urgent</td>
 					</tr>
 					<tr>
-						<td>N°2</td>
+						<td>2</td>
 						<td>Pièce manquante</td>
 						<td>Claude Sauvage</td>
 						<td>11/06/16</td>
 						<td>Très urgent</td>
 					</tr>
 					<tr>
-						<td>N°3</td>
+						<td>3</td>
 						<td>Pièce manquante</td>
 						<td>Claude Sauvage</td>
 						<td>11/06/16</td>
 						<td>Basse</td>
 					</tr>
 					<tr>
-						<td>N°4</td>
+						<td>4</td>
 						<td>Pièce manquante</td>
 						<td>Claude Sauvage</td>
 						<td>11/06/16</td>
 						<td>Urgent</td>
 					</tr>
 					<tr>
-						<td>N°5</td>
+						<td>5</td>
 						<td>Pièce manquante</td>
 						<td>Claude Sauvage</td>
 						<td>11/06/16</td>
@@ -117,44 +125,44 @@
 			<table id="table_id" class="display">
 				<thead>
 					<tr>
-						<th>N° ticket</th>
-						<th>Catégorie</th>
-						<th>Demandeur</th>
-						<th>Dernière action</th>
-						<th>Priorité</th>
+						<th class="col-tic">N° ticket</th>
+						<th class="col-cat">Catégorie</th>
+						<th class="col-dem">Demandeur</th>
+						<th class="col-act">Dernière action</th>
+						<th class="col-prio">Priorité</th>
 					</tr>
 				</thead>
 				<tbody>
 					<tr>
-						<td>N°1</td>
+						<td>1</td>
 						<td>Pièce manquante</td>
 						<td>Claude Sauvage</td>
 						<td>11/06/16</td>
 						<td>Très Urgent</td>
 					</tr>
 					<tr>
-						<td>N°2</td>
+						<td>2</td>
 						<td>Pièce manquante</td>
 						<td>Claude Sauvage</td>
 						<td>11/06/16</td>
 						<td>Très urgent</td>
 					</tr>
 					<tr>
-						<td>N°3</td>
+						<td>3</td>
 						<td>Pièce manquante</td>
 						<td>Claude Sauvage</td>
 						<td>11/06/16</td>
 						<td>Très Urgent</td>
 					</tr>
 					<tr>
-						<td>N°4</td>
+						<td>4</td>
 						<td>Pièce manquante</td>
 						<td>Claude Sauvage</td>
 						<td>11/06/16</td>
 						<td>Très Urgent</td>
 					</tr>
 					<tr>
-						<td>N°5</td>
+						<td>5</td>
 						<td>Pièce manquante</td>
 						<td>Claude Sauvage</td>
 						<td>11/06/16</td>
@@ -170,44 +178,44 @@
 			<table id="table_id" class="display">
 				<thead>
 					<tr>
-						<th>N° ticket</th>
-						<th>Catégorie</th>
-						<th>Demandeur</th>
-						<th>Dernière action</th>
-						<th>Priorité</th>
+						<th class="col-tic">N° ticket</th>
+						<th class="col-cat">Catégorie</th>
+						<th class="col-dem">Demandeur</th>
+						<th class="col-act">Dernière action</th>
+						<th class="col-prio">Priorité</th>
 					</tr>
 				</thead>
 				<tbody>
 					<tr>
-						<td>N°1</td>
+						<td>1</td>
 						<td>Pièce manquante</td>
 						<td>Claude Sauvage</td>
 						<td>11/06/16</td>
 						<td>Urgent</td>
 					</tr>
 					<tr>
-						<td>N°2</td>
+						<td>2</td>
 						<td>Pièce manquante</td>
 						<td>Claude Sauvage</td>
 						<td>11/06/16</td>
 						<td>Urgent</td>
 					</tr>
 					<tr>
-						<td>N°3</td>
+						<td>3</td>
 						<td>Pièce manquante</td>
 						<td>Claude Sauvage</td>
 						<td>11/06/16</td>
 						<td>Urgent</td>
 					</tr>
 					<tr>
-						<td>N°4</td>
+						<td>4</td>
 						<td>Pièce manquante</td>
 						<td>Claude Sauvage</td>
 						<td>11/06/16</td>
 						<td>Urgent</td>
 					</tr>
 					<tr>
-						<td>N°5</td>
+						<td>5</td>
 						<td>Pièce manquante</td>
 						<td>Claude Sauvage</td>
 						<td>11/06/16</td>
@@ -217,50 +225,50 @@
 			</table>
 		</div>
 	</div>
-	<div class="col-md-12 liste">
+	<div class="col-md-12 liste lastlist">
 		<div class="col-md-8 col-md-offset-2">
 			<h3>Derniers commentaires reçus</h3>
 			<table class="display">
 				<thead>
 					<tr>
-						<th>N° ticket</th>
-						<th>Catégorie</th>
-						<th>Demandeur</th>
-						<th>Dernière action</th>
-						<th>Priorité</th>
+						<th class="col-tic">N° ticket</th>
+						<th class="col-cat">Catégorie</th>
+						<th class="col-dem">Demandeur</th>
+						<th class="col-act">Dernière action</th>
+						<th class="col-prio">Priorité</th>
 					</tr>
 				</thead>
 				<tbody>
 					<tr>
-						<td>N°1</td>
+						<td>1</td>
 						<td>Pièce manquante</td>
 						<td>Claude Sauvage</td>
 						<td>28/06/16</td>
 						<td>Urgent</td>
 					</tr>
 					<tr>
-						<td>N°2</td>
+						<td>2</td>
 						<td>Pièce manquante</td>
 						<td>Claude Sauvage</td>
 						<td>28/06/16</td>
 						<td>Très urgent</td>
 					</tr>
 					<tr>
-						<td>N°3</td>
+						<td>3</td>
 						<td>Pièce manquante</td>
 						<td>Claude Sauvage</td>
 						<td>28/06/16</td>
 						<td>Basse</td>
 					</tr>
 					<tr>
-						<td>N°4</td>
+						<td>4</td>
 						<td>Pièce manquante</td>
 						<td>Claude Sauvage</td>
 						<td>28/06/16</td>
 						<td>Urgent</td>
 					</tr>
 					<tr>
-						<td>N°5</td>
+						<td>5</td>
 						<td>Pièce manquante</td>
 						<td>Claude Sauvage</td>
 						<td>28/06/16</td>
@@ -273,5 +281,5 @@
 
 	</br>
 </div>
-	</br></br></br>
 {% endblock %}
+
