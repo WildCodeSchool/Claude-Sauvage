@@ -8,7 +8,6 @@ use Symfony\Component\HttpFoundation\Request;
 use CS\GedBundle\Entity\Gedfiles;
 use CS\GedBundle\Form\GedfilesType;
 use AppBundle\Entity\User;
-use CS\GedBundle\Entity\Gedfiles;
 use CS\GedBundle\Entity\Linkbookmark;
 use CS\GedBundle\Entity\Category;
 use CS\GedBundle\Entity\Souscategory;
@@ -17,7 +16,7 @@ use CS\GedBundle\Entity\Gedtag;
 
 class ListController extends Controller
 {
-    public function showDashboardAction()
+    public function showDashboardAction(Request $request)
     {
     	$em=$this->getDoctrine()->getManager();
     	
@@ -37,7 +36,7 @@ class ListController extends Controller
 	    	//trouver la categorie ou souscategorie du fichier
 	    	if (!empty($fav->getIdsouscategory()))
 	    	{
-	    		$category=$em->getRepository('GedBundle:Souscategory')->findByOneId($fav->getIdsouscategory())
+	    		$category=$em->getRepository('GedBundle:Souscategory')->findByOneId($fav->getIdsouscategory());
 	    	}
 	    	else
 	    	{
@@ -65,6 +64,91 @@ class ListController extends Controller
 	    		"category"=>$category,
 	    		);
     	}
-    	
+    	if(empty($tabfav))
+    	{
+    		$tabfav=1;
+    	}
+
+		//LISTE DES 5 DERNIERS UPLOADS
+		$listupls=$em->getRepository('GedBundle:Gedfiles')->findByIdowner($iduser);
+    	foreach ($listupls as $oneupl ) {
+    		//on assigne à fav la ligne du fichier dans gedfiles
+	    	$idupl=$oneupl->getId();	
+	    	//trouver le nom du fichier
+	    	$path=$oneupl->getPath();
+	    	//trouver le type du fichier
+	    	$type=$oneupl->getType();
+	    	//trouver la categorie ou souscategorie du fichier
+	    	if (!empty($oneupl->getIdsouscategory()))
+	    	{
+	    		$category=$em->getRepository('GedBundle:Souscategory')->findByOneId($oneupl->getIdsouscategory());
+	    	}
+	    	else
+	    	{
+	    		$category=$em->getRepository('GedBundle:Category')->findByOneId($oneupl->getIdcategory());
+	    	}
+	    	//on recupere tous les tags correspondants au fichier
+	    	$linktag = $em->getRepository('GedBundle:linktag')->findByIdfile($idupl);
+	    	foreach ($linktag as $tag) {
+	    		//on recupere l'id du premier tag
+	    		$idtag=$tag->getIdtag();
+	    		//on recupere la ligne de la table Gedtag correspondante à l'id d'au dessus
+	    		$infostag=$em->getRepository('GedBundle:Gedtag')->findByOneId($idtag);
+	    		//on recupere le nom du tag et on met tout ca dans un tableau
+	    		$tagname=$infostag->getName();
+	    		$tagnames[]=array(
+	    			'id'=>$idtag,
+	    			'name'=>$tagname,
+	    			);
+	    		//on fout tout dans un tableau et on a des favoris tout neufs
+	    	}
+	    	$tabupl[]=array(
+	    		"tagnames"=>$tagnames,
+	    		"path"=>$path,
+	    		"type"=>$type,
+	    		"category"=>$category,
+	    		);
+    	}
+    	if(empty($tabupl))
+    	{
+    		$tabupl=1;
+    	}
+
+    	// $em = $this->getDoctrine()->getManager();
+        // $user = $this->getUser();
+		// var_dump($user);exit;
+        $gedfiles = new Gedfiles();
+        $form = $this->createForm(GedfilesType::class, $gedfiles);
+        $form->handleRequest($request);
+
+        if ($form->isSubmitted() && $form->isValid()) {
+            // $file stores the uploaded PDF file
+            /** @var Symfony\Component\HttpFoundation\File\UploadedFile $file */
+            $file = $gedfiles->getPath();
+
+            // Generate a unique name for the file before saving it
+            $fileName = md5(uniqid()).'.'.$file->guessExtension();
+
+            // Move the file to the directory where brochures are stored
+            $pathDir = $this->container->getParameter('kernel.root_dir').'/../web/uploads';
+            $file->move($pathDir, $fileName);
+            // Update the 'brochure' property to store the PDF file name
+            // instead of its contents
+
+            // $gedfiles->setPath($fileName),
+            // 		->setIdowner($),
+
+            // ... persist the $product variable or any other work
+
+            return $this->render('GedBundle::index.html.twig', array(
+            'form' => $form->createView(),
+        ));
+        }
+    	return $this->render('GedBundle::index.html.twig',array(
+    		'tabfav'=>$tabfav,
+    		'tabupl'=>$tabupl,
+    		'form' => $form->createView(),
+    		'user'=>$user
+    		));
     }
 }
