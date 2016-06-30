@@ -13,7 +13,7 @@ src: url('../fonts/glyphicons-halflings-regular.eot?#iefix') format('embedded-op
  */
 
 .navbar{
-	background-color: #DCDCDC;
+	background-color: #F1F1F1;
 	margin-bottom: 0px;
 }
 
@@ -36,7 +36,7 @@ src: url('../fonts/glyphicons-halflings-regular.eot?#iefix') format('embedded-op
 
 .searchbar{
 	height: 50px;
-	background-color: #00BFFF;
+	background-color: #1FA597;
 	padding-top: 7px;
 	margin-right: 0px;
 	margin-left: 0px;
@@ -47,16 +47,17 @@ src: url('../fonts/glyphicons-halflings-regular.eot?#iefix') format('embedded-op
  */
 
 .grc_dashboard h1{
-	font-size: 25px;
+	font-size: 35px;
 	text-align: center;
-	margin-bottom: 20px;
+	margin-top: 40px;
+	margin-bottom: 40px;
 }
 
 .grc_dashboard h2{
 	font-size: 25px;
-	font-weight: bold;
+	color: white;
 	text-align: center;
-	margin-top: 10px;
+	margin-top: 0px;
 }
 
 .dashboard{
@@ -65,8 +66,34 @@ src: url('../fonts/glyphicons-halflings-regular.eot?#iefix') format('embedded-op
 .tableau{
 	height: 200px;
 	border: black 1px solid;
-	background-color: #00BFFF;
 	margin-bottom: 10px;
+	padding-right: 0px;
+	padding-left: 0px; 
+
+}
+
+.tableau-top{
+	height: 40px;
+	border-bottom: black 1px solid;
+	padding-top: 6px;
+	background-color: #1FA597;
+}
+
+.tableau-low{
+	padding:10px;
+}
+
+.tableau-low img{
+	width: 140px;
+	height: 140px;
+}
+
+#graph p{
+	text-align: center;
+}
+
+#interligne{
+	line-height:33px;
 }
 
 .tableau p{
@@ -93,7 +120,37 @@ src: url('../fonts/glyphicons-halflings-regular.eot?#iefix') format('embedded-op
 
 /** GRC Listes 
  */
+.lastlist{
+	margin-bottom: 30px;
+}
 
 .liste h3{
 	font-weight: bold;
+	margin-top: 30px;
+}
+
+tr:hover td{
+	background-color: #C0C0C0;
+}
+
+.col-tic{
+
+	width:10%;
+	text-align: center;
+}
+
+.col-cat{
+	width:30%;
+}
+
+.col-dem{
+	width:30%;
+}
+
+.col-act{
+	width:15%;
+}
+
+.col-prio{
+	width:15%;
 }
