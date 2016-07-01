@@ -22,6 +22,13 @@
                     </button>
                     <button type="button" class="ajout-fichier btn btn-default navbar-btn" data-toggle="modal" data-target="#addfile"><span class="glyphicon glyphicon-plus" aria-hidden="true"></span> Ajouter un document</button>
                 </div>
+                {% for flashMessage in app.session.flashbag.get('success') %}
+                    <div style="width:50%; margin:5px 0 0 10%; height:40px; padding:10px 40px; text-align:center; display:none;" class="alert alert-success alert-dismissible navbar-header pagination-centered" role="alert" id="flashbag">
+                        <button type="button" class="close" data-dismiss="alert" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                        <strong>Succes</strong>
+                    {{ flashMessage }}
+                    </div>
+                {% endfor %}
     {# Modal ajout fichier #}
                 <div class="modal fade" id="addfile" tabindex="-1" role="dialog" aria-labelledby="myModalLabel">
                     <div class="modal-dialog" role="document">
@@ -46,7 +53,7 @@
                 <div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
                     <ul class="nav navbar-nav navbar-right">
                         <li class="lien-user">
-                            <a class="lien-user" href="#" >Bienvenue User
+                            <a class="lien-user" href="#" >Bienvenue {{ user | capitalize }}
                             <img class="image-user" alt="Default-User" src='{{ asset('uploads/profileimages/default/de5d596f0373130509ec704c95b7dfba.png') }}'>
                             </a>
                         </li>
@@ -56,9 +63,12 @@
             </div>  
         </nav>
     </header>
-        <div>
-            {% block body %}
-            {% endblock body %}
-        </div>
+    {% block body %}
+    {% endblock body %}
+    <script>
+        $( document ).ready(function() {
+          $("#flashbag").delay(500).fadeIn(500).delay(5000).fadeOut( 500);
+        });
+    </script>
     </body>
 </html>
