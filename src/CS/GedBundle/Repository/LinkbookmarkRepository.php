@@ -12,4 +12,14 @@ use Doctrine\ORM\EntityRepository;
  */
 class LinkbookmarkRepository extends EntityRepository
 {
+	public function findFav ($iduser)
+	{	
+		$qb = $this->createQueryBuilder('a');
+		$qb
+			array ("iduser"=>$iduser),
+			array ($orderBy = 'desc'),
+	  		$limit  = 5,
+	  		$offset = null
+  		);
+	}
 }

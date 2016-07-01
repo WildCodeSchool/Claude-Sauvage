@@ -23,7 +23,13 @@ class ListController extends Controller
     	$user = $this->container->get('security.context')->getToken()->getUser();
     	$iduser=$user->getId();
     	//on recupere tous les fichiers mis en fav par l'user
-    	$listfavs=$em->getRepository('GedBundle:Linkbookmark')->findByIduser($iduser);
+    	$listfavs=$em->getRepository('GedBundle:Linkbookmark')->findFav();
+  //   	findBy(  
+  //   		array('iduser' => $iduser), // Critere
+  // 			array('id' => 'desc'),        // Tri
+  // 			5,                              // Limite
+  // 			0                               // Offset
+		// );
     	foreach ($listfavs as $onefav ) {
     		//on assigne à fav la ligne du fichier dans gedfiles
 	    	$idfav=$onefav->getIdfile();	
@@ -36,11 +42,11 @@ class ListController extends Controller
 	    	//trouver la categorie ou souscategorie du fichier
 	    	if (!empty($fav->getIdsouscategory()))
 	    	{
-	    		$category=$em->getRepository('GedBundle:Souscategory')->findByOneId($fav->getIdsouscategory());
+	    		$category=$em->getRepository('GedBundle:Souscategory')->findOneById($fav->getIdsouscategory());
 	    	}
 	    	else
 	    	{
-	    		$category=$em->getRepository('GedBundle:Category')->findByOneId($fav->getIdcategory());
+	    		$category=$em->getRepository('GedBundle:Category')->findOneById($fav->getIdcategory());
 	    	}
 	    	//on recupere tous les tags correspondants au fichier
 	    	$linktag = $em->getRepository('GedBundle:linktag')->findByIdfile($idfav);
@@ -140,9 +146,9 @@ class ListController extends Controller
 
             // ... persist the $product variable or any other work
 
-            return $this->render('GedBundle::index.html.twig', array(
-            'form' => $form->createView(),
-        ));
+            // return $this->render('GedBundle::index.html.twig', array(
+            // 'form' => $form->createView(),
+        // ));
         }
     	return $this->render('GedBundle::index.html.twig',array(
     		'tabfav'=>$tabfav,
