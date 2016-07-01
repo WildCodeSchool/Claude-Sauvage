@@ -33,6 +33,7 @@
 	background-color:#fba858;
 	border-color: #f1f1f1;
 }
+
 /* Search bar */
 
 .search-bar{
@@ -153,6 +154,10 @@
 .tab-cel{
 	padding: 0 5px;
 	text-align:center;
+}
+
+tr:hover td{
+	background-color: #e0e0e0;
 }
 
 .modal-header{
