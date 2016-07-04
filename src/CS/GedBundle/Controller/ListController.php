@@ -198,6 +198,106 @@ class ListController extends Controller
     		$tabupl=1;
     	}
     	
+
+    	//DEBUT DE LA PARTIE "PARTAGÉS AVEC MOI"
+    	$listowner=$em->getRepository('GedBundle:Gedfiles')->findByIdowner($iduser);
+    	foreach ($listowner as $file) {
+    		
+    		$type=$file->getType();
+			$path=$file->getPath();
+			$idfile=$file->getId();
+
+			if (empty($file->getIdsouscategory() ) )
+			{
+
+				$categorytab=$em->getRepository('GedBundle:Category')->findOneById($file->getIdcategory());
+				$category=$categorytab->getName();
+			}
+			else
+			{
+				$categorytab=$em->getRepository('GedBundle:Souscategory')->findOneById($file->getIdsouscategory());
+				$category=$categorytab->getName();
+			}
+			$linktag = $em->getRepository('GedBundle:Linktag')->findByIdfile($idfile);
+			foreach ($linktag as $tag) {
+	    		//on recupere l'id du premier tag
+	    		$idtag=$tag->getIdtag();
+	    		//on recupere la ligne de la table Gedtag correspondante à l'id d'au dessus
+	    		$infostag=$em->getRepository('GedBundle:Gedtag')->findOneById($idtag);
+	    		//on recupere le nom du tag et on met tout ca dans un tableau
+	    		$tagname=$infostag->getName();
+	    		$tagnames[]=array(
+	    			'id'=>$idtag,
+	    			'name'=>$tagname,
+	    			);
+	    		//on fout tout dans un tableau et on a des favoris tout neufs
+	    	}
+	    	if(empty($tagnames))
+	    	{
+	    		$tagnames=1;
+	    	}
+	    	$tabpart[]=array(
+    		"tagnames"=>$tagnames,
+    		"path"=>$path,
+    		"type"=>$type,
+    		"category"=>$category,
+    		);
+    	}
+
+    	$listgroups=$em->getRepository('GedBundle:Linkgroup')->findByIduser($iduser);
+    	foreach ($listgroups as $groupfiles) {
+    		$idgroup=$groupfiles->getIdgroup();
+    		$listfiles=$em->getRepository('GedBundle:Gedfiles')->findByIdgroup($idgroup);
+    		foreach ($listfiles as $file) {
+    			$type=$file->getType();
+    			$path=$file->getPath();
+    			$idfile=$file->getId();
+
+    			if (empty($file->getIdsouscategory() ) )
+    			{
+
+    				$categorytab=$em->getRepository('GedBundle:Category')->findOneById($file->getIdcategory());
+    				$category=$categorytab->getName();
+    			}
+    			else
+    			{
+    				$categorytab=$em->getRepository('GedBundle:Souscategory')->findOneById($file->getIdsouscategory());
+    				$category=$categorytab->getName();
+    			}
+    			$linktag = $em->getRepository('GedBundle:Linktag')->findByIdfile($idfile);
+    			foreach ($linktag as $tag) {
+		    		//on recupere l'id du premier tag
+		    		$idtag=$tag->getIdtag();
+		    		//on recupere la ligne de la table Gedtag correspondante à l'id d'au dessus
+		    		$infostag=$em->getRepository('GedBundle:Gedtag')->findOneById($idtag);
+		    		//on recupere le nom du tag et on met tout ca dans un tableau
+		    		$tagname=$infostag->getName();
+		    		$tagnames[]=array(
+		    			'id'=>$idtag,
+		    			'name'=>$tagname,
+		    			);
+		    		//on fout tout dans un tableau et on a des favoris tout neufs
+		    	}
+		    	if(empty($tagnames))
+		    	{
+		    		$tagnames=1;
+		    	}
+		    	$tabpart[]=array(
+	    		"tagnames"=>$tagnames,
+	    		"path"=>$path,
+	    		"type"=>$type,
+	    		"category"=>$category,
+	    		);
+    		}
+    	}
+    	if (empty($tabpart) )
+    	{
+    		$tabpart=1;
+    	}
+
+
+    	//fonction d'upload
+
         $gedfiles = new Gedfiles();
 
         $form = $this->createForm(GedfilesType::class, $gedfiles);
@@ -240,6 +340,7 @@ class ListController extends Controller
     	return $this->render('GedBundle::index.html.twig',array(
     		'tabfav'=>$tabfav,
     		'tabupl'=>$tabupl,
+    		'tabpart'=>$tabpart,
     		'form' => $form->createView(),
     		'user'=>$user,
     		'file'=>$fileId,
