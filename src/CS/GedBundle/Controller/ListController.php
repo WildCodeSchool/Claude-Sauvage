@@ -197,10 +197,9 @@ class ListController extends Controller
     	{
     		$tabupl=1;
     	}
-    	// $em = $this->getDoctrine()->getManager();
-        // $user = $this->getUser();
-		// var_dump($user);exit;
-                $gedfiles = new Gedfiles();
+    	
+        $gedfiles = new Gedfiles();
+
         $form = $this->createForm(GedfilesType::class, $gedfiles);
         $form->handleRequest($request);
 
@@ -224,18 +223,26 @@ class ListController extends Controller
             $em->persist($gedfiles);
             $em->flush();
 
-           $this->get('session')->getFlashBag()->set('success', 'Fichier envoyé');
+            $this->get('session')->getFlashBag()->set('success', 'Fichier envoyé');
 
-            return $this->render('GedBundle::index.html.twig', array(
-            'form' => $form->createView(), 'user'=>$user, 'file'=>$gedfiles,
-        ));
-            // return $this->render('GedBundle::index.html.twig', array( 'form' => $form->createView() ));
+            return $this->redirectToRoute('ged_homepage');
+
         }
+
+        $file = $em->getRepository('GedBundle:Gedfiles')->findOneby( 
+                                                                        array('idowner'=> $user->getId(), 'idcategory' => 1 ),
+                                                                        array('date' => 'desc'),
+                                                                        1,
+                                                                        0
+                                                                    );
+        $fileId = $file->getId();
+
     	return $this->render('GedBundle::index.html.twig',array(
     		'tabfav'=>$tabfav,
     		'tabupl'=>$tabupl,
     		'form' => $form->createView(),
-    		'user'=>$user
-    		));
+    		'user'=>$user,
+    		'file'=>$fileId,
+    	));
     }
 }
