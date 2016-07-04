@@ -2,6 +2,10 @@ ged_homepage:
     path:     /
     defaults: { _controller: GedBundle:Upload:upload }
 
+ged_parameters_file:
+    path:     /parameters/{id}
+    defaults: { _controller: GedBundle:Parameters:parameters }
+
 # ged_upload:
 #     path:     /upload
 #     defaults: { _controller: GedBundle:Default:upload }

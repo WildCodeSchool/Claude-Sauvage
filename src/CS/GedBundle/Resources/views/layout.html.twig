@@ -23,10 +23,13 @@
                     <button type="button" class="ajout-fichier btn btn-default navbar-btn" data-toggle="modal" data-target="#addfile"><span class="glyphicon glyphicon-plus" aria-hidden="true"></span> Ajouter un document</button>
                 </div>
                 {% for flashMessage in app.session.flashbag.get('success') %}
-                    <div style="width:50%; margin:5px 0 0 10%; height:40px; padding:10px 40px; text-align:center; display:none;" class="alert alert-success alert-dismissible navbar-header pagination-centered" role="alert" id="flashbag">
+                    <div class="alert alert-success alert-dismissible navbar-header pagination-centered" role="alert" id="flashbag">
                         <button type="button" class="close" data-dismiss="alert" aria-label="Close"><span aria-hidden="true">&times;</span></button>
                         <strong>Succes</strong>
                     {{ flashMessage }}
+                    {% if file is defined %}
+                        <p><a href="{{ path('ged_parameters_file', { 'id' : file }) }}" title="">Vous pouvez maintenant régler les parametres du document ici.</a></p>
+                    {% endif %}
                     </div>
                 {% endfor %}
 {# Modal ajout fichier #}
@@ -67,7 +70,7 @@
     {% endblock body %}
     <script>
         $( document ).ready(function() {
-          $("#flashbag").delay(500).fadeIn(500).delay(5000).fadeOut( 500);
+          $("#flashbag").delay(500).fadeIn(500).delay(5000).fadeOut( 50000);
         });
     </script>
     </body>

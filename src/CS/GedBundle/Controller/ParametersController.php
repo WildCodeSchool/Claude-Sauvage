@@ -9,14 +9,14 @@ use CS\GedBundle\Entity\Gedfiles;
 use CS\GedBundle\Form\GedfilesType;
 use DateTime;
 
-class UploadController extends Controller
+class ParametersController extends Controller
 {
     /**
-     * @Route("/", name="ged_homepage")
+     * @Route("/parameters/{id_file}", name="ged_parameters_file")
      */
-    public function uploadAction(Request $request)
+    public function ParametersAction(Request $request)
     {
-        $em = $this->getDoctrine()->getManager();
+		$em = $this->getDoctrine()->getManager();
         $user = $this->getUser();
 
         $gedfiles = new Gedfiles();
@@ -43,27 +43,15 @@ class UploadController extends Controller
             $em->persist($gedfiles);
             $em->flush();
 
-            $fileId= $gedfiles->getId();
-
-            // var_dump($fileId);exit;
+            $test="abc";
 
             $this->get('session')->getFlashBag()->set('success', 'Fichier envoyé');
 
-            return $this->redirectToRoute('ged_homepage');
-        }
+            return $this->redirectToRoute('ged_homepage', array('test'=>$test,));
+            }
 
-        $file = $em->getRepository('GedBundle:Gedfiles')->findOneby( 
-                                                                        array('idowner'=> $user->getId(), 'idcategory' => 1 ),
-                                                                        array('date' => 'desc'),
-                                                                        1,
-                                                                        0
-                                                                    );
-        $fileId = $file->getId();
-
-        return $this->render('GedBundle::index.html.twig', array(
-            'form' => $form->createView(), 
-            'user'=>$user,
-            'file'=>$fileId,
+        return $this->render('GedBundle::parameters.html.twig', array(
+            'form' => $form->createView(), 'user'=>$user,
         ));
     }
 }

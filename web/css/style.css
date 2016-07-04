@@ -27,6 +27,20 @@
 	background-color:#fba858;
 	border:#fba858 1px solid;
 }
+
+/* flashbag alert*/
+
+.alert{
+	width:50%;
+	margin-top:5px ;
+	margin-bottom: 0px;
+	margin-left: 10% !important;
+	height:40px;
+	padding:0px 40px;
+	text-align:center;
+	display:none;
+}
+
 /* Modal envoi */
 .btn:active{
 	background-color: #f1f1f1!important;
