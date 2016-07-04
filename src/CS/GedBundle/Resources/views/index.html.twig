@@ -53,7 +53,7 @@
 				</tr> 
 			</thead> 
 			<tbody>
-				{% if tabupl != 1 %}
+				{% if tabupl is defined %}
 					{% for upload in tabupl %}
 						<tr> 
 							<td>{{ upload['type'] }}</td> 

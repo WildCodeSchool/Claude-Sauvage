@@ -13,6 +13,7 @@ use CS\GedBundle\Entity\Category;
 use CS\GedBundle\Entity\Souscategory;
 use CS\GedBundle\Entity\Linktag;
 use CS\GedBundle\Entity\Gedtag;
+use DateTime;
 
 class ListController extends Controller
 {
@@ -199,32 +200,36 @@ class ListController extends Controller
     	// $em = $this->getDoctrine()->getManager();
         // $user = $this->getUser();
 		// var_dump($user);exit;
-        $gedfiles = new Gedfiles();
+                $gedfiles = new Gedfiles();
         $form = $this->createForm(GedfilesType::class, $gedfiles);
         $form->handleRequest($request);
 
         if ($form->isSubmitted() && $form->isValid()) {
-            // $file stores the uploaded PDF file
-            /** @var Symfony\Component\HttpFoundation\File\UploadedFile $file */
+            
             $file = $gedfiles->getPath();
+            
+            $type = $file->guessExtension();
 
-            // Generate a unique name for the file before saving it
             $fileName = md5(uniqid()).'.'.$file->guessExtension();
 
-            // Move the file to the directory where brochures are stored
             $pathDir = $this->container->getParameter('kernel.root_dir').'/../web/uploads';
             $file->move($pathDir, $fileName);
-            // Update the 'brochure' property to store the PDF file name
-            // instead of its contents
 
-            $gedfiles->setPath($fileName),
-            		->setIdowner($),
+            $gedfiles->setType($type);
+            $gedfiles->setPath($fileName);
+            $gedfiles->setIdowner($user->getId());
+            $gedfiles->setIdCategory(1);
+            $gedfiles->setDate( new DateTime());
 
-            // ... persist the $product variable or any other work
+            $em->persist($gedfiles);
+            $em->flush();
+
+           $this->get('session')->getFlashBag()->set('success', 'Fichier envoyé');
 
             return $this->render('GedBundle::index.html.twig', array(
-            'form' => $form->createView(),
+            'form' => $form->createView(), 'user'=>$user, 'file'=>$gedfiles,
         ));
+            // return $this->render('GedBundle::index.html.twig', array( 'form' => $form->createView() ));
         }
     	return $this->render('GedBundle::index.html.twig',array(
     		'tabfav'=>$tabfav,
