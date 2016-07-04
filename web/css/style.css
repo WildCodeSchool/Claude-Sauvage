@@ -41,6 +41,11 @@
 	display:none;
 }
 
+.alert a{
+	text-decoration:none;
+	color:#3c763d;
+}
+
 /* Modal envoi */
 .btn:active{
 	background-color: #f1f1f1!important;
