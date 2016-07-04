@@ -28,10 +28,18 @@
 	border:#fba858 1px solid;
 }
 /* Modal envoi */
-
+.btn:active{
+	background-color: #f1f1f1!important;
+}
 .modal .btn-primary{
 	background-color:#fba858;
 	border-color: #f1f1f1;
+}
+
+.modal .btn-primary:active{
+	background-color:#f1f1f1 !important;
+	border-color: #f1f1f1;
+	color:#000;
 }
 
 /* Search bar */
@@ -43,7 +51,7 @@
 
 .styled-select select {
 	background: transparent;
-	width: 268px;
+	width: 252px;
 	padding: 5px;
 	font-size: 16px;
 	line-height: 1;
@@ -57,6 +65,7 @@
 	width: 240px;
 	height: 34px;
 	overflow: hidden;
+	z-index: 1;
 	background: url(../img/down_arrow_select.jpg) no-repeat right #fff;
 	border: 1px solid #ccc;
 }
@@ -64,7 +73,9 @@
 .search-btn{
 	border: 1px solid #ccc;
 }
-
+.search-bar .btn-default:hover{
+	background-color: #f1f1f1;
+}
 /* Navbar left */
 
 .nav-left{
@@ -103,13 +114,14 @@
 
 .nav-left a{
 	color:#000;
+	background-color:#f1f1f1;
 	text-decoration:none;
 	font-size:17px;
 	display: block;
 	padding: 10px 0 10px 0;
 }
-
 .nav-left li:hover{
+	border-radius: 5px !important;
 	background-color:#fba858;
 }
 
