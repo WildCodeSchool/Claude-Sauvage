@@ -290,11 +290,79 @@ class ListController extends Controller
 
         //récupération de tout les fichiers de l'utilisateur.
     	$myfiles = $em->getRepository('GedBundle:Gedfiles')->findBy(
-    																	array('idowner'=> $user->getId() ),
-    																	array('date' => 'desc'),
-    																	'all',
-    																	0
+    																	array( 'idowner'=> $user->getId() ),
+    																	array('date' => 'desc')
     																);
+    	//on parcours les fichiers.
+    	foreach ($myfiles as $myfile) {
+    		//récuperation du type de ficher.
+	    	$typeFile = $myfile->getType();
+
+	    	//récuperation du nom du ficher.
+	    	$nameFile = $myfile->getPath();
+
+	    	//récuperation de la date.
+	    	$dateFile = $myfile->getDate();
+	    	
+    		//récueration des membres des groupes.
+    		$groupMembers = $em->getRepository('GedBundle:Linkgroup')->findByIdgroup($myfile->getIdgroup());
+    		foreach ($groupMembers as $groupMember) {
+    			$groupMemberId = $groupMember->getIduser;
+    			$groupMemberInfo = $em->getRepository('AppBundle:User')->findOneById($groupMemberId);
+    			$groupMemberName = $groupMemberInfo->getusername();
+
+    			$tabInfoGroup = array(
+    					'groupMemberName'=>$groupMemberName,
+    			);
+    		}
+    		
+    		//récupération de la sous-catégory.
+    		if (!empty($myfile->getIdsouscategory)){
+    			$sousCategoryInfo = $em->getRepository('GedBundle:Souscategory')->findOneById($myfile->getIdsouscategory());
+		    	$category = $sousCategoryInfo->getName();
+		    }
+		    //sinon si la sous-catégorie n'éxiste pas on recupere la catégorie.
+	    	else {
+	    		$categoryInfo = $em->getRepository('GedBundle:Category')->findOneById($myfile->getIdcategory());
+	    		$category= $categoryInfo->getName();
+	    	}
+
+	    	//on compte les commentaires lier a un fichier.
+		    $comments =$em->getRepository('GedBundle:Gedcom')->findById($myfile->getId());
+		    $nbCom = count('$comments');
+
+		    //on recherches les tags lier a un fichier.
+		    	
+	    	//on recherches les lien de tags par raport a l'id du fichier.
+	    	$linkTags=$em->getRepository('GedBundle:Linktag')->findByIdfile($myfile->getId());
+
+	    	//puis on fait une boucle pour parcourir notre abjet de liens de tag.
+	    	foreach ($linkTags as $linkTag) {
+	    		$infoTag=$em->getRepository('GedBundle:Gedtag')->findOneById($linkTag->getIdtag());
+	    		$tagName=$infoTag->getName();
+
+	    		//on stoque tout dans un tableau.
+	    		$tabTags[]= array(
+	    			'tagName'=>$tagName,
+	    			);
+	    	}
+	    	if (empty($tabInfoGroup)){
+	    		$tabInfoGroup = 1;
+	    	}
+	    	if (empty($tabTags)){
+	    		$tabTags = 1;
+		    }
+
+		$tabMyFiles = array(
+	    					'groupMemberName'=>$tabInfoGroup,
+	    					'type'=>$typeFile,
+	    					'category'=>$category,
+			    			'name'=>$nameFile,
+			    			'tagnames'=>$tabTags,
+			    			'comments'=>$nbCom,
+    					);
+
+    	}
 
     	//récuperation de tout les fichiers des groupes ou est l'utilisateur.
     	$linkGroups = $em->getRepository('GedBundle:Linkgroup')->findByIduser($user->getId());
@@ -303,12 +371,25 @@ class ListController extends Controller
     	foreach ($linkGroups as $group) {
     		$groupFiles = $em->getRepository('GedBundle:Gedfiles')->findByIdgroup($group->getIdgroup());
 
+// /!\ /!\ /!\ /!\ /!\ /!\ /!\ /!\ /!\ /!\ /!\ /!\ a controler /!\ /!\ /!\ /!\ /!\ /!\ /!\ /!\ /!\ /!\ /!\ /!\ /!\ /!\ /!\ 
+    		//récueration des membres des groupes.
+    		$groupMemberId = $linkGroups->getIduser;
+	    	$groupMemberInfo = $em->getRepository('AppBundle:User')->findOneById($groupMemberId);
+	    	$groupMemberName = $groupMemberInfo->getusername();
+
+			$tabInfoGroup = array(
+					'groupMemberName'=>$groupMemberName,
+			);
+
 	    	foreach ($groupFiles as $file) {
 	    		//récuperation du type de ficher.
 	    		$typeFile = $file->getType();
 
 	    		//récuperation du nom du ficher.
 	    		$nameFile = $file->getPath();
+
+	    		//récuperation de la date.
+	    		$dateFile = $file->getDate();
 
 	    		//on recupere la sous-catégory.
 		    	if (!empty($file->getIdsouscategory)){
@@ -330,7 +411,6 @@ class ListController extends Controller
 		    	$nbCom = count('$comments');
 
 		    	//on recherches les tags lier a un fichier.
-		    	
 		    	//on recherches les lien de tags par raport a l'id du fichier.
 		    	$linkTags=$em->getRepository('GedBundle:Linktag')->findByIdfile($group->getId());
 
@@ -357,14 +437,16 @@ class ListController extends Controller
 		    		'name'=>$nameFile,
 		    		'type'=>$icoFile,
 		    		'tagnames'=>$tabTags,
+		    		'comments'=>$nbCom,
 		    	);
 	    	}
 	    }
 
 	    //on verifie que le tableau n'est pas vide, sinon on lui attribue la veleur 1.
 	    if (empty($tabGroupFiles)){
-		    		$tabTags = 1;
+		    		$tabGroupFiles = 1;
 		}
+
 
     	return $this->render('GedBundle::allfiles.html.twig',array( 'myfiles' => $myfiles,
 																	'form' => $form->createView(),

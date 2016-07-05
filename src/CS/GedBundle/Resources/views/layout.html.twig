@@ -56,7 +56,7 @@
                 <div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
                     <ul class="nav navbar-nav navbar-right">
                         <li class="lien-user">
-                            <a class="lien-user" href="#" >Bienvenue {{ user | capitalize }}
+                            <a class="lien-user" href="{{ path('ged_homepage') }}" title="Tous les fichiers"  >Bienvenue {{ user | capitalize }}
                             <img class="image-user" alt="Default-User" src='{{ asset('uploads/profileimages/default/de5d596f0373130509ec704c95b7dfba.png') }}'>
                             </a>
                         </li>
