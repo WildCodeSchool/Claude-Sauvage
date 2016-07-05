@@ -102,11 +102,13 @@ class ListController extends Controller
 	    	//trouver la categorie ou souscategorie du fichier
 	    	if (!empty($oneupl->getIdsouscategory()))
 	    	{
-	    		$category=$em->getRepository('GedBundle:Souscategory')->findOneById($oneupl->getIdsouscategory());
+	    		$categorytab=$em->getRepository('GedBundle:Souscategory')->findOneById($oneupl->getIdsouscategory());
+	    		$category=$categorytab->getName();
 	    	}
 	    	else
 	    	{
-	    		$category=$em->getRepository('GedBundle:Category')->findOneById($oneupl->getIdcategory());
+	    		$categorytab=$em->getRepository('GedBundle:Category')->findOneById($oneupl->getIdcategory());
+	    		$category=$categorytab->getName();
 	    	}
 	    	//on recupere tous les tags correspondants au fichier
 	    	$linktag = $em->getRepository('GedBundle:Linktag')->findByIdfile($idupl);
