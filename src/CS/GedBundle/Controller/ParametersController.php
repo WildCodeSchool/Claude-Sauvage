@@ -47,7 +47,7 @@ class ParametersController extends Controller
 
             $this->get('session')->getFlashBag()->set('success', 'Fichier envoyé');
 
-            return $this->redirectToRoute('ged_homepage', array('test'=>$test,));
+            return $this->redirectToRoute('ged_homepage');
             }
 
         return $this->render('GedBundle::parameters.html.twig', array(

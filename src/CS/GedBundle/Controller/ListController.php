@@ -245,4 +245,131 @@ class ListController extends Controller
     		'file'=>$fileId,
     	));
     }
+
+    public function allAction(Request $request)
+    {
+    	//récuperation & atribution de l entitiy manager.
+    	$em = $em=$this->getDoctrine()->getManager();
+
+    	//récuperation de l'utilisateur courant.
+    	$user =$this->getUser();
+
+    	//création d'une nouvelle instance de l'entité Gedfiles.
+    	$gedfiles = new Gedfiles();
+
+    	//créetion du formulaire
+        $form = $this->createForm(GedfilesType::class, $gedfiles);
+        $form->handleRequest($request);
+
+        //Si le formulaire est envoyer et est valide.
+        if ($form->isSubmitted() && $form->isValid()) {
+            
+            $file = $gedfiles->getPath();
+            
+            $type = $file->guessExtension();
+
+            $fileName = md5(uniqid()).'.'.$file->guessExtension();
+
+            $pathDir = $this->container->getParameter('kernel.root_dir').'/../web/uploads';
+            $file->move($pathDir, $fileName);
+
+            $gedfiles->setType($type);
+            $gedfiles->setPath($fileName);
+            $gedfiles->setIdowner($user->getId());
+            $gedfiles->setIdCategory(1);
+            $gedfiles->setDate( new DateTime());
+
+            $em->persist($gedfiles);
+            $em->flush();
+
+            $this->get('session')->getFlashBag()->set('success', 'Fichier envoyé');
+
+            return $this->redirectToRoute('ged_homepage');
+
+        }
+
+        //récupération de tout les fichiers de l'utilisateur.
+    	$myfiles = $em->getRepository('GedBundle:Gedfiles')->findBy(
+    																	array('idowner'=> $user->getId() ),
+    																	array('date' => 'desc'),
+    																	'all',
+    																	0
+    																);
+
+    	//récuperation de tout les fichiers des groupes ou est l'utilisateur.
+    	$linkGroups = $em->getRepository('GedBundle:Linkgroup')->findByIduser($user->getId());
+
+		//pour chaque fichiers recupéré recherche ca.														
+    	foreach ($linkGroups as $group) {
+    		$groupFiles = $em->getRepository('GedBundle:Gedfiles')->findByIdgroup($group->getIdgroup());
+
+	    	foreach ($groupFiles as $file) {
+	    		//récuperation du type de ficher.
+	    		$typeFile = $file->getType();
+
+	    		//récuperation du nom du ficher.
+	    		$nameFile = $file->getPath();
+
+	    		//on recupere la sous-catégory.
+		    	if (!empty($file->getIdsouscategory)){
+
+		    		$sousCategoryInfo = $em->getRepository('GedBundle:Souscategory')->findOneById($file->getIdsouscategory());
+		    		$sousCategory = $sousCategoryInfo->getName();
+		    	}
+
+		    	//sinon si la sous-catégorie n'éxiste pas on recupere la catégorie.
+		    	else {
+		    		$categoryInfo = $em->getRepository('GedBundle:Category')->findOneById($file->getIdcategory());
+		    		$category= $categoryInfo->getName();
+		    	}
+			    	    	
+				//on compte les commentaires lier a un fichier.
+		    	$comments =$em->getRepository('GedBundle:Gedcom')->findById($file->getId());
+
+		    	//on compte le nombre de commentaires.
+		    	$nbCom = count('$comments');
+
+		    	//on recherches les tags lier a un fichier.
+		    	
+		    	//on recherches les lien de tags par raport a l'id du fichier.
+		    	$linkTags=$em->getRepository('GedBundle:Linktag')->findByIdfile($group->getId());
+
+		    	//puis on fait une boucle pour parcourir notre abjet de liens de tag.
+		    	foreach ($linkTags as $linkTag) {
+		    		$infoTag=$em->getRepository('GedBundle:Gedtag')->findOneById($linkTag->getIdtag());
+		    		$tagName=$infoTag->getName();
+
+		    		//on stoque tout dans un tableau.
+		    		$tabTags[]= array(
+		    			'tagName'=>$tagName,
+		    			);
+		    	}
+
+		    	//on verifie que le tableau n'est pas vide, sinon on lui attribue la veleur 1.
+		    	if (empty($tabTags)){
+		    		$tabTags = 1;
+		    	}
+
+		    	//On regroupe tout dans un tableau.
+		    	$tabGroupFiles[] = array(
+		    		'category'=>$category,
+		    		'sousCategory'=>$sousCategory,
+		    		'name'=>$nameFile,
+		    		'type'=>$icoFile,
+		    		'tagnames'=>$tabTags,
+		    	);
+	    	}
+	    }
+
+	    //on verifie que le tableau n'est pas vide, sinon on lui attribue la veleur 1.
+	    if (empty($tabGroupFiles)){
+		    		$tabTags = 1;
+		}
+
+    	return $this->render('GedBundle::allfiles.html.twig',array( 'myfiles' => $myfiles,
+																	'form' => $form->createView(),
+																	'user'=> $user,
+																	'tabtag' => $tabTags,
+																));
+    }
 }
