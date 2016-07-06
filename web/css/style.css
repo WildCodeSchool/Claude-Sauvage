@@ -210,3 +210,17 @@ tr:hover td{
 .modal-title{
 	text-align: center;
 }
+
+/* tout les fichiers */
+
+#table .glyphicon-star-empty, #table .glyphicon-star{
+	font-size: 20px;
+}
+
+#table .glyphicon-star{
+	color:yellow;
+}
+
+#table a{
+	color:#000;
+}
