@@ -69,6 +69,7 @@ class ListController extends Controller
 	    		$tagnames=1;
 	    	}
 	    	$tabfav[]=array(
+	    		"idfile"=>$idfav,
 	    		"tagnames"=>$tagnames,
 	    		"path"=>$path,
 	    		"type"=>$type,
@@ -133,6 +134,7 @@ class ListController extends Controller
 	    		$tagnames=1;
 	    	}
 	    	$tabupl[]=array(
+	    		"idfile"=>$idupl,
 	    		"tagnames"=>$tagnames,
 	    		"path"=>$path,
 	    		"type"=>$type,
@@ -191,6 +193,7 @@ class ListController extends Controller
 		    		$tagnames=1;
 		    	}
 		    	$tabupl[]=array(
+		    		"idfile"=>$idfile,
 		    		"tagnames"=>$tagnames,
 		    		"path"=>$path,
 		    		"type"=>$type,
@@ -250,6 +253,7 @@ class ListController extends Controller
 		    	if (count($tabpart)<5)
 		    	{
 			    	$tabpart[]=array(
+			    		"idfile"=>$idfile,
 		    			"tagnames"=>$tagnames,
 		    			"path"=>$path,
 		    			"type"=>$type,
@@ -261,6 +265,7 @@ class ListController extends Controller
 	    	else
 	    	{
 	    		$tabpart[]=array(
+	    			"idfile"=>$idfile,
 		    		"tagnames"=>$tagnames,
 		    		"path"=>$path,
 		    		"type"=>$type,
@@ -318,6 +323,7 @@ class ListController extends Controller
 			    	if (count($tabpart)<5)
 		    		{
 				    	$tabpart[]=array(
+				    	"idfile"=>$idfile,
 			    		"tagnames"=>$tagnames,
 			    		"path"=>$path,
 			    		"type"=>$type,
@@ -329,6 +335,7 @@ class ListController extends Controller
 	    		else
 		    	{
 		    		$tabpart[]=array(
+		    			"idfile"=>$idfile,
 			    		"tagnames"=>$tagnames,
 			    		"path"=>$path,
 			    		"type"=>$type,
@@ -411,6 +418,7 @@ class ListController extends Controller
 		    		$tagnames=1;
 		    	}
 		    	$tabcom[]=array(
+	    		"idfile"=>$idfile,
 	    		"tagnames"=>$tagnames,
 	    		"path"=>$path,
 	    		"type"=>$type,

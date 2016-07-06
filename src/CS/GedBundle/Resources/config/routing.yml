@@ -10,6 +10,10 @@ ged_parameters_file:
     path:     /parameters/{id}
     defaults: { _controller: GedBundle:Parameters:parameters }
 
+one_file:
+    path:     /file/{id}
+    defaults: { _controller: GedBundle:File:show }
+
 # ged_upload:
 #     path:     /upload
 #     defaults: { _controller: GedBundle:Default:upload }

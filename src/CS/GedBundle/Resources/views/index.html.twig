@@ -52,7 +52,7 @@
 					{% for upload in tabupl %}
 						<tr> 
 							<td>{{ upload['type'] }}</td> 
-							<td>{{ upload['path'] }}</td>
+							<td><a href="{{ path('one_file' , {'id': upload['idfile'] }) }}">{{ upload['path'] }}</a></td>
 							<td>{{ upload['category'] }}</td> 
 							<td>
 								{% for tag in upload['tagnames'] %}
