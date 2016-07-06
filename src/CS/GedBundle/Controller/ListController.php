@@ -40,6 +40,7 @@ class ListController extends Controller
 	    	//trouver le type du fichier
 	    	$type=$fav->getType();
 	    	$date=$fav->getDate();
+	    	$name=$fav->getOriginalName();
 	    	//trouver la categorie ou souscategorie du fichier
 	    	if (!empty($fav->getIdsouscategory()))
 	    	{
@@ -75,6 +76,7 @@ class ListController extends Controller
 	    		"type"=>$type,
 	    		"category"=>$category,
 	    		"date"=>$date,
+	    		"name"=>$name
 	    		);
     	}
     	if(empty($tabfav))
@@ -103,6 +105,7 @@ class ListController extends Controller
 	    	//trouver le type du fichier
 	    	$type=$oneupl->getType();
 	    	$date=$oneupl->getDate();
+	    	$name=$oneupl->getOriginalName();
 	    	//trouver la categorie ou souscategorie du fichier
 	    	if (!empty($oneupl->getIdsouscategory()))
 	    	{
@@ -140,6 +143,7 @@ class ListController extends Controller
 	    		"type"=>$type,
 	    		"category"=>$category,
 	    		"date"=>$date,
+	    		"name"=>$name
 	    		);
     	}
 
@@ -162,6 +166,7 @@ class ListController extends Controller
 		    	//trouver le type du fichier
 		    	$type=$oneupl->getType();
 		    	$date=$oneupl->getDate();
+		    	$name=$oneupl->getOriginalName();
 		    	//trouver la categorie ou souscategorie du fichier
 		    	if (!empty($oneupl->getIdsouscategory()))
 		    	{
@@ -199,6 +204,7 @@ class ListController extends Controller
 		    		"type"=>$type,
 		    		"category"=>$category,
 		    		"date"=>$date,
+		    		"name"=>$name
 		    		);		
 	    	}
 		}
@@ -218,6 +224,7 @@ class ListController extends Controller
 			$path=$file->getPath();
 			$idfile=$file->getId();
 			$date=$file->getDate();
+			$name=$file->getOriginalName();
 
 			if (empty($file->getIdsouscategory() ) )
 			{
@@ -259,6 +266,7 @@ class ListController extends Controller
 		    			"type"=>$type,
 		    			"category"=>$category,
 		    			"date"=>$date,
+		    			"name"=>$name
 		    			);
 	    		}
 	    	}
@@ -271,6 +279,7 @@ class ListController extends Controller
 		    		"type"=>$type,
 		    		"category"=>$category,
 		    		"date"=>$date,
+		    		"name"=>$name
 		    		);
 	    	}
     	}
@@ -287,6 +296,7 @@ class ListController extends Controller
     			$path=$file->getPath();
     			$idfile=$file->getId();
     			$date=$file->getDate();
+    			$name=$file->getOriginalName();
 
     			if (empty($file->getIdsouscategory() ) )
     			{
@@ -329,6 +339,7 @@ class ListController extends Controller
 			    		"type"=>$type,
 			    		"category"=>$category,
 			    		"date"=>$date,
+			    		"name"=>$name
 			    		);
 	    			}
 	    		}
@@ -341,6 +352,7 @@ class ListController extends Controller
 			    		"type"=>$type,
 			    		"category"=>$category,
 			    		"date"=>$date,
+			    		"name"=>$name
 			    		);
 		    	}
     		}
@@ -386,6 +398,7 @@ class ListController extends Controller
     			$type=$file->getType();
     			$path=$file->getPath();
     			$date=$file->getDate();
+    			$name=$file->getOriginalName();
 
     			if (empty($file->getIdsouscategory() ) )
     			{
@@ -424,6 +437,7 @@ class ListController extends Controller
 	    		"type"=>$type,
 	    		"category"=>$category,
 	    		"date"=>$date,
+	    		"name"=>$name
 	    		);
     		}
     	};
@@ -441,6 +455,9 @@ class ListController extends Controller
 
         if ($form->isSubmitted() && $form->isValid()) {
             
+            $originalgetting=$form->getNormData()->getPath('originalName');
+            $originalname=$originalgetting->getClientOriginalName();
+
             $file = $gedfiles->getPath();
             
             $type = $file->guessExtension();
@@ -455,6 +472,7 @@ class ListController extends Controller
             $gedfiles->setIdowner($user->getId());
             $gedfiles->setIdCategory(1);
             $gedfiles->setDate( new DateTime());
+            $gedfiles->setOriginalname($originalname);
 
             $em->persist($gedfiles);
             $em->flush();

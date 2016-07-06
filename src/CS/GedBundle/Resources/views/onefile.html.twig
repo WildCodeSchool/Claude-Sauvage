@@ -1,11 +1,11 @@
 {% extends "GedBundle::layout.html.twig" %}
 {% block body %}
 	HELLO WORLD
-	<p> ce fichier à l'id {{ idfile }}</p>
-	<p>il s'appelle {{ file.path }}</p>
-	{% if file.type == 'jpeg' or file.type == 'jpg' or file.type == 'png' or file.type == 'gif' %}
+	<p> ce fichier a l'id {{ idfile }}</p>
+	<p>il s'appelle {{ file.originalname }}</p>
+	{% if file.type == 'jpeg' or file.type == 'jpg' or file.type == 'png' or file.type == 'gif' or file.type == 'ico' %}
 		<img src="{{ asset('/uploads/' ~file.path) }}" alt="image">
-	{% elseif file.type == 'txt' %}
+	{% elseif file.type == 'txt' or file.type == 'html' or file.type == 'html.twig' or file.type == 'css' or file.type == 'php' or file.type == 'js' or file.type == 'md' or file.type == 'yml' or file.type == 'htm'  or file.type == 'xml' or file.type == 'xls' %}
 		<pre>{{ textfile }}</pre>
 	{% endif %}
 {% endblock body %}

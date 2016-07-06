@@ -70,6 +70,12 @@ class Gedfiles
      */
     private $idgroup;
 
+    /**
+     * @var string
+     *
+     * @ORM\Column(name="originalname", type="string", length=255, nullable=true)
+     */
+    private $originalname;
 
     /**
      * Get id
@@ -240,5 +246,28 @@ class Gedfiles
     public function getIdgroup()
     {
         return $this->idgroup;
+    }
+
+    /**
+     * Set originalname
+     *
+     * @param string $originalname
+     * @return Gedfiles
+     */
+    public function setOriginalname($originalname)
+    {
+        $this->originalname = $originalname;
+
+        return $this;
+    }
+
+    /**
+     * Get originalname
+     *
+     * @return string 
+     */
+    public function getOriginalname()
+    {
+        return $this->originalname;
     }
 }

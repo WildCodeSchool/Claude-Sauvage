@@ -48,6 +48,8 @@ class FileController extends Controller
         $form->handleRequest($request);
 
         if ($form->isSubmitted() && $form->isValid()) {
+            $originalgetting=$form->getNormData()->getPath('originalName');
+            $originalname=$originalgetting->getClientOriginalName();
             
             $file = $gedfiles->getPath();
             
@@ -57,13 +59,13 @@ class FileController extends Controller
 
             $pathDir = $this->container->getParameter('kernel.root_dir').'/../web/uploads';
             $file->move($pathDir, $fileName);
-
             $gedfiles->setType($type);
             $gedfiles->setPath($fileName);
             $gedfiles->setIdowner($user->getId());
             $gedfiles->setIdCategory(1);
             $gedfiles->setDate( new DateTime());
-
+            $gedfiles->setOriginalname($originalname);
+            
             $em->persist($gedfiles);
             $em->flush();
 
