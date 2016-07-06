@@ -146,8 +146,14 @@
 
 .drop-content{
 	display:none;
-	margin-left: 100%;
+	margin-left:100%;
 	z-index: 2;
+}
+
+.drop-in-content{
+	display:none;
+	z-index: 2;
+	margin-left:100%;
 }
 
 .drop-content li a{
@@ -157,7 +163,13 @@
 .drop-btn:hover .drop-content {
 	display: block;
     position:absolute;
-    top:159px;
+    margin-top: -46px;
+}
+
+.drop-content li:hover .drop-in-content {
+	display: block;
+    position:absolute;
+    margin-top: -46px;
 }
 
 .drop-btn .glyphicon-triangle-right{
