@@ -1,3 +1,15 @@
 grc_homepage:
     path:     /
     defaults: { _controller: GrcBundle:Default:index }
+
+grc_create_ticket:
+    path:     /create
+    defaults: { _controller: GrcBundle:Default:create }
+
+ajax_send:
+    path:     /cat
+    defaults: { _controller: GrcBundle:Default:ajaxcat }
+
+ticket:
+    path:     /ticket/{id}
+    defaults: { _controller: GrcBundle:Default:ticket }

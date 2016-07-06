@@ -121,7 +121,6 @@ src: url('../fonts/glyphicons-halflings-regular.eot?#iefix') format('embedded-op
 /** GRC Listes 
  */
 .lastlist{
-	margin-bottom: 30px;
 }
 
 .liste h3{
@@ -153,4 +152,115 @@ tr:hover td{
 
 .col-prio{
 	width:15%;
+}
+
+/** GRC Ticket 
+ */
+.container_ticket{
+	background-color: white;
+	padding-top: 40px;
+	padding-bottom: 50px;
+}
+
+.statut_ticket{
+	position: relative;
+	margin-right: 20%;
+	margin-left: 20%;
+}
+
+.statut_ticket h2{
+	width:100%;
+	margin-top: 0px;
+	margin-bottom: 30px;
+	text-align: center;
+	font-weight: bold;
+}
+
+.statut{
+	position: absolute;
+	top: 0px;
+	left: 0px;
+}
+
+.statut p{
+	font-size: 17px;
+	background-color: #F1F1F1;
+	padding: 5px;
+}
+
+.demande_init{
+	background-color: white;
+	margin-right: 20%;
+	margin-left: 20%;
+	margin-bottom: 20px;
+	padding: 0px;
+	border: solid 2px black;
+}
+
+.demande_init_titre{
+	background-color: #1FA597;
+	padding: 5px;
+	padding-top: 8px;
+	height:40px;
+	border-bottom: solid 2px black;
+}
+
+.demande_init_titre p{
+	width:100%;
+	font-weight: bold;
+	font-size: 17px;
+	color: white;
+}
+
+.demande_init_titre p span{
+	float:right;
+}
+
+.commentaire_entete p{
+	width:100%;
+	font-weight: bold;
+}
+
+.commentaire_entete p span{
+	float:right;
+}
+
+.demande_init_contenu{
+	padding: 5px;
+}
+
+.sous_titre_com{
+	font-weight: bold;
+	margin-left: 20%;
+	font-size: 23px;
+}
+
+.commentaire{
+	border: solid 2px #1FA597;
+	padding: 5px;
+	margin-right: 20%;
+	margin-left: 20%;
+	margin-bottom: 10px;
+	background-color: #F1F1F1;
+}
+
+.bloc_reponse{
+	position:relative;
+	width: 50%;
+	margin-right: 25%;
+	margin-left: 25%;
+}
+
+.input_com{
+	width: 100%;
+}
+
+.btn-com-left{
+	margin-left: 0%;
+}
+
+.btn-com-right{
+	text-align: right;
+	position:absolute;
+	right:0px;
 }

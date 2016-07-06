@@ -52,6 +52,13 @@ class Ticket
     /**
      * @var string
      *
+     * @ORM\Column(name="content", type="text", nullable=false)
+     */
+    private $content;
+
+    /**
+     * @var string
+     *
      * @ORM\Column(name="status", type="string", length=255, nullable=true)
      */
     private $status;
@@ -171,6 +178,29 @@ class Ticket
     public function getIdsouscategory()
     {
         return $this->idsouscategory;
+    }
+
+        /**
+     * Set content
+     *
+     * @param string $content
+     * @return Ticket
+     */
+    public function setContent($content)
+    {
+        $this->content = $content;
+
+        return $this;
+    }
+
+    /**
+     * Get content
+     *
+     * @return string 
+     */
+    public function getContent()
+    {
+        return $this->content;
     }
 
     /**

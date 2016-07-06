@@ -1,0 +1,45 @@
+{% block body %}
+	<h1>Test create ticket</h1>
+	<p>Here we go</p>
+
+	{{ form_start(form) }}
+		{{ form_widget(form) }}
+		<input type="submit" value="Create" />
+	{{ form_end(form) }}
+
+<h3>Test AJAX</h3>
+
+	<select id="categories" name="categories">
+		<option value="">-- Categorie --</option>
+	</select>
+ 
+	<select id="sscategories" name="sscategories">
+		<option value="">-- Sous-catégorie--</option>
+	</select>
+
+
+
+
+	<script>
+	$(document).ready(function() {
+    	var $categories = $('#categories');
+    	var $sscategories = $('#sscategories');
+     
+    // chargement des catégories
+    $.ajax({
+        type:"POST",
+        url:"{{ path('ajax_send') }}",        
+        data: 'go', // on envoie $_POST['go']
+        dataType: 'json', // on veut un retour JSON
+        success: function(json) {
+            $.each(json, function(id, name) { // pour chaque noeud JSON
+                // on ajoute l option dans la liste
+                $categories.append('<option value="'+ id +'">'+ name +'</option>');
+            });
+        	}
+    	});
+    });
+
+	</script>
+	
+{% endblock %}
