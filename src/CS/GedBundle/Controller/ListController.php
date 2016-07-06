@@ -496,6 +496,16 @@ class ListController extends Controller
 
 	    	//récuperation de la date.
 	    	$dateFile = $myfile->getDate();
+
+	    	//récuperation des favoris.
+	    	$bookmarkfile = $em->getRepository('GedBundle:Linkbookmark')->findOneByIdfile($myfile->getId());
+
+	    	if (empty($bookmarkfile)){
+	    		$bookmarkfile = 0;
+	    	}
+	    	else{
+	    		$bookmarkfile = 1;
+	    	}
 	    	
     		//récueration des membres des groupes.
     		$groupMembers = $em->getRepository('GedBundle:Linkgroup')->findByIdgroup($myfile->getIdgroup());
@@ -553,6 +563,7 @@ class ListController extends Controller
 			    			'name'=>$nameFile,
 			    			'tagnames'=>$tabTags,
 			    			'comments'=>$nbCom,
+			    			'bookmark'=>$bookmarkfile,
     					);
 
     	}
@@ -583,6 +594,16 @@ class ListController extends Controller
 
 	    		//récuperation de la date.
 	    		$dateFile = $file->getDate();
+
+	    		//récuperation des favoris.
+	    		$bookmarkfile = $em->getRepository('GedBundle:Linkbookmark')->findOneByIdfile($myfile->getId());
+
+	    		if (empty($bookmarkfile)){
+	    			$bookmarkfile = 0;
+	    		}
+	    		else{
+	    			$bookmarkfile = 1;
+	    		}
 
 	    		//on recupere la sous-catégory.
 		    	if (!empty($file->getIdsouscategory)){
@@ -631,6 +652,7 @@ class ListController extends Controller
 		    		'type'=>$icoFile,
 		    		'tagnames'=>$tabTags,
 		    		'comments'=>$nbCom,
+		    		'bookmark'=>$bookmarkfile,
 		    	);
 	    	}
 	    }
