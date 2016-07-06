@@ -686,16 +686,18 @@ class ListController extends Controller
 	    	}
 	    }
 
+	    var_dump($tabMyFiles);
+
 	    //on verifie que le tableau n'est pas vide, sinon on lui attribue la valeur 1.
 	    if (empty($tabGroupFiles)){
 		    		$tabGroupFiles = 1;
 		}
 
 
-    	return $this->render('GedBundle::allfiles.html.twig',array( 'myfiles' => $myfiles,
+    	return $this->render('GedBundle::allfiles.html.twig',array( 'tabMyFiles' => $tabMyFiles,
 																	'form' => $form->createView(),
 																	'user'=> $user,
-																	'tabtag' => $tabTags,
+																	'tabtag' => $tabGroupFiles,
 																));
     }
 }
