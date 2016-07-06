@@ -28,6 +28,39 @@
 	border:#fba858 1px solid;
 }
 
+/* flashbag alert*/
+
+.alert{
+	width:50%;
+	margin-top:5px ;
+	margin-bottom: 0px;
+	margin-left: 10% !important;
+	height:40px;
+	padding:0px 40px;
+	text-align:center;
+	display:none;
+}
+
+.alert a{
+	text-decoration:none;
+	color:#3c763d;
+}
+
+/* Modal envoi */
+.btn:active{
+	background-color: #f1f1f1!important;
+}
+.modal .btn-primary{
+	background-color:#fba858;
+	border-color: #f1f1f1;
+}
+
+.modal .btn-primary:active{
+	background-color:#f1f1f1 !important;
+	border-color: #f1f1f1;
+	color:#000;
+}
+
 /* Search bar */
 
 .search-bar{
@@ -35,10 +68,33 @@
 	background-color:#fba858;
 }
 
-.search-select{
-	width: 100%;
+.styled-select select {
+	background: transparent;
+	width: 252px;
+	padding: 5px;
+	font-size: 16px;
+	line-height: 1;
+	border: 0;
+	border-radius: 0;
+	height: 34px;
+	-webkit-appearance: none;
 }
 
+.styled-select {
+	width: 240px;
+	height: 34px;
+	overflow: hidden;
+	z-index: 1;
+	background: url(../img/down_arrow_select.jpg) no-repeat right #fff;
+	border: 1px solid #ccc;
+}
+
+.search-btn{
+	border: 1px solid #ccc;
+}
+.search-bar .btn-default:hover{
+	background-color: #f1f1f1;
+}
 /* Navbar left */
 
 .nav-left{
@@ -62,6 +118,14 @@
 	color:yellow;
 }
 
+.glyphicon-cloud-upload{
+	right: 45px;
+}
+
+.nav-left .glyphicon-tasks{
+	right: 45px;
+}
+
 .nav-left ul{
 	padding: 0;
 	list-style: none;
@@ -69,13 +133,14 @@
 
 .nav-left a{
 	color:#000;
+	background-color:#f1f1f1;
 	text-decoration:none;
 	font-size:17px;
 	display: block;
-	padding: 10px 0 10px 10px ;
+	padding: 10px 0 10px 0;
 }
-
 .nav-left li:hover{
+	border-radius: 5px !important;
 	background-color:#fba858;
 }
 
@@ -85,19 +150,17 @@
 	z-index: 2;
 }
 
-.drop-content li{
-	margin:0;
-	width:auto;
-	min-width: 120px;
+.drop-content li a{
+	padding: 10px;
 }
 
 .drop-btn:hover .drop-content {
 	display: block;
     position:absolute;
-    top:160px;
+    top:159px;
 }
 
-.drop-btn .glyphicon{
+.drop-btn .glyphicon-triangle-right{
 	left: 50px;
 }
 .drop-btn a:hover, .btn:hover{
@@ -122,6 +185,10 @@
 .tab-cel{
 	padding: 0 5px;
 	text-align:center;
+}
+
+tr:hover td{
+	background-color: #e0e0e0;
 }
 
 .modal-header{

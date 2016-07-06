@@ -22,7 +22,17 @@
                     </button>
                     <button type="button" class="ajout-fichier btn btn-default navbar-btn" data-toggle="modal" data-target="#addfile"><span class="glyphicon glyphicon-plus" aria-hidden="true"></span> Ajouter un document</button>
                 </div>
-    {# Modal ajout fichier #}
+                {% for flashMessage in app.session.flashbag.get('success') %}
+                    <div class="alert alert-success alert-dismissible navbar-header pagination-centered" role="alert" id="flashbag">
+                        <button type="button" class="close" data-dismiss="alert" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                        <strong>Succes</strong>
+                    {{ flashMessage }}
+                    {% if file is defined %}
+                        <p><a href="{{ path('ged_parameters_file', { 'id' : file }) }}" title="">Vous pouvez maintenant régler les parametres du document ici.</a></p>
+                    {% endif %}
+                    </div>
+                {% endfor %}
+{# Modal ajout fichier #}
                 <div class="modal fade" id="addfile" tabindex="-1" role="dialog" aria-labelledby="myModalLabel">
                     <div class="modal-dialog" role="document">
                         <div class="modal-content">
@@ -32,21 +42,21 @@
                             </div>
                             <div class="modal-body">
                                 {{ form_start(form) }}
-                                    {{ form_row(form.path) }}
+                                    {{ form_widget(form.path) }}
                             </div>
                             <div class="modal-footer">
                                 <button type="button" class="btn btn-default" data-dismiss="modal">Annuler</button>
-                                <button type="submit" value="send" class="btn btn-primary">Comfirmer</button>
+                                <button type="submit" value="send" class="btn btn-primary">Confirmer</button>
                                 {{ form_end(form) }}
                             </div>
                         </div>
                     </div>
                 </div>
-     {# Fin Modal ajout fichier #}
+{# Fin Modal ajout fichier #}
                 <div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
                     <ul class="nav navbar-nav navbar-right">
                         <li class="lien-user">
-                            <a class="lien-user" href="#" >Bienvenue User
+                            <a class="lien-user" href="{{ path('ged_homepage') }}" title="Tous les fichiers"  >Bienvenue {{ user | capitalize }}
                             <img class="image-user" alt="Default-User" src='{{ asset('uploads/profileimages/default/de5d596f0373130509ec704c95b7dfba.png') }}'>
                             </a>
                         </li>
@@ -56,9 +66,12 @@
             </div>  
         </nav>
     </header>
-        <div>
-            {% block body %}
-            {% endblock body %}
-        </div>
+    {% block body %}
+    {% endblock body %}
+    <script>
+        $( document ).ready(function() {
+          $("#flashbag").delay(500).fadeIn(500).delay(5000).fadeOut(250);
+        });
+    </script>
     </body>
 </html>

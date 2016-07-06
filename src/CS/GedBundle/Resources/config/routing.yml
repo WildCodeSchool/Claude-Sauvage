@@ -1,6 +1,14 @@
 ged_homepage:
     path:     /
-    defaults: { _controller: GedBundle:Default:index }
+    defaults: { _controller: GedBundle:List:showDashboard }
+
+ged_all:
+    path:     /all
+    defaults: { _controller: GedBundle:List:all }
+
+ged_parameters_file:
+    path:     /parameters/{id}
+    defaults: { _controller: GedBundle:Parameters:parameters }
 
 # ged_upload:
 #     path:     /upload
