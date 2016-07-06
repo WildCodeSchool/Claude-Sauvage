@@ -238,14 +238,29 @@ class ListController extends Controller
 	    	{
 	    		$tagnames=1;
 	    	}
-	    	$tabpart[]=array(
-    		"tagnames"=>$tagnames,
-    		"path"=>$path,
-    		"type"=>$type,
-    		"category"=>$category,
-    		);
+	    	if (!empty($tabpart))
+	    	{
+		    	if (count($tabpart)<5)
+		    	{
+			    	$tabpart[]=array(
+		    			"tagnames"=>$tagnames,
+		    			"path"=>$path,
+		    			"type"=>$type,
+		    			"category"=>$category,
+		    			);
+	    		}
+	    	}
+	    	else
+	    	{
+	    		$tabpart[]=array(
+		    		"tagnames"=>$tagnames,
+		    		"path"=>$path,
+		    		"type"=>$type,
+		    		"category"=>$category,
+		    		);
+	    	}
     	}
-
+    	var_dump($tabpart);
     	// recup des groupes de l'utilisateur courant
     	$listgroups=$em->getRepository('GedBundle:Linkgroup')->findByIduser($iduser);
     	foreach ($listgroups as $groupfiles) {
@@ -289,12 +304,27 @@ class ListController extends Controller
 		    	{
 		    		$tagnames=1;
 		    	}
-		    	$tabpart[]=array(
-	    		"tagnames"=>$tagnames,
-	    		"path"=>$path,
-	    		"type"=>$type,
-	    		"category"=>$category,
-	    		);
+	    		if (!empty($tabpart))
+	    		{
+			    	if (count($tabpart)<5)
+		    		{
+				    	$tabpart[]=array(
+			    		"tagnames"=>$tagnames,
+			    		"path"=>$path,
+			    		"type"=>$type,
+			    		"category"=>$category,
+			    		);
+	    			}
+	    		}
+	    		else
+		    	{
+		    		$tabpart[]=array(
+			    		"tagnames"=>$tagnames,
+			    		"path"=>$path,
+			    		"type"=>$type,
+			    		"category"=>$category,
+			    		);
+		    	}
     		}
     	}
     	if (empty($tabpart) )
@@ -497,12 +527,12 @@ class ListController extends Controller
 	    	//récuperation de la date.
 	    	$dateFile = $myfile->getDate();
 	    	
-    		//récueration des membres des groupes.
+    		//récuperation des membres des groupes.
     		$groupMembers = $em->getRepository('GedBundle:Linkgroup')->findByIdgroup($myfile->getIdgroup());
     		foreach ($groupMembers as $groupMember) {
     			$groupMemberId = $groupMember->getIduser;
     			$groupMemberInfo = $em->getRepository('AppBundle:User')->findOneById($groupMemberId);
-    			$groupMemberName = $groupMemberInfo->getusername();
+    			$groupMemberName = $groupMemberInfo->getUsername();
 
     			$tabInfoGroup = array(
     					'groupMemberName'=>$groupMemberName,
@@ -520,21 +550,21 @@ class ListController extends Controller
 	    		$category= $categoryInfo->getName();
 	    	}
 
-	    	//on compte les commentaires lier a un fichier.
+	    	//on compte les commentaires liés a un fichier.
 		    $comments =$em->getRepository('GedBundle:Gedcom')->findById($myfile->getId());
 		    $nbCom = count('$comments');
 
-		    //on recherches les tags lier a un fichier.
+		    //on recherche les tags liés a un fichier.
 		    	
-	    	//on recherches les lien de tags par raport a l'id du fichier.
+	    	//on recherche les liens de tags par rapport a l'id du fichier.
 	    	$linkTags=$em->getRepository('GedBundle:Linktag')->findByIdfile($myfile->getId());
 
-	    	//puis on fait une boucle pour parcourir notre abjet de liens de tag.
+	    	//puis on fait une boucle pour parcourir notre objet de liens de tag.
 	    	foreach ($linkTags as $linkTag) {
 	    		$infoTag=$em->getRepository('GedBundle:Gedtag')->findOneById($linkTag->getIdtag());
 	    		$tagName=$infoTag->getName();
 
-	    		//on stoque tout dans un tableau.
+	    		//on stocke tout dans un tableau.
 	    		$tabTags[]= array(
 	    			'tagName'=>$tagName,
 	    			);
@@ -565,7 +595,7 @@ class ListController extends Controller
     		$groupFiles = $em->getRepository('GedBundle:Gedfiles')->findByIdgroup($group->getIdgroup());
 
 // /!\ /!\ /!\ /!\ /!\ /!\ /!\ /!\ /!\ /!\ /!\ /!\ a controler /!\ /!\ /!\ /!\ /!\ /!\ /!\ /!\ /!\ /!\ /!\ /!\ /!\ /!\ /!\ 
-    		//récueration des membres des groupes.
+    		//récuperation des membres des groupes.
     		$groupMemberId = $linkGroups->getIduser;
 	    	$groupMemberInfo = $em->getRepository('AppBundle:User')->findOneById($groupMemberId);
 	    	$groupMemberName = $groupMemberInfo->getusername();
@@ -591,17 +621,17 @@ class ListController extends Controller
 		    		$sousCategory = $sousCategoryInfo->getName();
 		    	}
 
-		    	//sinon si la sous-catégorie n'éxiste pas on recupere la catégorie.
+		    	//sinon si la sous-catégorie n'existe pas on recupere la catégorie.
 		    	else {
 		    		$categoryInfo = $em->getRepository('GedBundle:Category')->findOneById($file->getIdcategory());
 		    		$category= $categoryInfo->getName();
 		    	}
 			    	    	
-				//on compte les commentaires lier a un fichier.
+				//on compte les commentaires liés a un fichier.
 		    	$comments =$em->getRepository('GedBundle:Gedcom')->findById($file->getId());
 
 		    	//on compte le nombre de commentaires.
-		    	$nbCom = count('$comments');
+		    	$nbCom = count($comments);
 
 		    	//on recherches les tags lier a un fichier.
 		    	//on recherches les lien de tags par raport a l'id du fichier.
@@ -635,7 +665,7 @@ class ListController extends Controller
 	    	}
 	    }
 
-	    //on verifie que le tableau n'est pas vide, sinon on lui attribue la veleur 1.
+	    //on verifie que le tableau n'est pas vide, sinon on lui attribue la valeur 1.
 	    if (empty($tabGroupFiles)){
 		    		$tabGroupFiles = 1;
 		}
