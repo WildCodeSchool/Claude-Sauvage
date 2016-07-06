@@ -163,13 +163,13 @@
 .drop-btn:hover .drop-content {
 	display: block;
     position:absolute;
-    top:159px;
+    margin-top: -46px;
 }
 
 .drop-content li:hover .drop-in-content {
 	display: block;
     position:absolute;
-    top:0%;
+    margin-top: -46px;
 }
 
 .drop-btn .glyphicon-triangle-right{

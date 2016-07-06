@@ -260,7 +260,6 @@ class ListController extends Controller
 		    		);
 	    	}
     	}
-    	var_dump($tabpart);
     	// recup des groupes de l'utilisateur courant
     	$listgroups=$em->getRepository('GedBundle:Linkgroup')->findByIduser($iduser);
     	foreach ($listgroups as $groupfiles) {
