@@ -531,6 +531,10 @@ class ListController extends Controller
     																);
     	//on parcours les fichiers.
     	foreach ($myfiles as $myfile) {
+
+    		//récuperation de l'Id du fichier.
+    		$idFile = $myfile->getId();
+
     		//récuperation du type de ficher.
 	    	$typeFile = $myfile->getType();
 
@@ -543,9 +547,10 @@ class ListController extends Controller
 	    	//récuperation des favoris.
 	    	$bookmarkfile = $em->getRepository('GedBundle:Linkbookmark')->findOneByIdfile($myfile->getId());
 
-	    	if (empty($bookmarkfile)){
-	    		$bookmarkfile = 0;
+    		if (empty($bookmarkfile)){
+    		$bookmarkfile = 0;
 	    	}
+
 	    	else{
 	    		$bookmarkfile = 1;
 	    	}
@@ -575,7 +580,12 @@ class ListController extends Controller
 
 	    	//on compte les commentaires liés a un fichier.
 		    $comments =$em->getRepository('GedBundle:Gedcom')->findById($myfile->getId());
-		    $nbCom = count('$comments');
+		    if (empty($comments)){
+		    		$nbCom = 0;
+		    	}
+		    	else {
+		    		$nbCom = count($comments);
+		    	}
 
 		    //on recherche les tags liés a un fichier.
 		    	
@@ -599,16 +609,17 @@ class ListController extends Controller
 	    		$tabTags = 1;
 		    }
 
-		$tabMyFiles = array(
-	    					'groupMemberName'=>$tabInfoGroup,
-	    					'type'=>$typeFile,
-	    					'category'=>$category,
-			    			'name'=>$nameFile,
-			    			'tagnames'=>$tabTags,
-			    			'comments'=>$nbCom,
-			    			'bookmark'=>$bookmarkfile,
-    					);
-
+			$tabMyFiles[]= array(
+								'fileId'=>$idFile,
+		    					'groupMemberName'=>$tabInfoGroup,
+		    					'type'=>$typeFile,
+		    					'category'=>$category,
+		    					'date'=>$dateFile,
+				    			'name'=>$nameFile,
+				    			'tagnames'=>$tabTags,
+				    			'comments'=>$nbCom,
+				    			'bookmark'=>$bookmarkfile,
+	    					);
     	}
 
     	//récuperation de tout les fichiers des groupes ou est l'utilisateur.
@@ -618,7 +629,6 @@ class ListController extends Controller
     	foreach ($linkGroups as $group) {
     		$groupFiles = $em->getRepository('GedBundle:Gedfiles')->findByIdgroup($group->getIdgroup());
 
-// /!\ /!\ /!\ /!\ /!\ /!\ /!\ /!\ /!\ /!\ /!\ /!\ a controler /!\ /!\ /!\ /!\ /!\ /!\ /!\ /!\ /!\ /!\ /!\ /!\ /!\ /!\ /!\ 
     		//récuperation des membres des groupes.
     		$groupMemberId = $linkGroups->getIduser;
 	    	$groupMemberInfo = $em->getRepository('AppBundle:User')->findOneById($groupMemberId);
@@ -629,6 +639,10 @@ class ListController extends Controller
 			);
 
 	    	foreach ($groupFiles as $file) {
+
+	    		//récuperation de l'Id du fichier.
+    			$idFile = $myfile->getId();
+
 	    		//récuperation du type de ficher.
 	    		$typeFile = $file->getType();
 
@@ -665,7 +679,14 @@ class ListController extends Controller
 		    	$comments =$em->getRepository('GedBundle:Gedcom')->findById($file->getId());
 
 		    	//on compte le nombre de commentaires.
-		    	$nbCom = count($comments);
+		    	if (empty($comments)){
+		    		$nbCom = 0;
+		    	}
+		    	else {
+		    		$nbCom = count($comments);
+		    	}
+
+
 
 		    	//on recherches les tags lier a un fichier.
 		    	//on recherches les lien de tags par raport a l'id du fichier.
@@ -689,10 +710,12 @@ class ListController extends Controller
 
 		    	//On regroupe tout dans un tableau.
 		    	$tabGroupFiles[] = array(
+		    		'fileId'=>$idFile,
 		    		'category'=>$category,
 		    		'sousCategory'=>$sousCategory,
 		    		'name'=>$nameFile,
 		    		'type'=>$icoFile,
+		    		'date'=>$dateFile,
 		    		'tagnames'=>$tabTags,
 		    		'comments'=>$nbCom,
 		    		'bookmark'=>$bookmarkfile,
@@ -700,18 +723,27 @@ class ListController extends Controller
 	    	}
 	    }
 
-	    var_dump($tabMyFiles);
-
 	    //on verifie que le tableau n'est pas vide, sinon on lui attribue la valeur 1.
 	    if (empty($tabGroupFiles)){
 		    		$tabGroupFiles = 1;
 		}
 
+		//on verifie que le tableau n'est pas vide, sinon on lui attribue la valeur 1.
+	    if (empty($tabMyFiles)){
+		    		$tabMyFiles = 1;
+		}
 
-    	return $this->render('GedBundle::allfiles.html.twig',array( 'tabMyFiles' => $tabMyFiles,
+	// var_dump($tabMyFiles);
+	// var_dump($tabGroupFiles);
+		// var_dump($comments);exit;
+
+
+
+    	return $this->render('GedBundle::allfiles.html.twig',array( 
 																	'form' => $form->createView(),
 																	'user'=> $user,
-																	'tabtag' => $tabGroupFiles,
-																));
+																	'tabMyFiles' => $tabMyFiles,
+																	'tabGroupFiles' => $tabGroupFiles,
+																	));
     }
 }
