@@ -26,19 +26,15 @@ class FileController extends Controller
 
  		$fichier = '../web/uploads/'.$file->getPath(); 
 
-            if ( (!empty($fichier)) && (is_readable($fichier)) )
-            { 
-        	    $textfile = file_get_contents($fichier); 
-            } 
-	        else 
-	        { 
-	        	$extfile=1;
-	            echo 'Le fichier '.$fichier.' n\'existe pas ou n\'est pas disponible en ouverture '; 
-	        } 
-
-
-
-
+        if ( (!empty($fichier)) && (is_readable($fichier)) )
+        { 
+    	    $textfile = file_get_contents($fichier); 
+        } 
+        else 
+        { 
+        	$extfile=1;
+            echo 'Le fichier '.$fichier.' n\'existe pas ou n\'est pas disponible en ouverture '; 
+        } 
 
 
 		//fonction d'upload
