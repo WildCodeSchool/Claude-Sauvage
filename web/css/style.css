@@ -233,24 +233,45 @@ tr:hover td{
 	margin-bottom: 25px;
 	margin-top: 25px;
 }
+
 .button-one-file
 {
 	background-color: #fba858;
 }
+
 .button-one-file:focus
 {
-	background-color: #F1F1F1;
+	background-color: #fba858;
 }
-.com-part
+
+#com-part
 {
-	background-color: #F1F1F1;	
+	background-color: #F1F1F1;
+	border: 1px solid #c9c9c9;	
 }
+
 .existing-com
 {
 	height:500px;
 	overflow: auto;
 }
+
 .com-form
 {
-	bottom: 50px;
+	
+}
+
+.one-comment
+{
+	background-color: #fba858;
+	margin:5px;
+	margin-top: 10px;
+	border-radius: 3px;
+	font-size: 15px;
+	padding: 3px;
+	padding-left: 7px;
+}
+.showform
+{
+	display: none;
 }

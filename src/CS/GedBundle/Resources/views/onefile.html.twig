@@ -1,12 +1,16 @@
 {% extends "GedBundle::layout.html.twig" %}
 {% block body %}
-	<div class="col-md-6 button-container">
+<div class="all">	
+	<div class="col-md-4 button-container">
 		<button class="btn button-one-file">Télécharger</button>
 	</div>
-	<div class="col-md-6 button-container">
+	<div class="col-md-4 button-container">
 		<button class="btn button-one-file">Partager</button>
 	</div>
-	<div class="col-md-9">
+	<div class="col-md-4 button-container">
+		<button class="btn button-one-file" id="btn-com">Commentaires</button>
+	</div>
+	<div class="col-md-12" id="file-part">
 		<p> ce fichier a l'id {{ idfile }}</p>
 		<p>il s'appelle {{ file.originalname }}</p>
 		{% if file.type == 'jpeg' or file.type == 'jpg' or file.type == 'png' or file.type == 'gif' or file.type == 'ico' %}
@@ -17,18 +21,19 @@
 			<div><a href=" {{ asset('./uploads/'~file.path ) }} " target="blank">Afficher le document</a></div>
 		{% endif %}
 	</div>
-	<div class="col-md-3 com-part">
+
+	<div class="showform" id="com-part">
 		<div class="existing-com">
 			{% if tabcom != 1 %}
 				{% for comment in tabcom %}
-					<div>
+					<div class="one-comment">
 						<p>{{ comment['owner'] }} {{ comment['date'].date | date("d/m/Y h:m:s") }}</p>
 						<p>{{ comment['content'] }}</p>
 					</div>
 				{% endfor %}
 			{% endif %}
 		</div>
-		<div class="com-form">
+		<div class="com-form showform" id="form">
 			<form action="{{ path('new_comment') }}" method="post">
 				<label for="content">laisser un commentaire:</label>
 				<br/>
@@ -39,4 +44,18 @@
 			</form>
 		</div>
 	</div>
+</div>
+<script>
+	$(document).ready(function(){
+
+		$('#btn-com').click(function(){
+			$('#com-part').toggleClass('col-md-3');
+			$('#com-part').toggleClass('showform');
+			$('#form').toggleClass('showform');
+			$('#file-part').toggleClass('col-md-9');
+			$('#file-part').toggleClass('col-md-12');
+		});
+
+	});
+</script>
 {% endblock body %}
