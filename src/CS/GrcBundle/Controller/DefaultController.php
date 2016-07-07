@@ -25,11 +25,21 @@ class DefaultController extends Controller
 		$user = $this->container->get('security.context')->getToken()->getUser();
 		$iduser = $user->getId();
 
+		$categories = $em->getRepository('GrcBundle:Grccategory')->findAll();
+		$sscategories = $em->getRepository('GrcBundle:Grcsouscategory')->findAll();
+
 		if ($form->isSubmitted() && $form->isValid()) {
             $date = new DateTime;
+
+            $cat = $request->request->get('cat');
+            $sscat = $request->request->get('sscat');
+
             $em = $this->getDoctrine()->getManager();
             $ticket->setDate($date);
             $ticket->setIdsender($iduser);
+            $ticket->setIdreceiver(1);
+            $ticket->setIdcategory($cat);
+            $ticket->setIdsouscategory($sscat);
 
             $em->persist($ticket);
             $em->flush();
@@ -39,29 +49,11 @@ class DefaultController extends Controller
 
 		return $this->render('GrcBundle:Default:create.html.twig', array(
 		'form' => $form->createView(),
+		'categories' => $categories,
+		'sscategories' => $sscategories,
         ));
     }
 	
-	public function ajaxcatAction(Request $request)
-	{
-	
-	$em = $this->getDoctrine()->getManager();
-	$listcat=$em->getRepository('GrcBundle::Grccategory')->findAll();
-
-	var_dump($listcat);
-	$json = array();
-
-	foreach ($listcat as $cat) {
-		$id=$cat->getId();
-		$name=$cat->getName();
-		$json[$id][] = $name;
-	}
-
-	// envoi du résultat au success
-	echo json_encode($json);
-
-	}
-
 	public function ticketAction(Request $request)
 	{
 	
