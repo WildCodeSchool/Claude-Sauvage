@@ -511,7 +511,7 @@ class ListController extends Controller
     public function allAction(Request $request)
     {
     	//récuperation & atribution de l entitiy manager.
-    	$em = $em=$this->getDoctrine()->getManager();
+    	$em=$this->getDoctrine()->getManager();
 
     	//récuperation de l'utilisateur courant.
     	$user =$this->getUser();
@@ -525,6 +525,9 @@ class ListController extends Controller
 
         //Si le formulaire est envoyer et est valide.
         if ($form->isSubmitted() && $form->isValid()) {
+
+        	$originalgetting=$form->getNormData()->getPath('originalName');
+            $originalname=$originalgetting->getClientOriginalName();
             
             $file = $gedfiles->getPath();
             
@@ -540,6 +543,7 @@ class ListController extends Controller
             $gedfiles->setIdowner($user->getId());
             $gedfiles->setIdCategory(1);
             $gedfiles->setDate( new DateTime());
+            $gedfiles->setOriginalname($originalname);
 
             $em->persist($gedfiles);
             $em->flush();
@@ -565,10 +569,13 @@ class ListController extends Controller
 	    	$typeFile = $myfile->getType();
 
 	    	//récuperation du nom du ficher.
-	    	$nameFile = $myfile->getPath();
+	    	$pathFile = $myfile->getPath();
 
 	    	//récuperation de la date.
 	    	$dateFile = $myfile->getDate();
+
+	    	//récuperation du nom original.
+	    	$nameFile=$myfile->getOriginalName();
 
 	    	//récuperation des favoris.
 	    	$bookmarkfile = $em->getRepository('GedBundle:Linkbookmark')->findOneByIdfile($myfile->getId());
@@ -642,6 +649,7 @@ class ListController extends Controller
 		    					'category'=>$category,
 		    					'date'=>$dateFile,
 				    			'name'=>$nameFile,
+				    			'path'=>$pathFile,
 				    			'tagnames'=>$tabTags,
 				    			'comments'=>$nbCom,
 				    			'bookmark'=>$bookmarkfile,
@@ -673,10 +681,13 @@ class ListController extends Controller
 	    		$typeFile = $file->getType();
 
 	    		//récuperation du nom du ficher.
-	    		$nameFile = $file->getPath();
+	    		$pathFile = $file->getPath();
 
 	    		//récuperation de la date.
 	    		$dateFile = $file->getDate();
+
+	    		//récuperation du nom original.
+	    		$nameFile=$myfile->getOriginalName();
 
 	    		//récuperation des favoris.
 	    		$bookmarkfile = $em->getRepository('GedBundle:Linkbookmark')->findOneByIdfile($myfile->getId());
@@ -740,6 +751,7 @@ class ListController extends Controller
 		    		'category'=>$category,
 		    		'sousCategory'=>$sousCategory,
 		    		'name'=>$nameFile,
+		    		'path'=>$pathFile,
 		    		'type'=>$icoFile,
 		    		'date'=>$dateFile,
 		    		'tagnames'=>$tabTags,
