@@ -51,11 +51,7 @@
 					{% for upload in tabupl %}
 						<tr> 
 							<td>{{ upload['type'] }}</td> 
-							{% if upload['type'] == 'pdf' %}
 								<td><a href="{{ path('one_file' , {'id': upload['idfile'] }) }}">{{ upload['name'] }}</a></td>
-							{% else %}
-								<td><a href="{{ path('one_file' , {'id': upload['idfile'] }) }}">{{ upload['name'] }}</a></td>
-							{% endif %}
 							<td>{{ upload['category'] }}</td> 
 							<td>
 								{% for tag in upload['tagnames'] %}
