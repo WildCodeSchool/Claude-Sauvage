@@ -12,14 +12,7 @@ class TicketType extends AbstractType
     public function buildForm(FormBuilderInterface $builder, array $options)
     {
         $builder
-            ->add('idreceiver')
             ->add('content')
-            ->add('idcategory', 'entity', array(
-                'class'    => 'GrcBundle:Grccategory',
-                'property' => 'name',
-                'multiple' => false
-                ))
-            ->add('idsouscategory')
         ;
     }
     
