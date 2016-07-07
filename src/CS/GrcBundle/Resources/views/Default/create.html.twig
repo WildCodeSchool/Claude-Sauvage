@@ -4,42 +4,23 @@
 
 	{{ form_start(form) }}
 		{{ form_widget(form) }}
+		
+		<select id="categories" name="cat">
+			<option value="99">-- Categorie --</option>
+			{% for categorie in categories %}
+			<option value= {{ categorie.id }} > {{ categorie.name }} </option>
+			{% endfor %}
+		</select></br>
+
+		<select id="sscategories" name="sscat">
+			<option value="99">-- Sous-catégorie--</option>
+			{% for sscategorie in sscategories %}
+			<option value= {{ sscategorie.id }} > {{ sscategorie.name }} </option>
+			{% endfor %}
+		</select></br>
+
 		<input type="submit" value="Create" />
 	{{ form_end(form) }}
 
-<h3>Test AJAX</h3>
-
-	<select id="categories" name="categories">
-		<option value="">-- Categorie --</option>
-	</select>
- 
-	<select id="sscategories" name="sscategories">
-		<option value="">-- Sous-catégorie--</option>
-	</select>
-
-
-
-
-	<script>
-	$(document).ready(function() {
-    	var $categories = $('#categories');
-    	var $sscategories = $('#sscategories');
-     
-    // chargement des catégories
-    $.ajax({
-        type:"POST",
-        url:"{{ path('ajax_send') }}",        
-        data: 'go', // on envoie $_POST['go']
-        dataType: 'json', // on veut un retour JSON
-        success: function(json) {
-            $.each(json, function(id, name) { // pour chaque noeud JSON
-                // on ajoute l option dans la liste
-                $categories.append('<option value="'+ id +'">'+ name +'</option>');
-            });
-        	}
-    	});
-    });
-
-	</script>
 	
 {% endblock %}

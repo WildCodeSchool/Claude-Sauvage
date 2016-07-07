@@ -194,7 +194,6 @@ class ListController extends Controller
 	    	}
 		}
 
-
 		if(empty($tabupl))
     	{
     		$tabupl=1;
