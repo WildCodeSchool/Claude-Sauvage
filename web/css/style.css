@@ -1,4 +1,4 @@
-/* Navbar top*/
+/* --------------------------------- Navbar top ---------------------------------*/
 
 .navbar{
 	margin-bottom:0;
@@ -28,7 +28,7 @@
 	border:#fba858 1px solid;
 }
 
-/* flashbag alert*/
+/* --------------------------------- flashbag alert ---------------------------------*/
 
 .alert{
 	width:50%;
@@ -95,7 +95,8 @@
 .search-bar .btn-default:hover{
 	background-color: #f1f1f1;
 }
-/* Navbar left */
+
+/*--------------------------------- Navbar left --------------------------------- */
 
 .nav-left{
 	padding: 20px 0 0 0;
@@ -187,12 +188,16 @@
 	font-size: 20px;
 }
 
+.drop-content .glyphicon-triangle-right{
+	left: 10px;
+}
+
 .corbeille span:nth-child(2){
 	font-size: 10px;
 	margin-right: 40px;
 }
 
-/* Dashboard */
+/*--------------------------------- Dashboard ---------------------------------*/
 
 .tab-cel{
 	padding: 0 5px;
@@ -211,7 +216,7 @@ tr:hover td{
 	text-align: center;
 }
 
-/* tous les fichiers */
+/*--------------------------------- tout les fichiers ---------------------------------*/
 
 #table .glyphicon-star-empty, #table .glyphicon-star{
 	font-size: 20px;
