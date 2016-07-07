@@ -15,6 +15,9 @@ one_file:
     path:     /file/{id}
     defaults: { _controller: GedBundle:File:show }
 
+new_comment:
+    path:     /newcom
+    defaults: { _controller: GedBundle:File:addComment }
 ged_download:
     pattern: /download/{name}
     defaults: { _controller: GedBundle:Download:download}

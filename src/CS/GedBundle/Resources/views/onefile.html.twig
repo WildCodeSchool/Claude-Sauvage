@@ -1,11 +1,42 @@
 {% extends "GedBundle::layout.html.twig" %}
 {% block body %}
-	HELLO WORLD
-	<p> ce fichier a l'id {{ idfile }}</p>
-	<p>il s'appelle {{ file.originalname }}</p>
-	{% if file.type == 'jpeg' or file.type == 'jpg' or file.type == 'png' or file.type == 'gif' or file.type == 'ico' %}
-		<img src="{{ asset('/uploads/' ~file.path) }}" alt="image">
-	{% elseif file.type == 'txt' or file.type == 'html' or file.type == 'html.twig' or file.type == 'css' or file.type == 'php' or file.type == 'js' or file.type == 'md' or file.type == 'yml' or file.type == 'htm'  or file.type == 'xml' or file.type == 'xls' %}
-		<pre>{{ textfile }}</pre>
-	{% endif %}
+	<div class="col-md-6 button-container">
+		<button class="btn button-one-file">Télécharger</button>
+	</div>
+	<div class="col-md-6 button-container">
+		<button class="btn button-one-file">Partager</button>
+	</div>
+	<div class="col-md-9">
+		<p> ce fichier a l'id {{ idfile }}</p>
+		<p>il s'appelle {{ file.originalname }}</p>
+		{% if file.type == 'jpeg' or file.type == 'jpg' or file.type == 'png' or file.type == 'gif' or file.type == 'ico' %}
+			<img src="{{ asset('/uploads/' ~file.path) }}" alt="image">
+		{% elseif file.type == 'txt' or file.type == 'html' or file.type == 'html.twig' or file.type == 'css' or file.type == 'php' or file.type == 'js' or file.type == 'md' or file.type == 'yml' or file.type == 'htm'  or file.type == 'xml' or file.type == 'xls' %}
+			<pre>{{ textfile }}</pre>
+		{% elseif file.type == 'pdf' %}
+			<div><a href=" {{ asset('./uploads/'~file.path ) }} " target="blank">Afficher le document</a></div>
+		{% endif %}
+	</div>
+	<div class="col-md-3 com-part">
+		<div class="existing-com">
+			{% if tabcom != 1 %}
+				{% for comment in tabcom %}
+					<div>
+						<p>{{ comment['owner'] }} {{ comment['date'].date | date("d/m/Y h:m:s") }}</p>
+						<p>{{ comment['content'] }}</p>
+					</div>
+				{% endfor %}
+			{% endif %}
+		</div>
+		<div class="com-form">
+			<form action="{{ path('new_comment') }}" method="post">
+				<label for="content">laisser un commentaire:</label>
+				<br/>
+				<textarea name="content"></textarea>
+				<input name="idfile" value="{{ idfile }}" style="display:none;"/>
+				<br/>
+				<input type="submit" value="valider"/>
+			</form>
+		</div>
+	</div>
 {% endblock body %}

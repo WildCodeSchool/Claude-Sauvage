@@ -229,3 +229,33 @@ tr:hover td{
 #table a{
 	color:#000;
 }
+
+/* page 1 fichier */
+
+.button-container
+{
+	text-align: center;
+	margin-bottom: 25px;
+	margin-top: 25px;
+}
+.button-one-file
+{
+	background-color: #fba858;
+}
+.button-one-file:focus
+{
+	background-color: #F1F1F1;
+}
+.com-part
+{
+	background-color: #F1F1F1;	
+}
+.existing-com
+{
+	height:500px;
+	overflow: auto;
+}
+.com-form
+{
+	bottom: 50px;
+}
