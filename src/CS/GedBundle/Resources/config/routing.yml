@@ -10,6 +10,11 @@ ged_parameters_file:
     path:     /parameters/{id}
     defaults: { _controller: GedBundle:Parameters:parameters }
 
-# ged_upload:
-#     path:     /upload
-#     defaults: { _controller: GedBundle:Default:upload }
+
+one_file:
+    path:     /file/{id}
+    defaults: { _controller: GedBundle:File:show }
+
+ged_download:
+    pattern: /download/{name}
+    defaults: { _controller: GedBundle:Download:download}

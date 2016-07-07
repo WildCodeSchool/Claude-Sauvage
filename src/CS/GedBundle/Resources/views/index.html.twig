@@ -20,7 +20,7 @@
 					{% for favorite in tabfav %}
 						<tr> 
 							<td>{{ favorite['type'] }}</td> 
-							<td>{{ favorite['path'] }}</td>
+							<td><a href="{{ path('one_file' , {'id': favorite['idfile'] }) }}">{{ favorite['name'] }}</a></td>
 							<td>{{ favorite['category'] }}</td> 
 							<td>
 								{% for tag in favorite['tagnames'] %}
@@ -51,7 +51,7 @@
 					{% for upload in tabupl %}
 						<tr> 
 							<td>{{ upload['type'] }}</td> 
-							<td>{{ upload['path'] }}</td>
+							<td><a href="{{ path('one_file' , {'id': upload['idfile'] }) }}">{{ upload['name'] }}</a></td>
 							<td>{{ upload['category'] }}</td> 
 							<td>
 								{% for tag in upload['tagnames'] %}
@@ -84,7 +84,7 @@
 					{% for commented in tabcom %}
 						<tr> 
 							<td>{{ commented['type'] }}</td> 
-							<td>{{ commented['path'] }}</td>
+							<td><a href="{{ path('one_file' , {'id': commented['idfile'] }) }}">{{ commented['name'] }}</a></td>
 							<td>{{ commented['category'] }}</td> 
 							<td>
 								{% for tag in commented['tagnames'] %}
@@ -115,7 +115,7 @@
 					{% for partaged in tabpart %}
 						<tr> 
 							<td>{{ partaged['type'] }}</td> 
-							<td>{{ partaged['path'] }}</td>
+							<td><a href="{{ path('one_file' , {'id': partaged['idfile'] }) }}">{{ partaged['name'] }}</a></td>
 							<td>{{ partaged['category'] }}</td> 
 							<td>
 								{% for tag in partaged['tagnames'] %}
