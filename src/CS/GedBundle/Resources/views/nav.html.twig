@@ -9,9 +9,11 @@
 					{% if categorie.name != 'brouillon' %}
 						<li><a href="#" class="btn btn-default">{{ categorie.name }}<span class="glyphicon glyphicon-triangle-right" aria-hidden="true"></span></a>
 							<ul class="drop-in-content">
-								<li><a href="#" class="btn btn-default">Sous-Categorie 1</a></li>
-								<li><a href="#" class="btn btn-default">Sous-Categorie 2</a></li>
-								<li><a href="#" class="btn btn-default">Sous-Categorie 3</a></li>
+								{% for sscategory in categoryTab %}
+									{% if sscategory['id'] == categorie.id %}
+										<li><a href="#" class="btn btn-default">{{ sscategory['category'] }}</a></li>
+									{% endif %}
+								{% endfor %}
 							</ul>
 						</li>
 					{% endif %}

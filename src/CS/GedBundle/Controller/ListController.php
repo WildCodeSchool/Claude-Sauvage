@@ -23,6 +23,32 @@ class ListController extends Controller
     	
     	$user = $this->container->get('security.context')->getToken()->getUser();
     	$iduser=$user->getId();
+
+    	//récupération des Category.
+        $categories = $em->getRepository('GedBundle:Category')->findAll();
+
+        //récuperation des sous-catégories.
+        $categoryTab = [];
+        foreach ($categories as $category) {
+
+        	$categoryInfos = $em->getRepository('GedBundle:Souscategory')->findByIdcategory($category->getId());
+
+        	if (!empty($categoryInfos)){
+
+        		//On place les sous-catégorie dans un tableau si elle sont définie.
+				foreach ($categoryInfos as $categoryInfo) {
+
+        			$categoryName=$categoryInfo->getName();
+        			$categoryId=$categoryInfo->getIdcategory();
+    		
+    				$categoryTab[] = array(
+    					'category' => $categoryName,
+    					'id' => $categoryId,
+					);
+        		}
+        	}
+    	}
+
     	//on recupere tous les fichiers mis en fav par l'user
     	$listfavs=$em->getRepository('GedBundle:Linkbookmark')->findBy(  
     		array('iduser' => $iduser), // Critere
@@ -464,6 +490,8 @@ class ListController extends Controller
     		'form' => $form->createView(),
     		'user'=>$user,
     		'file'=>$fileId,
+    		'categories' => $categories,
+			'categoryTab'=> $categoryTab,
     	));
     }
 
@@ -517,6 +545,7 @@ class ListController extends Controller
         $categories = $em->getRepository('GedBundle:Category')->findAll();
 
         //récuperation des sous-catégories.
+        $categoryTab = [];
         foreach ($categories as $category) {
 
         	$categoryInfos = $em->getRepository('GedBundle:Souscategory')->findByIdcategory($category->getId());
@@ -524,21 +553,16 @@ class ListController extends Controller
         	if (!empty($categoryInfos)){
 
         		//On place les sous-catégorie dans un tableau si elle sont définie.
-        		foreach ($categoryInfos as $categoryInfo) {
+				foreach ($categoryInfos as $categoryInfo) {
 
         			$categoryName=$categoryInfo->getName();
-        			$categoryId=$categoryInfo->getId();
+        			$categoryId=$categoryInfo->getIdcategory();
     		
-    				$categoryTab = array(
+    				$categoryTab[] = array(
     					'category' => $categoryName,
     					'id' => $categoryId,
 					);
-
         		}
-        	}
-
-        	else{
-        		$categoryTab = 0;
         	}
     	}		
 
@@ -765,6 +789,7 @@ class ListController extends Controller
 																	'tabMyFiles' => $tabMyFiles,
 																	'tabGroupFiles' => $tabGroupFiles,
 																	'categories' => $categories,
+																	'categoryTab'=> $categoryTab,
 																	));
     }
 }
