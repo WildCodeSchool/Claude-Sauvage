@@ -1,26 +1,32 @@
+{% extends 'GrcBundle::layout.html.twig' %}
+
 {% block body %}
-	<h1>Test create ticket</h1>
-	<p>Here we go</p>
 
-	{{ form_start(form) }}
-		{{ form_widget(form) }}
-		
-		<select id="categories" name="cat">
-			<option value="99">-- Categorie --</option>
-			{% for categorie in categories %}
-			<option value= {{ categorie.id }} > {{ categorie.name }} </option>
-			{% endfor %}
-		</select></br>
+<div class="page_formulaire">
+	<h3>Créer votre ticket en remplissant le formulaire ci-dessous</h3>
+	<div class="formulaire">
+		{{ form_start(form) }}
+			
+			<p><b>Veuillez sélectionner la catégorie/sous-catégorie:</b></p>
+			<select id="categories" name="cat">
+				<option value="99">-- Categorie --</option>
+					{% for categorie in categories %}
+						<option value= {{ categorie.id }} > {{ categorie.name }} </option>
+					{% endfor %}
+			</select>
 
-		<select id="sscategories" name="sscat">
-			<option value="99">-- Sous-catégorie--</option>
-			{% for sscategorie in sscategories %}
-			<option value= {{ sscategorie.id }} > {{ sscategorie.name }} </option>
-			{% endfor %}
-		</select></br>
+			<select id="sscategories" name="sscat">
+				<option value="99">-- Sous-catégorie--</option>
+					{% for sscategorie in sscategories %}
+						<option value= {{ sscategorie.id }} > {{ sscategorie.name }} </option>
+					{% endfor %}
+			</select></br></br>
+			<p><b>Veuillez décrire votre demande:</b></p>
+			{{ form_widget(form.content) }}</br></br>
 
-		<input type="submit" value="Create" />
-	{{ form_end(form) }}
+			<input type="submit" value="Create" />
+		{{ form_end(form) }}
+	</div>
+</div>
 
-	
 {% endblock %}

@@ -1,0 +1,48 @@
+{% extends 'GrcBundle::layout.html.twig' %}
+
+{% block body %}
+	<div class="container_liste">
+		<h2>Liste des tickets</h2>
+		<table id"table_id" class="display liste_tickets">
+			<thead> 
+				<tr> 
+					<th>N°Ticket</th> 
+					<th>Catégorie</th>
+					<th>Sous-catégorie</th> 
+					<th>Demandeur</th>
+					<th>Date création</th>
+					<th>Dernière action</th>
+					<th>Priorité</th>
+					<th>Status</th>
+				</tr> 
+			</thead> 
+			<tbody>
+				{% if ticketslist is defined %}
+					{% for ticket in ticketslist %}
+						<tr> 
+							<td><a href="{{ path('ticket', { 'id': ticket['idticket'] }) }}">{{ ticket['idticket'] }}</a></td>
+							<td>{{ ticket['catname'] }}</td>
+							<td>{{ ticket['sscatname'] }}</td>
+							<td>{{ ticket['iddemandeur'] }}</td>
+							<td>{{ ticket['dateticket']|date('Y-m-d') }}</td>
+							<td>Not available</td>
+							<td>{{ ticket['prioticket'] }}</td>
+							<td>{{ ticket['statusticket'] }}</td>
+						</tr>
+					{% endfor %}
+				{% endif %}
+			</tbody>
+		</table>
+	</div>
+
+<script type="text/javascript"> 
+	$(document).ready(function() { 
+		$('.liste_tickets').DataTable( {
+		"paging": true,
+		"ordering": true, 
+		"info": true, 
+		"sDom": '<"H"lr>t<"F"ip>' 
+		}); 
+	});
+</script>
+{% endblock %}

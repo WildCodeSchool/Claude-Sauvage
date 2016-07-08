@@ -264,3 +264,20 @@ tr:hover td{
 	position:absolute;
 	right:0px;
 }
+
+/** GRC formulaire création ticket 
+ */
+ .page_formulaire h3{
+	text-align: center;
+}
+ .formulaire{
+	padding-top: 30px;
+	padding-bottom: 30px;
+	margin-left: 30%;
+	margin-right: 30%;
+	background-color: #1FA597;
+	text-align: center;
+}
+
+/** GRC liste de tout les tickets
+ */
