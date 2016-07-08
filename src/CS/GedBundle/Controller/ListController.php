@@ -173,6 +173,10 @@ class ListController extends Controller
 	    	$change++;
 	    	
     	}
+    	if (empty($tabupl))
+    	{
+    		$tabupl=1;
+    	}
 
 		
     	//DEBUT DE LA PARTIE "PARTAGÉS AVEC MOI"
