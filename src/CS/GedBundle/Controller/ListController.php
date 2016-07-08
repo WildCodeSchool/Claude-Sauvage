@@ -553,6 +553,35 @@ class ListController extends Controller
 
         }
 
+        //récupération des Category.
+        $categories = $em->getRepository('GedBundle:Category')->findAll();
+
+        //récuperation des sous-catégories.
+        foreach ($categories as $category) {
+
+        	$categoryInfos = $em->getRepository('GedBundle:Souscategory')->findByIdcategory($category->getId());
+
+        	if (!empty($categoryInfos)){
+
+        		//On place les sous-catégorie dans un tableau si elle sont définie.
+        		foreach ($categoryInfos as $categoryInfo) {
+
+        			$categoryName=$categoryInfo->getName();
+        			$categoryId=$categoryInfo->getId();
+    		
+    				$categoryTab = array(
+    					'category' => $categoryName,
+    					'id' => $categoryId,
+					);
+
+        		}
+        	}
+
+        	else{
+        		$categoryTab = 0;
+        	}
+    	}		
+
         //récupération de tout les fichiers de l'utilisateur.
     	$myfiles = $em->getRepository('GedBundle:Gedfiles')->findBy(
     																	array( 'idowner'=> $user->getId() ),
@@ -611,13 +640,13 @@ class ListController extends Controller
 	    	}
 
 	    	//on compte les commentaires liés a un fichier.
-		    $comments =$em->getRepository('GedBundle:Gedcom')->findById($myfile->getId());
+		    $comments =$em->getRepository('GedBundle:Gedcom')->findByIdfile($myfile->getId());
 		    if (empty($comments)){
 		    		$nbCom = 0;
 		    	}
-		    	else {
-		    		$nbCom = count($comments);
-		    	}
+	    	else {
+	    		$nbCom = count($comments);
+	    	}
 
 		    //on recherche les tags liés a un fichier.
 		    	
@@ -712,7 +741,7 @@ class ListController extends Controller
 		    	}
 			    	    	
 				//on compte les commentaires liés a un fichier.
-		    	$comments =$em->getRepository('GedBundle:Gedcom')->findById($file->getId());
+		    	$comments =$em->getRepository('GedBundle:Gedcom')->findByIdfile($file->getId());
 
 		    	//on compte le nombre de commentaires.
 		    	if (empty($comments)){
@@ -770,17 +799,12 @@ class ListController extends Controller
 		    		$tabMyFiles = 1;
 		}
 
-	// var_dump($tabMyFiles);
-	// var_dump($tabGroupFiles);
-		// var_dump($comments);exit;
-
-
-
     	return $this->render('GedBundle::allfiles.html.twig',array( 
 																	'form' => $form->createView(),
 																	'user'=> $user,
 																	'tabMyFiles' => $tabMyFiles,
 																	'tabGroupFiles' => $tabGroupFiles,
+																	'categories' => $categories,
 																	));
     }
 }
