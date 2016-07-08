@@ -19,7 +19,6 @@
 				{% if tabfav is defined %}
 					{% for favorite in tabfav %}
 						<tr> 
-							<td>{{ favorite['type'] }}</td> 
 							<td><a href="{{ path('one_file' , {'id': favorite['idfile'] }) }}">{{ favorite['name'] }}</a></td>
 							<td>{{ favorite['category'] }}</td> 
 							<td>

@@ -13,3 +13,8 @@ ajax_send:
 ticket:
     path:     /ticket/{id}
     defaults: { _controller: GrcBundle:Default:ticket }
+    methods:  [GET, POST]
+
+liste:
+    path:     /liste
+    defaults: { _controller: GrcBundle:Default:liste}

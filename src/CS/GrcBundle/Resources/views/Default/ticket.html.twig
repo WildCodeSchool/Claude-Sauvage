@@ -31,18 +31,19 @@
 	</div>	
 	<div class="container_ticket">
 		<div class="statut_ticket">
-			<h2>Ticket N°123</h2>
+			<h2>Ticket N°{{ ticket.id }}</h2>
+			<h2>{{ idduticket }}</h2>
 			<div class="statut">
-				<p>Status: <b>En cours</b></p>
+				<p>Status: <b>{{ ticket.status }}</b></p>
 			</div>
 		</div>
 		<p><span class="sous_titre_com">Demande initiale: </span></p>
 		<div class="demande_init">
 			<div class="demande_init_titre">
-				<p>Demandeur: Mr Dupont<span>Date création: 27/06/16</span></p>
+				<p>Demandeur: Mr Dupont<span>Date création: {{ ticket.date | date('d-m-Y') }}</span></p>
 			</div>
 			<div class="demande_init_contenu">
-				<p><b>Catégorie / Sous-catégorie</b></p>
+				<p><b>{{ categorie.name }} / {{ sscategorie.name }}</b></p>
 				<p><b>Description: </b>Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.</p>
 				<p><b>Pièce jointe: </b>IMG_123456.jpg</p>
 			</div>
