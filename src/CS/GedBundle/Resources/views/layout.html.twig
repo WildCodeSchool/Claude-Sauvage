@@ -67,11 +67,15 @@
             </div>  
         </nav>
     </header>
+    <div class="loader"></div>
     {% block body %}
     {% endblock body %}
-    <script>
+    <script type="text/javascript">
+        $(window).load(function() {
+            $(".loader").delay(1500).fadeOut('slow');
+        });    
         $( document ).ready(function() {
-          $("#flashbag").delay(500).fadeIn(500).delay(5000).fadeOut(250);
+          $("#flashbag").delay(2000).fadeIn(500).delay(5000).fadeOut(250);
         });
     </script>
     </body>
