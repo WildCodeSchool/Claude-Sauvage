@@ -14,11 +14,20 @@ class DownloadController extends Controller
         $path = $this->get('kernel')->getRootDir(). "/../web/uploads/";
         $content = file_get_contents($path.$name);
 
+        //récuperation & atribution de l entitiy manager.
+        $em=$this->getDoctrine()->getManager();
+
+        //récupération de l'instance d'entité corespondante.
+        $fileSource = $em->getRepository('GedBundle:Gedfiles')->findOneByPath($name);
+
+        //récupération du nom original.
+        $fileOriginalName = $fileSource->getOriginalname();
+
         $response = new Response();
 
         //set headers
         $response->headers->set('Content-Type', 'mime/type');
-        $response->headers->set('Content-Disposition', 'attachment;filename="'.$name);
+        $response->headers->set('Content-Disposition', 'attachment;filename="'.$fileOriginalName);
 
         $response->setContent($content);
     return $response;

@@ -1,38 +1,28 @@
 <div class="col-md-2 nav-left">
-		<ul>
-			<li><a href="{{ path('ged_all') }}" title="Tous les fichiers" class="btn btn-default"><span class="glyphicon glyphicon-folder-open" aria-hidden="true"></span>Tous les fichiers</a></li>
-			<li><a href="#"class="btn btn-default"><span class="glyphicon glyphicon-star" aria-hidden="true"></span>Mes favoris</li></a>
-			<li><a href="#" class="btn btn-default"><span class="glyphicon glyphicon-user" aria-hidden="true"></span>Partagés avec moi</a></li>
-			<li class="drop-btn"><a href="#" class="btn btn-default"><span class="glyphicon glyphicon-tasks" aria-hidden="true"></span>Catégories<span class="glyphicon glyphicon-triangle-right" aria-hidden="true"></span></a>
-				<ul class="drop-content">
-					<li><a href="#" class="btn btn-default">Categorie 1</a>
-						<ul class="drop-in-content">
-							<li><a href="#" class="btn btn-default">Sous-Categorie 1</a></li>
-							<li><a href="#" class="btn btn-default">Sous-Categorie 2</a></li>
-							<li><a href="#" class="btn btn-default">Sous-Categorie 3</a></li>
-						</ul>
-					</li>
-					<li><a href="#" class="btn btn-default">Categorie 2</a>
-						<ul class="drop-in-content">
-							<li><a href="#" class="btn btn-default">Sous-Categorie 1</a></li>
-							<li><a href="#" class="btn btn-default">Sous-Categorie 2</a></li>
-							<li><a href="#" class="btn btn-default">Sous-Categorie 3</a></li>
-						</ul>
-					</li>
-					<li><a href="#" class="btn btn-default">Categorie 3</a>
-						<ul class="drop-in-content">
-							<li><a href="#" class="btn btn-default">Sous-Categorie 1</a></li>
-							<li><a href="#" class="btn btn-default">Sous-Categorie 2</a></li>
-							<li><a href="#" class="btn btn-default">Sous-Categorie 3</a></li>
-						</ul>
-					</li>
-				</ul>
-			</li>
-			<li><a href="#" class="btn btn-default"><span class="glyphicon glyphicon-cloud-upload" aria-hidden="true"></span>Mes Uploads</a></li>
-		</ul>
-		<ul class="corbeille">
-			<li><a href="#" class="btn btn-default"><span class="glyphicon glyphicon-trash" aria-hidden="true"></span><span>Corbeille</span></a></li>
-		</ul>
-	
-
+	<ul>
+		<li><a href="{{ path('ged_all') }}" title="Tous les fichiers" class="btn btn-default"><span class="glyphicon glyphicon-folder-open" aria-hidden="true"></span>Tous les fichiers</a></li>
+		<li><a href="#"class="btn btn-default"><span class="glyphicon glyphicon-star" aria-hidden="true"></span>Mes favoris</li></a>
+		<li><a href="#" class="btn btn-default"><span class="glyphicon glyphicon-user" aria-hidden="true"></span>Partagés avec moi</a></li>
+		<li class="drop-btn"><a href="#" class="btn btn-default"><span class="glyphicon glyphicon-tasks" aria-hidden="true"></span>Catégories<span class="glyphicon glyphicon-triangle-right" aria-hidden="true"></span></a>
+			<ul class="drop-content">
+				{% for categorie in categories %}
+					{% if categorie.name != 'brouillon' %}
+						<li><a href="#" class="btn btn-default">{{ categorie.name }}<span class="glyphicon glyphicon-triangle-right" aria-hidden="true"></span></a>
+							<ul class="drop-in-content">
+								{% for sscategory in categoryTab %}
+									{% if sscategory['id'] == categorie.id %}
+										<li><a href="#" class="btn btn-default">{{ sscategory['category'] }}</a></li>
+									{% endif %}
+								{% endfor %}
+							</ul>
+						</li>
+					{% endif %}
+				{% endfor %}
+			</ul>
+		</li>
+		<li><a href="#" class="btn btn-default"><span class="glyphicon glyphicon-cloud-upload" aria-hidden="true"></span>Mes Uploads</a></li>
+	</ul>
+	<ul class="corbeille">
+		<li><a href="#" class="btn btn-default"><span class="glyphicon glyphicon-trash" aria-hidden="true"></span><span>Corbeille</span></a></li>
+	</ul>
 </div>
