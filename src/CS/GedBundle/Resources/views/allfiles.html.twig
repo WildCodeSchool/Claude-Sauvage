@@ -30,7 +30,8 @@
 								Ico
 							{% endif %}
 						</td>
-						<td>{{ myfiles['name'] }}</td>
+						
+						<td><a href="{{ path('one_file' , {'id': myfiles['fileId'] }) }}">{{ myfiles['name'] }}</a></td>
 						<td>{{ myfiles['date'] | date("d/m/Y") }}</td>
 						<td>
 							{% if myfiles['groupMemberName'] != 1 %}
