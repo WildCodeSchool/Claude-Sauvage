@@ -1,0 +1,80 @@
+{% extends 'GrcBundle::layout.html.twig' %}
+
+{% block body %}
+	<div class="searchbar row">
+		<div class="col-md-3 col-md-offset-1">
+			<div class="input-group">
+		    	<input type="text" placeholder="Rechercher" class="form-control">
+		    	<span class="input-group-btn"><button class="btn btn-default" type="button">ok</button></span>
+		    </div>
+		</div>
+		<div class="col-md-3 col-md-offset-1">
+			<form>
+				<select class="form-control search-select" name="Catégorie">
+				<option>Toute les catégories
+				<option>Catégorie 1
+				<option>Catégorie 2
+				<option>Catégorie 3
+				</select>
+			</form>
+		</div>
+		<div class="col-md-3 col-md-offset-1">
+			<form>
+				<select class="form-control search-select" name="Sous-catégorie">
+				<option>Toute les sous-catégories
+				<option>Sous-catégorie 1
+				<option>Sous-catégorie 2
+				<option>Sous-catégorie 3
+				</select>
+			</form>
+		</div>
+	</div>	
+	<div class="container_ticket">
+		<div class="statut_ticket">
+			<h2>Ticket N°123</h2>
+			<div class="statut">
+				<p>Status: <b>En cours</b></p>
+			</div>
+		</div>
+		<p><span class="sous_titre_com">Demande initiale: </span></p>
+		<div class="demande_init">
+			<div class="demande_init_titre">
+				<p>Demandeur: Mr Dupont<span>Date création: 27/06/16</span></p>
+			</div>
+			<div class="demande_init_contenu">
+				<p><b>Catégorie / Sous-catégorie</b></p>
+				<p><b>Description: </b>Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.</p>
+				<p><b>Pièce jointe: </b>IMG_123456.jpg</p>
+			</div>
+		</div>
+		<p><span class="sous_titre_com">Historique des échanges: </span></p>
+		<div class="commentaire">
+			<div class="commentaire_entete">
+				<p>De: Mr le commercial<span>Date: 27/06/16</span></p>
+			</div>
+			<p>Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat.</p>
+			<p><b>Pièce jointe: </b>IMG_23456.jpg</p>
+		</div>
+		<div class="commentaire">
+			<div class="commentaire_entete">
+				<p>De: Mr le commercial<span>Date: 27/06/16</span></p>
+			</div>
+			<p>Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat.</p>
+			<p><b>Pièce jointe: </b>IMG_23456.jpg</p>
+		</div>
+		<div class="commentaire">
+			<div class="commentaire_entete">
+				<p>De: Mr le commercial<span>Date: 27/06/16</span></p>
+			</div>
+			<p>Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat.</p>
+			<p><b>Pièce jointe: </b>IMG_23456.jpg</p>
+		</div>
+
+		<div class="bloc_reponse">
+			<textarea class="input_com" type="text" rows="3" name="input_com"></textarea>
+			<button type="button" class="btn btn-default btn-com-left">Ajouter un fichier</button>
+			<button type="button" class="btn btn-default btn-com-right">Envoyer</button>
+		</div>
+
+	</div>
+{% endblock %}

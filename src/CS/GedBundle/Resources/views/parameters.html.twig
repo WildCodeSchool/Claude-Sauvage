@@ -1,0 +1,17 @@
+{% extends "GedBundle::layout.html.twig" %}
+{% block body %}
+	<div class="col-md-10 col-md-offset-1 tab-cel ">
+		<h3 style="text-align:center;">Parametres du fichier.</h3>
+	</div>
+</div>
+<script type="text/javascript"> 
+$(document).ready(function() { 
+	$('table').DataTable( { 
+		"paging": false,
+		"info": false,
+		"sDom": '<"H"lr>t<"F"ip>',
+		"columnDefs": [{ "orderable": false, "targets": [2,4] }]
+	} );
+} );
+</script>
+{% endblock body %}

@@ -1,1 +1,283 @@
-Hello World!
+{% extends 'GrcBundle::layout.html.twig' %}
+
+{% block body %}
+
+<div class= "grc_dashboard">
+	<div class="searchbar row">
+		<div class="col-md-3 col-md-offset-1">
+			<div class="input-group">
+	    		<input type="text" placeholder="Rechercher" class="form-control">
+	    		<span class="input-group-btn"><button class="btn btn-default" type="button">ok</button></span>
+	    	</div>
+		</div>
+		<div class="col-md-3 col-md-offset-1">
+			<form>
+				<select class="form-control search-select" name="Catégorie">
+					<option>Toute les catégories
+					<option>Catégorie 1
+					<option>Catégorie 2
+					<option>Catégorie 3
+				</select>
+			</form>
+		</div>
+		<div class="col-md-3 col-md-offset-1">
+			<form>
+				<select class="form-control search-select" name="Sous-catégorie">
+					<option>Toute les sous-catégories
+					<option>Sous-catégorie 1
+					<option>Sous-catégorie 2
+					<option>Sous-catégorie 3
+				</select>
+			</form>
+		</div>
+	</div>
+	<h1>Bienvenue sur votre outil de gestion de ticket</h1>
+	<div class="col-md-12 dashboard">
+		<div class="col-md-2 col-md-offset-2 tableau">
+			<div class="tableau-top">
+				<h2>Status</h2>
+			</div>
+			<div class="tableau-low" id="interligne">
+				<p>A traiter: <span class="rouge">15</span></p>
+				<p>En cours: <span class="orange">20</span></p>
+				<p>Cloturés: <span class="vert">15</span></p>
+				<p>Archivés: <span class="gris">10</span></p>
+			</div>
+		</div>
+		<div class="col-md-2 col-md-offset-1 tableau">
+			<div class="tableau-top">				
+				<h2>Priorités</h2>
+			</div>
+			<div class="tableau-low">				
+				<p>Très urgent: <span class="rouge">10</span></p>
+				<p>Urgent: <span class="rouge">10</span></p>
+				<p>Bloquant: <span class="orange">20</span></p>
+				<p>Simple: <span class="vert">15</span></p>
+				<p>Basse: <span class="vert">20</span></p>
+			</div>
+		</div>
+		<div class="col-md-2 col-md-offset-1 tableau">
+			<div class="tableau-top">
+				<h2>Catégories</h2>
+			</div>
+			<div class="tableau-low" id="graph">
+				<p><img src="{{ asset('/img/categorie.jpg') }}"></p>
+			</div>
+		</div>
+	</div>
+
+	<div class="col-md-12 liste">
+		<div class="col-md-8 col-md-offset-2">
+			<h3>Nouveaux tickets</h3>
+			<table id="table_id" class="display">
+				<thead>
+					<tr>
+						<th class="col-tic">N° ticket</th>
+						<th class="col-cat">Catégorie</th>
+						<th class="col-dem">Demandeur</th>
+						<th class="col-act">Dernière action</th>
+						<th class="col-prio">Priorité</th>
+					</tr>
+				</thead>
+				<tbody>
+					<tr>
+						<td>1</td>
+						<td>Pièce manquante</td>
+						<td>Claude Sauvage</td>
+						<td>11/06/16</td>
+						<td>Urgent</td>
+					</tr>
+					<tr>
+						<td>2</td>
+						<td>Pièce manquante</td>
+						<td>Claude Sauvage</td>
+						<td>11/06/16</td>
+						<td>Très urgent</td>
+					</tr>
+					<tr>
+						<td>3</td>
+						<td>Pièce manquante</td>
+						<td>Claude Sauvage</td>
+						<td>11/06/16</td>
+						<td>Basse</td>
+					</tr>
+					<tr>
+						<td>4</td>
+						<td>Pièce manquante</td>
+						<td>Claude Sauvage</td>
+						<td>11/06/16</td>
+						<td>Urgent</td>
+					</tr>
+					<tr>
+						<td>5</td>
+						<td>Pièce manquante</td>
+						<td>Claude Sauvage</td>
+						<td>11/06/16</td>
+						<td>Urgent</td>
+					</tr>
+		   		</tbody>
+			</table>
+		</div>
+	</div>
+	<div class="col-md-12 liste">
+		<div class="col-md-8 col-md-offset-2">
+			<h3>Dernier très urgent</h3>
+			<table id="table_id" class="display">
+				<thead>
+					<tr>
+						<th class="col-tic">N° ticket</th>
+						<th class="col-cat">Catégorie</th>
+						<th class="col-dem">Demandeur</th>
+						<th class="col-act">Dernière action</th>
+						<th class="col-prio">Priorité</th>
+					</tr>
+				</thead>
+				<tbody>
+					<tr>
+						<td>1</td>
+						<td>Pièce manquante</td>
+						<td>Claude Sauvage</td>
+						<td>11/06/16</td>
+						<td>Très Urgent</td>
+					</tr>
+					<tr>
+						<td>2</td>
+						<td>Pièce manquante</td>
+						<td>Claude Sauvage</td>
+						<td>11/06/16</td>
+						<td>Très urgent</td>
+					</tr>
+					<tr>
+						<td>3</td>
+						<td>Pièce manquante</td>
+						<td>Claude Sauvage</td>
+						<td>11/06/16</td>
+						<td>Très Urgent</td>
+					</tr>
+					<tr>
+						<td>4</td>
+						<td>Pièce manquante</td>
+						<td>Claude Sauvage</td>
+						<td>11/06/16</td>
+						<td>Très Urgent</td>
+					</tr>
+					<tr>
+						<td>5</td>
+						<td>Pièce manquante</td>
+						<td>Claude Sauvage</td>
+						<td>11/06/16</td>
+						<td>Très Urgent</td>
+					</tr>
+		   		</tbody>
+			</table>
+		</div>
+	</div>
+	<div class="col-md-12 liste">
+		<div class="col-md-8 col-md-offset-2">
+			<h3>Derniers urgent</h3>
+			<table id="table_id" class="display">
+				<thead>
+					<tr>
+						<th class="col-tic">N° ticket</th>
+						<th class="col-cat">Catégorie</th>
+						<th class="col-dem">Demandeur</th>
+						<th class="col-act">Dernière action</th>
+						<th class="col-prio">Priorité</th>
+					</tr>
+				</thead>
+				<tbody>
+					<tr>
+						<td>1</td>
+						<td>Pièce manquante</td>
+						<td>Claude Sauvage</td>
+						<td>11/06/16</td>
+						<td>Urgent</td>
+					</tr>
+					<tr>
+						<td>2</td>
+						<td>Pièce manquante</td>
+						<td>Claude Sauvage</td>
+						<td>11/06/16</td>
+						<td>Urgent</td>
+					</tr>
+					<tr>
+						<td>3</td>
+						<td>Pièce manquante</td>
+						<td>Claude Sauvage</td>
+						<td>11/06/16</td>
+						<td>Urgent</td>
+					</tr>
+					<tr>
+						<td>4</td>
+						<td>Pièce manquante</td>
+						<td>Claude Sauvage</td>
+						<td>11/06/16</td>
+						<td>Urgent</td>
+					</tr>
+					<tr>
+						<td>5</td>
+						<td>Pièce manquante</td>
+						<td>Claude Sauvage</td>
+						<td>11/06/16</td>
+						<td>Urgent</td>
+					</tr>
+		   		</tbody>
+			</table>
+		</div>
+	</div>
+	<div class="col-md-12 liste lastlist">
+		<div class="col-md-8 col-md-offset-2">
+			<h3>Derniers commentaires reçus</h3>
+			<table class="display">
+				<thead>
+					<tr>
+						<th class="col-tic">N° ticket</th>
+						<th class="col-cat">Catégorie</th>
+						<th class="col-dem">Demandeur</th>
+						<th class="col-act">Dernière action</th>
+						<th class="col-prio">Priorité</th>
+					</tr>
+				</thead>
+				<tbody>
+					<tr>
+						<td>1</td>
+						<td>Pièce manquante</td>
+						<td>Claude Sauvage</td>
+						<td>28/06/16</td>
+						<td>Urgent</td>
+					</tr>
+					<tr>
+						<td>2</td>
+						<td>Pièce manquante</td>
+						<td>Claude Sauvage</td>
+						<td>28/06/16</td>
+						<td>Très urgent</td>
+					</tr>
+					<tr>
+						<td>3</td>
+						<td>Pièce manquante</td>
+						<td>Claude Sauvage</td>
+						<td>28/06/16</td>
+						<td>Basse</td>
+					</tr>
+					<tr>
+						<td>4</td>
+						<td>Pièce manquante</td>
+						<td>Claude Sauvage</td>
+						<td>28/06/16</td>
+						<td>Urgent</td>
+					</tr>
+					<tr>
+						<td>5</td>
+						<td>Pièce manquante</td>
+						<td>Claude Sauvage</td>
+						<td>28/06/16</td>
+						<td>Urgent</td>
+					</tr>
+		   		</tbody>
+			</table>
+		</div>
+	</div>
+</div>
+{% endblock %}
+

@@ -1,0 +1,12 @@
+{% extends "AppBundle::layout.html.twig" %}
+
+{% block fos_user_content %}
+<div class="col-md-12">
+	<div class="col-md-6" style="margin-top:200px; text-align:center;">
+		<a class="btn btn-primary btn-lg" href="{{ path("ged_homepage") }}">GED</a>
+	</div>
+	<div class="col-md-6" style="margin-top:200px; text-align:center;">
+		<a class="btn btn-primary btn-lg" href="{{ path("grc_homepage") }}">GRC</a>
+	</div>
+</div>
+{% endblock fos_user_content %}

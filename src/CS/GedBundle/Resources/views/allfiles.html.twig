@@ -1,0 +1,88 @@
+	{% extends "GedBundle::layout.html.twig" %}
+{% block body %}
+{% include "GedBundle::search.html.twig" %}
+{% include "GedBundle::nav.html.twig" %}
+<div class="col-md-10">
+	<h3 style="text-align:center;">Tous les fichiers</h3>
+	<table class="table compact stripe" id="table">
+		<thead> 
+			<tr> 
+				<th></th>
+				<th>Nom du fichier</th>
+				<th>Date</th>
+				<th>Partagé avec</th>
+				<th>Catégorie</th> 
+				<th>Tags</th>
+				<th>Com</th>
+				<th>Favori</th>
+				<th>Paramètres</th>
+				<th></th>
+			</tr> 
+		</thead> 
+		<tbody>
+			{% if tabMyFiles is defined %}
+				{% for myfiles in tabMyFiles %}
+					<tr> 
+						<td>
+							{% if myfiles['type'] == 'jpeg' or myfiles['type'] == 'jpg' or myfiles['type'] == 'png' or myfiles['type'] == 'gif' %}
+								<span class="glyphicon glyphicon-picture" aria-hidden="true"></span>
+							{% else %}
+								Ico
+							{% endif %}
+						</td>
+						<td>{{ myfiles['name'] }}</td>
+						<td>{{ myfiles['date'] | date("d/m/Y") }}</td>
+						<td>
+							{% if myfiles['groupMemberName'] != 1 %}
+								{% for Member in myfiles['groupMemberName'] %}
+										{{ Member['groupMemberName'] }} ,
+								{% endfor %}
+							{% else %}
+								Aucun partage
+							{% endif %}
+						</td>
+						<td>{{ myfiles['category'] }}</td> 
+						<td>
+							{% if myfiles['tagnames'] != 1 %}
+								{% for tag in tagnames['groupMemberName'] %}
+										{{ tag['tagName'] }} ,
+								{% endfor %}
+							{% else %}
+								Aucun Tag
+							{% endif %}
+						</td>
+						<td><span class="badge">{{ myfiles['comments'] }}</span></td>
+						<td>
+							{% if myfiles['bookmark'] != 1 %}
+								<span class="glyphicon glyphicon-star-empty" aria-hidden="true"></span>
+							{% else %}
+								<span class="glyphicon glyphicon-star" aria-hidden="true"></span>
+							{% endif %}
+						</td>
+						<td>
+							<a class="btn" href="{{ path('ged_parameters_file', { 'id' : myfiles['fileId'] }) }}" title="">
+							<span class="glyphicon glyphicon-pencil" aria-hidden="true"></span></a>
+						</td>
+						<td>
+							<a class="btn" href="{{ path('ged_download', { 'name' : myfiles['path'] }) }}">
+								<span class="glyphicon glyphicon-cloud-download" aria-hidden="true"></span> Telecharger
+							</a>
+						</td>
+					</tr>
+				{% endfor %}
+			{% endif %}
+		</tbody>
+	</table>
+</div>
+<script type="text/javascript"> 
+$(document).ready(function() { 
+	$('table').DataTable( { 
+		"paging": false,
+		"info": false,
+		"sDom": '<"H"lr>t<"F"ip>',
+		"columnDefs": [{ "orderable": false, "targets": [3,4] }],
+		"order": [[1, "asc"]]
+	} );
+} );
+</script>
+{% endblock body %}
