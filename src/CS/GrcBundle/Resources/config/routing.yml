@@ -1,6 +1,6 @@
 grc_homepage:
     path:     /
-    defaults: { _controller: GrcBundle:Default:index }
+    defaults: { _controller: GrcBundle:List:showDashboard }
 
 grc_create_ticket:
     path:     /create
@@ -18,3 +18,8 @@ ticket:
 liste:
     path:     /liste
     defaults: { _controller: GrcBundle:Default:liste}
+
+ajaxsscat:
+    path:     /ajaxsscat/
+    defaults: { _controller: GrcBundle:Default:ajaxsscat }
+    methods:  [GET, POST]
