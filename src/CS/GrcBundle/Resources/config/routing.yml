@@ -18,3 +18,8 @@ ticket:
 liste:
     path:     /liste
     defaults: { _controller: GrcBundle:Default:liste}
+
+ajaxsscat:
+    path:     /ajaxsscat/
+    defaults: { _controller: GrcBundle:Default:ajaxsscat }
+    methods:  [GET, POST]

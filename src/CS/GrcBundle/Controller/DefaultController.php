@@ -4,6 +4,7 @@ namespace CS\GrcBundle\Controller;
 
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Symfony\Component\HttpFoundation\Request;
+use Symfony\Component\HttpFoundation\JsonResponse;
 use CS\GrcBundle\Entity\Ticket;
 use CS\GrcBundle\Form\TicketType;
 use DateTime;
@@ -57,10 +58,10 @@ class DefaultController extends Controller
         ));
     }
 	
-	public function ticketAction(Request $request, Ticket $ticket)
-	{
-
+	public function ticketAction(Request $request, Ticket $ticket, $id)
+	{ 
 	$em = $this->getDoctrine()->getManager();
+
     $idcat= $ticket->getIdcategory();
     $idsscat= $ticket->getIdsouscategory();
     $categorie = $em->getRepository('GrcBundle:Grccategory')->findOneById($idcat);
@@ -70,11 +71,9 @@ class DefaultController extends Controller
         'ticket'=>$ticket,
         'categorie'=>$categorie,
         'sscategorie'=>$sscategorie,
-        'idduticket'=>$idduticket,
         ));
-
-
 	}
+
     public function listeAction(Request $request)
     {
     
@@ -131,5 +130,26 @@ class DefaultController extends Controller
         'ticketslist'=>$ticketslist,
         ));
 
+    }
+
+    public function ajaxsscatAction(Request $request)
+    { 
+    
+    $em = $this->getDoctrine()->getManager();
+    $idcategorie = $request->request->get('categorie');
+    $sscategories = $em->getRepository('GrcBundle:Grcsouscategory')->findByIdcategory($idcategorie);
+
+        foreach ($sscategories as $sscategorie){
+            $id = $sscategorie->getId();
+            $name = $sscategorie->getName();
+
+            $sscatlist[]=array(
+                "id"=>$id,
+                "name"=>$name,
+                );
+        }
+
+    $response = new JsonResponse();
+    return $response->setData(array('sscatlist' => $sscatlist));
     }
 }
