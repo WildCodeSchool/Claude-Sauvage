@@ -13,7 +13,7 @@
 		<div class="col-md-3 col-md-offset-1">
 			<form>
 				<select class="form-control search-select" name="Catégorie">
-					<option>Toute les catégories
+					<option>Toutes les catégories
 					<option>Catégorie 1
 					<option>Catégorie 2
 					<option>Catégorie 3
@@ -23,7 +23,7 @@
 		<div class="col-md-3 col-md-offset-1">
 			<form>
 				<select class="form-control search-select" name="Sous-catégorie">
-					<option>Toute les sous-catégories
+					<option>Toutes les sous-catégories
 					<option>Sous-catégorie 1
 					<option>Sous-catégorie 2
 					<option>Sous-catégorie 3
@@ -80,34 +80,17 @@
 					</tr>
 				</thead>
 				<tbody>
-					<tr>
-						<td>1</td>
-						<td>Pièce manquante</td>
-						<td>Claude Sauvage</td>
-						<td>11/06/16</td>
-						<td>Urgent</td>
-					</tr>
-					<tr>
-						<td>2</td>
-						<td>Pièce manquante</td>
-						<td>Claude Sauvage</td>
-						<td>11/06/16</td>
-						<td>Très urgent</td>
-					</tr>
-					<tr>
-						<td>3</td>
-						<td>Pièce manquante</td>
-						<td>Claude Sauvage</td>
-						<td>11/06/16</td>
-						<td>Basse</td>
-					</tr>
-					<tr>
-						<td>4</td>
-						<td>Pièce manquante</td>
-						<td>Claude Sauvage</td>
-						<td>11/06/16</td>
-						<td>Urgent</td>
-					</tr>
+					{% if newtickets is defined %}
+						{% for newticket in newtickets %}
+							<tr> 
+								<td>{{ newticket['id'] }}</td>
+								<td>{{ newticket['category'] }}</td> 
+								<td>{{ newticket['sender'] }}</td>
+								<td>{{ newticket['date'].date | date('d/m/Y h:m:s') }}</td>
+								<td>{{ newticket['priority'] }}</td>
+							</tr>
+						{% endfor %}
+					{% endif %}
 					<tr>
 						<td>5</td>
 						<td>Pièce manquante</td>
@@ -133,34 +116,17 @@
 					</tr>
 				</thead>
 				<tbody>
-					<tr>
-						<td>1</td>
-						<td>Pièce manquante</td>
-						<td>Claude Sauvage</td>
-						<td>11/06/16</td>
-						<td>Très Urgent</td>
-					</tr>
-					<tr>
-						<td>2</td>
-						<td>Pièce manquante</td>
-						<td>Claude Sauvage</td>
-						<td>11/06/16</td>
-						<td>Très urgent</td>
-					</tr>
-					<tr>
-						<td>3</td>
-						<td>Pièce manquante</td>
-						<td>Claude Sauvage</td>
-						<td>11/06/16</td>
-						<td>Très Urgent</td>
-					</tr>
-					<tr>
-						<td>4</td>
-						<td>Pièce manquante</td>
-						<td>Claude Sauvage</td>
-						<td>11/06/16</td>
-						<td>Très Urgent</td>
-					</tr>
+					{% if hutickets is defined %}
+						{% for huticket in hutickets %}
+							<tr> 
+								<td>{{ huticket['id'] }}</td>
+								<td>{{ huticket['category'] }}</td> 
+								<td>{{ huticket['sender'] }}</td>
+								<td>{{ huticket['date'].date | date('d/m/Y h:m:s') }}</td>
+								<td>{{ huticket['priority'] }}</td>
+							</tr>
+						{% endfor %}
+					{% endif %}
 					<tr>
 						<td>5</td>
 						<td>Pièce manquante</td>
@@ -186,34 +152,17 @@
 					</tr>
 				</thead>
 				<tbody>
-					<tr>
-						<td>1</td>
-						<td>Pièce manquante</td>
-						<td>Claude Sauvage</td>
-						<td>11/06/16</td>
-						<td>Urgent</td>
-					</tr>
-					<tr>
-						<td>2</td>
-						<td>Pièce manquante</td>
-						<td>Claude Sauvage</td>
-						<td>11/06/16</td>
-						<td>Urgent</td>
-					</tr>
-					<tr>
-						<td>3</td>
-						<td>Pièce manquante</td>
-						<td>Claude Sauvage</td>
-						<td>11/06/16</td>
-						<td>Urgent</td>
-					</tr>
-					<tr>
-						<td>4</td>
-						<td>Pièce manquante</td>
-						<td>Claude Sauvage</td>
-						<td>11/06/16</td>
-						<td>Urgent</td>
-					</tr>
+					{% if urgenttickets is defined %}
+						{% for urgentticket in urgenttickets %}
+							<tr> 
+								<td>{{ urgentticket['id'] }}</td>
+								<td>{{ urgentticket['category'] }}</td> 
+								<td>{{ urgentticket['sender'] }}</td>
+								<td>{{ urgentticket['date'].date | date('d/m/Y h:m:s') }}</td>
+								<td>{{ urgentticket['priority'] }}</td>
+							</tr>
+						{% endfor %}
+					{% endif %}
 					<tr>
 						<td>5</td>
 						<td>Pièce manquante</td>
@@ -239,34 +188,17 @@
 					</tr>
 				</thead>
 				<tbody>
-					<tr>
-						<td>1</td>
-						<td>Pièce manquante</td>
-						<td>Claude Sauvage</td>
-						<td>28/06/16</td>
-						<td>Urgent</td>
-					</tr>
-					<tr>
-						<td>2</td>
-						<td>Pièce manquante</td>
-						<td>Claude Sauvage</td>
-						<td>28/06/16</td>
-						<td>Très urgent</td>
-					</tr>
-					<tr>
-						<td>3</td>
-						<td>Pièce manquante</td>
-						<td>Claude Sauvage</td>
-						<td>28/06/16</td>
-						<td>Basse</td>
-					</tr>
-					<tr>
-						<td>4</td>
-						<td>Pièce manquante</td>
-						<td>Claude Sauvage</td>
-						<td>28/06/16</td>
-						<td>Urgent</td>
-					</tr>
+					{% if commentedtickets is defined %}
+						{% for commentedticket in commentedtickets %}
+							<tr> 
+								<td>{{ commentedticket['id'] }}</td>
+								<td>{{ commentedticket['category'] }}</td> 
+								<td>{{ commentedticket['sender'] }}</td>
+								<td>{{ commentedticket['date'].date | date('d/m/Y h:m:s') }}</td>
+								<td>{{ commentedticket['priority'] }}</td>
+							</tr>
+						{% endfor %}
+					{% endif %}
 					<tr>
 						<td>5</td>
 						<td>Pièce manquante</td>
