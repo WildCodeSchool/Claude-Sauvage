@@ -7,7 +7,20 @@
 			<ul class="drop-content">
 				{% for categorie in categories %}
 					{% if categorie.name != 'brouillon' %}
-						<li><a href="#" class="btn btn-default">{{ categorie.name }}<span class="glyphicon glyphicon-triangle-right" aria-hidden="true"></span></a>
+						<li>
+							<a href="#" class="btn btn-default">{{ categorie.name }}
+								{% set count = 0 %}
+								{% for sscategory in categoryTab %}
+									{% if sscategory['id'] == categorie.id %}
+										{% set count = count + 1 %}
+									{% endif %}							
+								{% endfor %}
+								{% if count >= 1 %}
+										<span class="glyphicon glyphicon-triangle-right" aria-hidden="true"></span>
+								{% else %}
+										<span class="no-glyphicon"></span>
+								{% endif %}
+							</a>
 							<ul class="drop-in-content">
 								{% for sscategory in categoryTab %}
 									{% if sscategory['id'] == categorie.id %}

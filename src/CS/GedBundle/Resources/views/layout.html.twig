@@ -11,6 +11,11 @@
         <script type="text/javascript" src="{{ asset('js/search.js') }}"></script>
     </head>
     <body>
+    <script type="text/javascript">
+    $(window).load(function() {
+        $(".loader").delay(1500).fadeOut('slow');
+        }); 
+    </script>
     <header>
         <nav class="navbar navbar-default">
             <div class="container-fluid">
@@ -70,10 +75,7 @@
     <div class="loader"></div>
     {% block body %}
     {% endblock body %}
-    <script type="text/javascript">
-        $(window).load(function() {
-            $(".loader").delay(1500).fadeOut('slow');
-        });    
+    <script type="text/javascript">   
         $( document ).ready(function() {
           $("#flashbag").delay(2000).fadeIn(500).delay(5000).fadeOut(250);
         });

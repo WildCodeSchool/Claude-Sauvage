@@ -110,6 +110,19 @@
 	background-color: #f1f1f1;
 }
 
+.search-result{
+	max-width: 300px;
+	border: solid #F7CA18 1px;
+	border-radius: 5px;
+	color: #F7CA18;
+	font-family:'Lobster';
+	font-size: 18px;
+	z-index: 2000;
+	max-height: 500px;
+	display: none;
+	background-color: black;
+	position: absolute;
+}
 /*--------------------------------- Navbar left --------------------------------- */
 
 .nav-left{
@@ -190,6 +203,11 @@
 .drop-btn .glyphicon-triangle-right{
 	left: 50px;
 }
+
+.no-glyphicon{
+	margin-left:20px;
+}
+
 .drop-btn a:hover, .btn:hover{
 	background-color:#fba858;
 }
