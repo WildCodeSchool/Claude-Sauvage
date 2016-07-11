@@ -38,10 +38,10 @@
 				<h2>Status</h2>
 			</div>
 			<div class="tableau-low" id="interligne">
-				<p>A traiter: <span class="rouge">15</span></p>
-				<p>En cours: <span class="orange">20</span></p>
-				<p>Cloturés: <span class="vert">15</span></p>
-				<p>Archivés: <span class="gris">10</span></p>
+				<p>A traiter: <span class="rouge">{{ statstab['nbtoclass'] }}</span></p>
+				<p>En cours: <span class="orange">{{ statstab['nbinprogress'] }}</span></p>
+				<p>Cloturés: <span class="vert">{{ statstab['nbclosed'] }}</span></p>
+				<p>Archivés: <span class="gris">{{ statstab['nbarchived'] }}</span></p>
 			</div>
 		</div>
 		<div class="col-md-2 col-md-offset-1 tableau">
@@ -49,11 +49,11 @@
 				<h2>Priorités</h2>
 			</div>
 			<div class="tableau-low">				
-				<p>Très urgent: <span class="rouge">10</span></p>
-				<p>Urgent: <span class="rouge">10</span></p>
-				<p>Bloquant: <span class="orange">20</span></p>
-				<p>Simple: <span class="vert">15</span></p>
-				<p>Basse: <span class="vert">20</span></p>
+				<p>Très urgent: <span class="rouge">{{ statstab['nbhu'] }}</span></p>
+				<p>Urgent: <span class="rouge">{{ statstab['nburgent'] }}</span></p>
+				<p>Bloquant: <span class="orange">{{ statstab['nbblocking'] }}</span></p>
+				<p>Simple: <span class="vert">{{ statstab['nbsimple'] }}</span></p>
+				<p>Basse: <span class="vert">{{ statstab['nblow'] }}</span></p>
 			</div>
 		</div>
 		<div class="col-md-2 col-md-offset-1 tableau">
