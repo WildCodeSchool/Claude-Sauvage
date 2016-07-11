@@ -75,6 +75,68 @@ class ListController extends Controller
     {
     	$em=$this->getDoctrine()->getManager();
     	$user=$this->getUser();
+    	//comptes du haut de dashboard
+    	//status
+    	$toclasstickets=$em->getRepository('GrcBundle:Ticket')->findBy(
+    		array('idreceiver'=>$user->getId(), 'status'=>'A traiter')
+    		);
+    	$nbtoclass = count($toclasstickets);
+    	
+       	$inprogresstickets=$em->getRepository('GrcBundle:Ticket')->findBy(
+    		array('idreceiver'=>$user->getId(), 'status'=>'En cours')
+    		);
+    	$nbinprogress = count($inprogresstickets);
+
+		$closedtickets=$em->getRepository('GrcBundle:Ticket')->findBy(
+    		array('idreceiver'=>$user->getId(), 'status'=>'Cloturés')
+    		);
+    	$nbclosed = count($closedtickets);
+
+		$archivedtickets=$em->getRepository('GrcBundle:Ticket')->findBy(
+    		array('idreceiver'=>$user->getId(), 'status'=>'Archivés')
+    		);
+    	$nbarchived = count($archivedtickets);
+
+    	//priorités
+
+		$hutickets=$em->getRepository('GrcBundle:Ticket')->findBy(
+    		array('idreceiver'=>$user->getId(), 'priority'=>'Très urgent')
+    		);
+    	$nbhu = count($hutickets);
+
+		$urgenttickets=$em->getRepository('GrcBundle:Ticket')->findBy(
+    		array('idreceiver'=>$user->getId(), 'priority'=>'Urgent')
+    		);
+    	$nburgent = count($urgenttickets);
+
+		$blockingtickets=$em->getRepository('GrcBundle:Ticket')->findBy(
+    		array('idreceiver'=>$user->getId(), 'priority'=>'Bloquant')
+    		);
+    	$nbblocking = count($blockingtickets);
+
+		$simpletickets=$em->getRepository('GrcBundle:Ticket')->findBy(
+    		array('idreceiver'=>$user->getId(), 'priority'=>'Simple')
+    		);
+    	$nbsimple = count($simpletickets);
+
+		$lowtickets=$em->getRepository('GrcBundle:Ticket')->findBy(
+    		array('idreceiver'=>$user->getId(), 'priority'=>'Basse')
+    		);
+    	$nblow = count($lowtickets);
+
+    	$statstab=array(
+    		'nbtoclass'=>$nbtoclass,
+    		'nbinprogress'=>$nbinprogress,
+    		'nbclosed'=>$nbclosed,
+    		'nbarchived'=>$nbarchived,
+    		'nbhu'=>$nbhu,
+    		'nburgent'=>$nburgent,
+    		'nbblocking'=>$nbblocking,
+    		'nbsimple'=>$nbsimple,
+    		'nblow'=>$nblow,
+    		);
+
+
 
     	$newtickets=$em->getRepository('GrcBundle:Ticket')->findBy(
     		array('idreceiver' => $user->getId()), // Critere
@@ -218,6 +280,7 @@ class ListController extends Controller
     		'hutickets'=>$huticketstab,
     		'urgenttickets'=>$urgentticketstab,
     		'commentedtickets'=>$commentedticketstab,
+    		'statstab'=>$statstab,
     		));
     }
 }
