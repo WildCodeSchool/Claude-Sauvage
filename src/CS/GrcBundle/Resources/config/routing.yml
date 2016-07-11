@@ -1,6 +1,6 @@
 grc_homepage:
     path:     /
-    defaults: { _controller: GrcBundle:Default:index }
+    defaults: { _controller: GrcBundle:List:showDashboard }
 
 grc_create_ticket:
     path:     /create

@@ -125,6 +125,10 @@ class DefaultController extends Controller
         {
             $tabfav=1;
         }
+        if (empty($ticketslist))
+        {
+          $ticketslist=1;
+        }
 
     return $this->render('GrcBundle:Default:liste.html.twig', array(
         'ticketslist'=>$ticketslist,
