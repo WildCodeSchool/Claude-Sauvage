@@ -30,3 +30,15 @@ new_comment:
 ged_download:
     pattern: /download/{name}
     defaults: { _controller: GedBundle:Download:download}
+
+ged_newgroup:
+    path:     /newgroup
+    defaults: { _controller:GedBundle:Group:createGroup }
+
+ged_editgroup:
+    path:     /editgroup/{id}
+    defaults: { _controller:GedBundle:Group:editGroup }
+
+ged_addfiletogroup:
+    path:    /addfiletogroup/{id}/{idfile}
+    defaults: { _controller:GedBundle:File:addToGroup }

@@ -1,0 +1,8 @@
+{% extends "GedBundle::layout.html.twig" %}
+{% block body %}
+<form action="{{ path('ged_newgroup') }}" method="post">
+	<label for="name">Nom du groupe:</label>
+	<input name="name"/>
+	<input type="submit" value="valider"/>
+</form>
+{% endblock %}
