@@ -1,8 +1,0 @@
-{% extends "GedBundle::layout.html.twig" %}
-{% block body %}
-<form action="{{ path('ged_adduser',{ 'id': id } ) }}" method="post">
-	<label for="username">Utilisateur à ajouter:</label>
-	<input name="username"/>
-	<input type="submit" value="valider"/>
-</form>
-{% endblock %}

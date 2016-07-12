@@ -36,7 +36,7 @@ class GroupController extends Controller
 
 			$idgroup=$group->getId();
 			
-			$url = $this -> generateUrl('ged_adduser', array( 'id'=>$idgroup ));
+			$url = $this -> generateUrl('ged_editgroup', array( 'id'=>$idgroup ));
         	$response = new RedirectResponse($url);
         	return $response;
 		}
@@ -84,68 +84,6 @@ class GroupController extends Controller
 			));
 	}
 
-	public function addUserAction (Request $request, $id)
-	{
-		$em = $this->getDoctrine()->getManager();
-		$user = $this->getUser();
-		$group = $em->getRepository('GedBundle:Groupe')->findOneById($id);
-		$idgroup=$id;
-		$username = $request->request->get('username');
-		if(!empty($username))
-		{
-			$otheruser = $em->getRepository('AppBundle:User')->findOneByUsername($username);
-			$iduser = $otheruser -> getId();
-
-			$groupUser = new Linkgroup();
-			$groupUser->setIduser($iduser);
-			$groupUser->setIdgroup($id);
-
-			$em->persist($groupUser);
-			$em->flush();
-		}
-		//fonction d'upload 
-        $gedfiles = new Gedfiles();
-
-        $form = $this->createForm(GedfilesType::class, $gedfiles);
-        $form->handleRequest($request);
-
-        if ($form->isSubmitted() && $form->isValid()) {
-            
-            $originalgetting=$form->getNormData()->getPath('originalName');
-            $originalname=$originalgetting->getClientOriginalName();
-
-            $file = $gedfiles->getPath();
-            
-            $type = $file->guessExtension();
-
-            $fileName = md5(uniqid()).'.'.$file->guessExtension();
-
-            $pathDir = $this->container->getParameter('kernel.root_dir').'/../web/uploads';
-            $file->move($pathDir, $fileName);
-
-            $gedfiles->setType($type);
-            $gedfiles->setPath($fileName);
-            $gedfiles->setIdowner($user->getId());
-            $gedfiles->setIdCategory(1);
-            $gedfiles->setDate( new DateTime());
-            $gedfiles->setOriginalname($originalname);
-
-            $em->persist($gedfiles);
-            $em->flush();
-
-            $this->get('session')->getFlashBag()->set('success', 'Fichier envoyé');
-
-            return $this->redirectToRoute('ged_homepage');
-
-        }
-
-		return $this->render('GedBundle::adduser.html.twig',array(
-			'form'=>$form->createView(),
-			'user'=>$user,
-			'id'=>$idgroup
-			));
-	}
-
 	public function editGroupAction (Request $request, $id)
 	{
 		$em = $this->getDoctrine()->getManager();
@@ -156,7 +94,6 @@ class GroupController extends Controller
 		$useradd=$request->request->get('useradd');
 		$userremove=$request->request->get('userremove');
 		$groupremove=$request->request->get('groupremove');
-		
 
 
 		//fonction d'upload 
@@ -222,7 +159,7 @@ class GroupController extends Controller
 			$em->flush();
 		}
 
-		if(!empty($groupremove) && $groupremove == $group->getName() )
+		if(!empty($groupremove))
 		{
 			$groupe=$em->getRepository('GedBundle:Groupe')->findOneById($idgroup);
 			$em->remove($groupe);

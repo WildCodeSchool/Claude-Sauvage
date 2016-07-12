@@ -30,9 +30,6 @@ ged_newgroup:
     path:     /newgroup
     defaults: { _controller:GedBundle:Group:createGroup }
 
-ged_adduser:
-    path:     /adduser/{id}
-    defaults: { _controller:GedBundle:Group:addUser }
 ged_editgroup:
     path:     /editgroup/{id}
     defaults: { _controller:GedBundle:Group:editGroup }

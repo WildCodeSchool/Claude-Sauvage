@@ -15,6 +15,8 @@ use CS\GedBundle\Entity\Souscategory;
 use CS\GedBundle\Entity\Linktag;
 use CS\GedBundle\Entity\Gedtag;
 use CS\GedBundle\Entity\Gedcom;
+use CS\GedBundle\Entity\Groupe;
+use CS\GedBundle\Entity\Linkgroup;
 use DateTime;
 
 class FileController extends Controller
@@ -25,6 +27,19 @@ class FileController extends Controller
 		$user=$this->getUser();
 		$file=$em->getRepository('GedBundle:Gedfiles')->findOneById($id);
         $comments=$em->getRepository('GedBundle:Gedcom')->findByIdfile($id);
+        
+        $linkgroups=$em->getRepository('GedBundle:Linkgroup')->findByIduser($user->getId());
+        foreach ($linkgroups as $linkgroup) {
+            $group=$em->getRepository('GedBundle:Groupe')->findOneById($linkgroup->getIdgroup());  
+            $tabgroup=array(
+                '$idgroup'=>$group->getId(),
+                '$groupname'=>$group->getName(),
+                ); 
+        }
+        if(empty($tabgroup))
+        {
+            $tabgroup=1;
+        }
         if(!empty($comments))
         {
             foreach ($comments as $comment)
@@ -99,6 +114,7 @@ class FileController extends Controller
     		'file'=>$file,
     		'textfile'=>$textfile,
             'tabcom'=>$tabcom,
+            'tabgroup'=>$tabgroup,
 			));
 	}
     public function addCommentAction (Request $request)
