@@ -33,3 +33,7 @@ ged_newgroup:
 ged_editgroup:
     path:     /editgroup/{id}
     defaults: { _controller:GedBundle:Group:editGroup }
+
+ged_addfiletogroup:
+    path:    /addfiletogroup/{id}/{idfile}
+    defaults: { _controller:GedBundle:File:addToGroup }

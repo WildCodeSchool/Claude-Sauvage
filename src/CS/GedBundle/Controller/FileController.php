@@ -31,9 +31,9 @@ class FileController extends Controller
         $linkgroups=$em->getRepository('GedBundle:Linkgroup')->findByIduser($user->getId());
         foreach ($linkgroups as $linkgroup) {
             $group=$em->getRepository('GedBundle:Groupe')->findOneById($linkgroup->getIdgroup());  
-            $tabgroup=array(
-                '$idgroup'=>$group->getId(),
-                '$groupname'=>$group->getName(),
+            $tabgroup[]=array(
+                'idgroup'=>$group->getId(),
+                'groupname'=>$group->getName(),
                 ); 
         }
         if(empty($tabgroup))
@@ -137,6 +137,17 @@ class FileController extends Controller
             $em->persist($gedcom);
             $em->flush();
         }
+        $url = $this -> generateUrl('one_file', array( 'id'=>$idfile ));
+        $response = new RedirectResponse($url);
+        return $response;
+    }
+    public function addToGroupAction (Request $request, $id, $idfile)
+    {
+        $em=$this->getDoctrine()->getManager();
+        $file=$em->getRepository('GedBundle:Gedfiles')->findOneById($idfile);
+        $file->setIdgroup($id);
+        $em->persist($file);
+        $em->flush();
         $url = $this -> generateUrl('one_file', array( 'id'=>$idfile ));
         $response = new RedirectResponse($url);
         return $response;
