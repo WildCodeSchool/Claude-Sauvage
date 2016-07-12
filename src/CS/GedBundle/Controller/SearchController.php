@@ -12,12 +12,32 @@ use Symfony\Component\Serializer\Encoder\JsonEncoder;
 use Symfony\Component\Serializer\Normalizer\GetSetMethodNormalizer;
 use CS\GedBundle\Entity\Category;
 use CS\GedBundle\Entity\Gedfiles;
+use Symfony\Component\HttpFoundation\JsonResponse;
 
 class SearchController extends Controller
 {
-    /**
-     * @Route("/search", name="ged_search")
-     */
+    public function ajaxsscatAction(Request $request)
+    {
+        $em = $this->getDoctrine()->getManager();
+
+        $idCategorie = $request->request->get('categorie');
+
+        $ssCategories = $em->getRepository('GedBundle:Souscategory')->findByIdcategory($idCategorie);
+
+        foreach ($ssCategories as $ssCategorie){
+            $id = $ssCategorie->getId();
+            $name = $ssCategorie->getName();
+
+            $ssCategorieTab[]=array(
+                "id"=>$id,
+                "name"=>$name,
+                );
+        }
+
+    $response = new JsonResponse();
+    return $response->setData(array('ssCategorieTab' => $ssCategorieTab));
+    }
+
     public function searchAction(Request $request)
     {
         $em = $this->getDoctrine()->getManager();
@@ -30,17 +50,15 @@ class SearchController extends Controller
 
         // définition plus tard du la recherche de type de fichier.
 
-        if($SSCatégorie != "Toutes les sous-catégories" ){
-
-            $SSCatégorie = $em->getRepository('GedBundle:Category')->findOneByName($Catégorie);
-            $SSCatégorieId = $CatégorieInfo->getId();
+        if($SSCatégorie != 0){
 
             //recherche mes fichier.
 
             $Myfiles = $em->getRepository('GedBundle:Gedfiles')->findBy( array(
-                                                                                        'idcategory'=>$SSCatégorieId,
-                                                                                        'idowner'=>$user->getId(),
-                                                                            ))  ;
+                                                                                'idsouscategory'=>$SSCatégorie,
+                                                                                'idowner'=>$user->getId(),
+                                                                            ));
+
             foreach ($Myfiles as $Myfile)
             {
                 $type=$Myfile->getType();
@@ -61,11 +79,32 @@ class SearchController extends Controller
                         'id'=>$idtag,
                         'name'=>$tagname,
                         );
-                    //on fout tout dans un tableau et on a des favoris tout neufs
+                
+                //on fout tout dans un tableau et on a des favoris tout neufs
                 }
                 if(empty($tagnames))
                 {
                     $tagnames=1;
+                }
+
+                //récuperation des favoris.
+                $bookmarkfile = $em->getRepository('GedBundle:Linkbookmark')->findOneByIdfile($Myfile->getId());
+
+                if (empty($bookmarkfile)){
+                $bookmarkfile = 0;
+                }
+
+                else{
+                    $bookmarkfile = 1;
+                }
+
+                //on compte les commentaires liés a un fichier.
+                $comments =$em->getRepository('GedBundle:Gedcom')->findByIdfile($Myfile->getId());
+                if (empty($comments)){
+                        $nbCom = 0;
+                    }
+                else {
+                    $nbCom = count($comments);
                 }
 
                 $tabFiles[]=array(
@@ -73,9 +112,11 @@ class SearchController extends Controller
                     "tagnames"=>$tagnames,
                     "path"=>$path,
                     "type"=>$type,
-                    "category"=>$Catégorie,
+                    "category"=>$SSCatégorie,
                     "date"=>$date,
                     "name"=>$name
+                    "bookmark"=>$bookmarkfile,
+                    "com"=>$nbCom,
                 );
             }
 
@@ -113,6 +154,26 @@ class SearchController extends Controller
                     if(empty($tagnames))
                     {
                         $tagnames=1;
+                    }                
+
+                    //récuperation des favoris.
+                    $bookmarkfile = $em->getRepository('GedBundle:Linkbookmark')->findOneByIdfile($myfile->getId());
+
+                    if (empty($bookmarkfile)){
+                    $bookmarkfile = 0;
+                    }
+
+                    else{
+                        $bookmarkfile = 1;
+                    }
+
+                    //on compte les commentaires liés a un fichier.
+                    $comments =$em->getRepository('GedBundle:Gedcom')->findByIdfile($Myfile->getId());
+                    if (empty($comments)){
+                        $nbCom = 0;
+                    }
+                    else {
+                        $nbCom = count($comments);
                     }
 
                     $tabGrpFiles[]=array(
@@ -120,24 +181,31 @@ class SearchController extends Controller
                         "tagnames"=>$tagnames,
                         "path"=>$path,
                         "type"=>$type,
-                        "category"=>$Catégorie,
+                        "category"=>$SSCatégorie,
                         "date"=>$date,
-                        "name"=>$name
+                        "name"=>$name,
+                        "bookmarkfile"=>$bookmarkfile,
+                        "com"=>$nbCom,
                     );
                 }
             }
+            return $this->render('GedBundle::result_search.html.twig',array(
+                                                                            'form' => $form->createView(),
+                                                                            'user'=>$user,
+                                                                            'tabFiles'=> $tabFiles,
+                                                                            'tabGrpFiles'=>$tabGrpFiles,
+                                                                        ));
         }
 
-        elseif($Catégorie != "Toutes les catégories"){
-            $CatégorieInfo = $em->getRepository('GedBundle:Category')->findOneByName($Catégorie);
-            $CatégorieId = $CatégorieInfo->getId();
-
+        elseif($Catégorie != 0){
+            
             //recherche mes fichier.
 
             $Myfiles = $em->getRepository('GedBundle:Gedfiles')->findBy( array(
-                                                                                        'idcategory'=>$CatégorieId,
+                                                                                        'idcategory'=>$Catégorie,
                                                                                         'idowner'=>$user->getId(),
                                                                             ))  ;
+
             foreach ($Myfiles as $Myfile)
             {
                 $type=$Myfile->getType();
@@ -223,32 +291,9 @@ class SearchController extends Controller
                     );
                 }
             }
-
-            var_dump($tabFiles);exit;
         }
 
         else{
         }
     }
-
-                
-   
 }
-
-
-        // $string = $this->getRequest()->request->get('recherche');
-
-        // $recherche = $em->getRepository('GedBundle:Category')->findBy(
-        // 														array('name' => $string,), // Critere
-	  					// 										array('id' => 'desc'),        // Tri
-								// 					  			5,                              // Limite
-								// 					  			0                               // Offset
-								// 							);
-        // $encoders = array(new XmlEncoder(), new JsonEncoder());
-        // $normalizers = array(new GetSetMethodNormalizer());
-        // $serializer = new Serializer($normalizers, $encoders);
-        // $jsonContent = $serializer->serialize($recherche, 'json');
-        // $response = new Response($jsonContent);
-
-        // var_dump($response);exit;
-        // return $response;

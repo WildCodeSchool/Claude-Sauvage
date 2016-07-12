@@ -68,14 +68,14 @@ class ListController extends Controller
 	    	$date=$fav->getDate();
 	    	$name=$fav->getOriginalName();
 	    	//trouver la categorie ou souscategorie du fichier
-	    	if (!empty($fav->getIdsouscategory()))
-	    	{
-	    		$category=$em->getRepository('GedBundle:Souscategory')->findOneById($fav->getIdsouscategory());
-	    	}
-	    	else
-	    	{
-	    		$category=$em->getRepository('GedBundle:Category')->findOneById($fav->getIdcategory());
-	    	}
+	    	// if (!empty($fav->getIdsouscategory()))
+	    	// {
+	    	// 	$category=$em->getRepository('GedBundle:Souscategory')->findOneById($fav->getIdsouscategory());
+	    	// }
+	    	// else
+	    	// {
+    		$category=$em->getRepository('GedBundle:Category')->findOneById($fav->getIdcategory());
+	    	// }
 	    	//on recupere tous les tags correspondants au fichier
 	    	$linktag = $em->getRepository('GedBundle:Linktag')->findByIdfile($idfav);
 	    	foreach ($linktag as $tag) {
@@ -152,16 +152,16 @@ class ListController extends Controller
 			    	$date=$oneupl->getDate();
 			    	$name=$oneupl->getOriginalName();
 			    	//trouver la categorie ou souscategorie du fichier
-			    	if (!empty($oneupl->getIdsouscategory()))
-			    	{
-			    		$categorytab=$em->getRepository('GedBundle:Souscategory')->findOneById($oneupl->getIdsouscategory());
-			    		$category=$categorytab->getName();
-			    	}
-			    	else
-			    	{
-			    		$categorytab=$em->getRepository('GedBundle:Category')->findOneById($oneupl->getIdcategory());
-			    		$category=$categorytab->getName();
-			    	}
+			    	// if (!empty($oneupl->getIdsouscategory()))
+			    	// {
+			    	// 	$categorytab=$em->getRepository('GedBundle:Souscategory')->findOneById($oneupl->getIdsouscategory());
+			    	// 	$category=$categorytab->getName();
+			    	// }
+			    	// else
+			    	// {
+		    		$categorytab=$em->getRepository('GedBundle:Category')->findOneById($oneupl->getIdcategory());
+		    		$category=$categorytab->getName();
+			    	// }
 			    	//on recupere tous les tags correspondants au fichier
 			    	$linktag = $em->getRepository('GedBundle:Linktag')->findByIdfile($idupl);
 			    	foreach ($linktag as $tag) {
@@ -215,17 +215,17 @@ class ListController extends Controller
 			$date=$file->getDate();
 			$name=$file->getOriginalName();
 
-			if (empty($file->getIdsouscategory() ) )
-			{
+			// if (empty($file->getIdsouscategory() ) )
+			// {
 
-				$categorytab=$em->getRepository('GedBundle:Category')->findOneById($file->getIdcategory());
-				$category=$categorytab->getName();
-			}
-			else
-			{
-				$categorytab=$em->getRepository('GedBundle:Souscategory')->findOneById($file->getIdsouscategory());
-				$category=$categorytab->getName();
-			}
+			$categorytab=$em->getRepository('GedBundle:Category')->findOneById($file->getIdcategory());
+			$category=$categorytab->getName();
+			// }
+			// else
+			// {
+			// 	$categorytab=$em->getRepository('GedBundle:Souscategory')->findOneById($file->getIdsouscategory());
+			// 	$category=$categorytab->getName();
+			// }
 			$linktag = $em->getRepository('GedBundle:Linktag')->findByIdfile($idfile);
 			foreach ($linktag as $tag) {
 	    		//on recupere l'id du premier tag
@@ -287,17 +287,17 @@ class ListController extends Controller
     			$date=$file->getDate();
     			$name=$file->getOriginalName();
 
-    			if (empty($file->getIdsouscategory() ) )
-    			{
+    			// if (empty($file->getIdsouscategory() ) )
+    			// {
 
-    				$categorytab=$em->getRepository('GedBundle:Category')->findOneById($file->getIdcategory());
-    				$category=$categorytab->getName();
-    			}
-    			else
-    			{
-    				$categorytab=$em->getRepository('GedBundle:Souscategory')->findOneById($file->getIdsouscategory());
-    				$category=$categorytab->getName();
-    			}
+				$categorytab=$em->getRepository('GedBundle:Category')->findOneById($file->getIdcategory());
+				$category=$categorytab->getName();
+    			// }
+    			// else
+    			// {
+    			// 	$categorytab=$em->getRepository('GedBundle:Souscategory')->findOneById($file->getIdsouscategory());
+    			// 	$category=$categorytab->getName();
+    			// }
     			$linktag = $em->getRepository('GedBundle:Linktag')->findByIdfile($idfile);
     			foreach ($linktag as $tag) {
 		    		//on recupere l'id du premier tag
@@ -352,9 +352,9 @@ class ListController extends Controller
     	}
 
     	//DERNIERS COMMENTÉS
-// requete sur les commentaires (par date la plus récente)
-// prise d'idfile verification des droits et s'il a deja été compté et prise des infos
-// notation de l'idfile dans un tableau pour le compter
+		// requete sur les commentaires (par date la plus récente)
+		// prise d'idfile verification des droits et s'il a deja été compté et prise des infos
+		// notation de l'idfile dans un tableau pour le compter
 
 
 
@@ -389,17 +389,17 @@ class ListController extends Controller
     			$date=$file->getDate();
     			$name=$file->getOriginalName();
 
-    			if (empty($file->getIdsouscategory() ) )
-    			{
+    			// if (empty($file->getIdsouscategory() ) )
+    			// {
 
-    				$categorytab=$em->getRepository('GedBundle:Category')->findOneById($file->getIdcategory());
-    				$category=$categorytab->getName();
-    			}
-    			else
-    			{
-    				$categorytab=$em->getRepository('GedBundle:Souscategory')->findOneById($file->getIdsouscategory());
-    				$category=$categorytab->getName();
-    			}
+				$categorytab=$em->getRepository('GedBundle:Category')->findOneById($file->getIdcategory());
+				$category=$categorytab->getName();
+    			// }
+    			// else
+    			// {
+    			// 	$categorytab=$em->getRepository('GedBundle:Souscategory')->findOneById($file->getIdsouscategory());
+    			// 	$category=$categorytab->getName();
+    			// }
     			$linktag = $em->getRepository('GedBundle:Linktag')->findByIdfile($idfile);
     			foreach ($linktag as $tag) {
 		    		//on recupere l'id du premier tag

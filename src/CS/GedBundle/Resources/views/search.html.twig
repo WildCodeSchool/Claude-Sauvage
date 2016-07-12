@@ -13,11 +13,11 @@
 				</div>
 				<div class="col-md-3">
 			    	<div class="styled-select">
-				    	<select class="form-control search-select" name="Catégorie">
-				    		<option>Toutes les catégories
+				    	<select class="form-control search-select" id="categories" name="Catégorie">
+				    		<option value="0" >Toutes les catégories</option>
 				    		{% for categorie in categories %}
 								{% if categorie.name != 'brouillon' %}
-								    <option>{{ categorie.name }}
+								    <option value="{{ categorie.id }}">{{ categorie.name }}</option>
 								{% endif %}
 							{% endfor %}
 					    </select>
@@ -25,22 +25,19 @@
 				</div>
 				<div class="col-md-3">
 			    	<div class="styled-select">
-				    	<select class="form-control" name="SSCatégorie">
-						    <option>Toutes les sous-catégories
-						    <option>sous-catégorie 1
-						    <option>sous-catégorie 2
-						    <option>sous-catégorie 3
+				    	<select class="form-control" name="SSCatégorie" id="sscategories" disabled>
+						    <option value="O" >Toutes les sous-catégories</option>
 					    </select>
 					</div>
 				</div>
 				<div class="col-md-3">
 			    	<div class="styled-select">
 				    	<select class="form-control" name="Type">
-						    <option>Tout type de fichier
-						    <option>Texte
-						    <option>Image
-						    <option>Audio
-						    <option>Video
+						    <option>Tout type de fichier</option>
+						    <option>Texte</option>
+						    <option>Image</option>
+						    <option>Audio</option>
+						    <option>Video</option>
 					    </select>
 					</div>
 				</div>
@@ -48,3 +45,6 @@
 		</div>
 	</div>
 </section>
+<script type="text/javascript">
+	var path =  "{{ path('ged_ajax_sscat_search') }}";
+</script>

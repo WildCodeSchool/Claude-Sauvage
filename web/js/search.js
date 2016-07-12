@@ -1,32 +1,38 @@
-// $(document).ready(function(){
-// 	$("#search").keyup(function(){
-// 		recherche = $(this).val();
+$("document").ready(function() { 
 
-// 		$.ajax({
-// 			type: "post",
-// 			url: "{{ path('ged_search') }}",
-// 			dataType: "json",
-// 			data: {recherche : recherche},
-// 			success : function(response) {
-//             	document.getElementById("sresult").innerHTML = "";
-//             	if(response.length === 1){
-//                		var elmt = document.getElementById("sresult");
-//                 	elmt.style.display = "block";
+    $("#categories").change(function() {
 
-// 					var result = response[0];
-//                 	document.getElementById("sresult").innerHTML = "<div class=resultat><p>"+result.name"</p></div>";
+		var categorie = $(this).val();
+            
+		if ( categorie != 0 ) {
 
-//             	}
-//            		else {
-//               		for(var i =0;i <= response.length-1;i++) {
-//                 		var elmt = document.getElementById("sresult");
-//                			elmt.style.display = "block";
+			$.ajax({
+			type: 'POST',
+			url: path,
+			data: {categorie: categorie},
+			dataType : 'json',
+				beforeSend: function() {
+					console.log('On charge');
+					$("#sscategories option").remove();
+					$("#sscategories").append($('<option>',{ value : 0 , text: "Toutes les sous-catégories"}));
+					$("#sscategories").attr('disabled', 'disabled');
 
-//                 		var result = response[i];
-//                 		document.getElementById("sresult").innerHTML += "<div class=resultat><p>"+result.name"</p></div>";
-//               		}
-//             	}
-//           	}
-//         });
-//     });
+				},
+				success: function(data) {
+				console.log('Requete ok',data);
+					$.each(data.ssCategorieTab, function(index,value) {
+						$("#sscategories").append($('<option>',{ value : value.id , text: value.name }));
+						$("#sscategories").removeAttr('disabled');
+					});
+				}
+				
+			});
+		}
+
+		else {
+			$("#sscategories option").remove();
+			$("#sscategories").append($('<option>',{ value : 0 , text: "Toutes les sous-catégories" }));
+			$("#sscategories").attr('disabled', 'disabled');
+		}
+    });
 });

@@ -6,6 +6,11 @@ ged_search:
     path:     /search
     defaults: { _controller: GedBundle:Search:search }
 
+ged_ajax_sscat_search:
+    path:     /search/souscategorie
+    defaults: { _controller: GedBundle:Search:ajaxsscat }
+    methods:  [GET, POST]
+
 ged_all:
     path:     /all
     defaults: { _controller: GedBundle:List:all }
