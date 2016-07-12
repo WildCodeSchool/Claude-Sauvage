@@ -5,8 +5,29 @@
 		<button class="btn button-one-file">Télécharger</button>
 	</div>
 	<div class="col-md-4 button-container">
-		<button class="btn button-one-file" href="">Partager</button>
+		<button type="button" class="btn button-one-file" data-toggle="modal" data-target="#modal-partage">
+ 			Partager
+		</button>
+{# debut modal #}
 	</div>
+	<div class="modal fade" id="modal-partage" tabindex="-1" role="dialog" aria-labelledby="myModalLabel">
+		<div class="modal-dialog" role="document">
+			<div class="modal-content">
+				<div class="modal-header">
+					<button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+					<h4 class="modal-title" id="myModalLabel">Modal title</h4>
+				</div>
+				<div class="modal-body">
+				...
+				</div>
+				<div class="modal-footer">
+					<button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+					<button type="button" class="btn btn-primary">Save changes</button>
+				</div>
+			</div>
+		</div>
+	</div>
+{# fin modal #}
 	<div class="col-md-4 button-container">
 		<button class="btn button-one-file" id="btn-com">Commentaires</button>
 	</div>
@@ -55,7 +76,11 @@
 			$('#file-part').toggleClass('col-md-9');
 			$('#file-part').toggleClass('col-md-12');
 		});
+		$('#modal-partage').on('shown.bs.modal', function () {
+  		$('#modal-partage').focus()
+		})
 
 	});
+	
 </script>
 {% endblock body %}
