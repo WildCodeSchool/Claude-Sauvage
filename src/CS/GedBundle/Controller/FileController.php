@@ -28,18 +28,18 @@ class FileController extends Controller
 		$file=$em->getRepository('GedBundle:Gedfiles')->findOneById($id);
         $comments=$em->getRepository('GedBundle:Gedcom')->findByIdfile($id);
         
-        $linkgroups=$em->getRepository('GedBundle:Linkgroup')->findByIduser($user->getId());
-        foreach ($linkgroups as $linkgroup) {
-            $group=$em->getRepository('GedBundle:Groupe')->findOneById($linkgroup->getIdgroup());  
-            $tabgroup[]=array(
-                'idgroup'=>$group->getId(),
-                'groupname'=>$group->getName(),
-                ); 
-        }
-        if(empty($tabgroup))
-        {
-            $tabgroup=1;
-        }
+        // $linkgroups=$em->getRepository('GedBundle:Linkgroup')->findByIduser($user->getId());
+        // foreach ($linkgroups as $linkgroup) {
+        //     $group=$em->getRepository('GedBundle:Groupe')->findOneById($linkgroup->getIdgroup());  
+        //     $tabgroup[]=array(
+        //         'idgroup'=>$group->getId(),
+        //         'groupname'=>$group->getName(),
+        //         ); 
+        // }
+        // if(empty($tabgroup))
+        // {
+        //     $tabgroup=1;
+        // }
         if(!empty($comments))
         {
             foreach ($comments as $comment)
@@ -114,7 +114,7 @@ class FileController extends Controller
     		'file'=>$file,
     		'textfile'=>$textfile,
             'tabcom'=>$tabcom,
-            'tabgroup'=>$tabgroup,
+            // 'tabgroup'=>$tabgroup,
 			));
 	}
     public function addCommentAction (Request $request)

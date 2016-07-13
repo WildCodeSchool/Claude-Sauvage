@@ -17,14 +17,14 @@
 					<button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
 					<h4 class="modal-title" id="myModalLabel">Partager ce fichier</h4>
 				</div>
-				<div class="modal-body">
+			{# 	<div class="modal-body">
 					<div class="row">
 						<div class="col-md-6">
 							Partager dans un groupe existant:
 							<br/>
 							<div class="styled-select">
 								{% if tabgroup is defined %}
-									{# <form action="{{ path('ged_addfiletogroup', {'id':tabgroup['idgroup'], 'idfile': idfile } ) }}"> #}
+									<form action="{{ path('ged_addfiletogroup', {'id':tabgroup['idgroup'], 'idfile': idfile } ) }}">
 									<select>
 								
 										{% for group in tabgroup %}
@@ -34,7 +34,7 @@
 										{% endfor %}
 									
 									</select>
-						{# 		</form> #}
+								</form>
 								{% endif %}
 							</div>
 						</div>
@@ -47,7 +47,7 @@
 				</div>
 				<div class="modal-footer">
 					<button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
-				</div>
+				</div> #}
 			</div>
 		</div>
 	</div>
