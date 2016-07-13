@@ -12,4 +12,22 @@ use Doctrine\ORM\EntityRepository;
  */
 class GedfilesRepository extends EntityRepository
 {
+	public function findSearch($word)
+	{
+		$queryBuilder = $this->createQueryBuilder('f');
+
+		$queryBuilder
+			->where('f.originalname LIKE :word')
+			->setParameter('word', '%'.$word.'%');
+			// ->getResult();
+
+		// $query = $queryBuilder->getQuery();
+
+
+
+		// $results = $queryBuilder->getResult();
+
+		return $queryBuilder;
+
+	}
 }
