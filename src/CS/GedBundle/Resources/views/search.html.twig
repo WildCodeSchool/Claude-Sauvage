@@ -1,48 +1,50 @@
 <section>
 	<div class="col-md-12 search-bar">
 		<div class="col-md-10 col-md-offset-1">
-			<div class="col-md-3">
-				<form action="{{ path('ged_search') }}" method="post">
+			<form action="{{ path('ged_search') }}" method="post">
+				<div class="col-md-3">
 					<div class="input-group">
 						<input type="text" class="form-control" name="recherche" placeholder="Rechercher">
 						<span class="input-group-btn">
 							<button class="btn btn-default" type="submit">Ok</button>
 						</span>
 					</div>
-					<div class="resultat" id="resultat"></div>
+					<div class="resultat" id="search-result"></div>
 				</div>
 				<div class="col-md-3">
 			    	<div class="styled-select">
-				    	<select class="form-control search-select" name="Catégorie">
-						    <option>Toutes les catégories
-						    <option>Catégorie 1
-						    <option>Catégorie 2
-						    <option>Catégorie 3
+				    	<select class="form-control search-select" id="categories" name="categorie">
+				    		<option value="0" >Toutes les catégories</option>
+				    		{% for categorie in categories %}
+								{% if categorie.name != 'brouillon' %}
+								    <option value="{{ categorie.id }}">{{ categorie.name }}</option>
+								{% endif %}
+							{% endfor %}
 					    </select>
 					</div>
 				</div>
 				<div class="col-md-3">
 			    	<div class="styled-select">
-				    	<select class="form-control" name="Sous-Catégorie">
-						    <option>Toutes les sous-catégories
-						    <option>sous-catégorie 1
-						    <option>sous-catégorie 2
-						    <option>sous-catégorie 3
+				    	<select class="form-control" name="sscategories" id="sscategories" disabled>
+						    <option value="0">Toutes les sous-catégories</option>
 					    </select>
 					</div>
 				</div>
-				<div class="col-md-3">
-			    	<div class="styled-select">
-				    	<select class="form-control" name="Type de fichier">
-						    <option>Tout type de fichier
-						    <option>Texte
-						    <option>Image
-						    <option>Audio
-						    <option>Video
+				<div class="col-md-2">
+			    	<div class="styled-select select-type">
+				    	<select class="form-control" name="type">
+						    <option value="0">Tout type de fichier</option>
+						    <option>Texte</option>
+						    <option>Image</option>
+						    <option>Audio</option>
+						    <option>Video</option>
 					    </select>
 					</div>
-			    </form>
-			</div>
+				</div>
+			</form>
 		</div>
 	</div>
 </section>
+<script type="text/javascript">
+	var path =  "{{ path('ged_ajax_sscat_search') }}";
+</script>
