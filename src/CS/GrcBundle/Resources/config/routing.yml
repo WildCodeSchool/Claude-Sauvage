@@ -23,3 +23,7 @@ ajaxsscat:
     path:     /ajaxsscat/
     defaults: { _controller: GrcBundle:Default:ajaxsscat }
     methods:  [GET, POST]
+
+ticket_comment:
+    path:     /newcom
+    defaults: { _controller: GrcBundle:Default:addComment }

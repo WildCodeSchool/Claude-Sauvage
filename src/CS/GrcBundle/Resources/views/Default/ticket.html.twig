@@ -71,10 +71,14 @@
 		</div>
 
 		<div class="bloc_reponse">
-			<textarea class="input_com" type="text" rows="3" name="input_com"></textarea>
-			<button type="button" class="btn btn-default btn-com-left">Ajouter un fichier</button>
-			<button type="button" class="btn btn-default btn-com-right">Envoyer</button>
+			<form method="post" action="{{ path('ticket_comment') }}">
+				<label for="content">laisser un commentaire:</label>
+				<textarea class="input_com" type="text" rows="3" name="content"></textarea>
+				<input name="idticket" value="{{ ticket.id }}" style="display:none;"/>
+				<button type="button" class="btn btn-default btn-com-left">Ajouter un fichier</button>
+				<button type="submit" class="btn btn-default btn-com-right">Envoyer</button>
+			<form>
 		</div>
-
+		
 	</div>
 {% endblock %}

@@ -110,6 +110,7 @@ class FileController extends Controller
         $content=$request->request->get('content');
 
         $file=$em->getRepository('GedBundle:Gedfiles')->findOneById($idfile);
+        
         if (!empty($content))
         {
             $gedcom= new Gedcom();
