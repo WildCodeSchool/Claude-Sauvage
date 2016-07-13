@@ -1,11 +1,8 @@
 $("document").ready(function() { 
 
     $("#categories").change(function() {
-
 		var categorie = $(this).val();
-            
 		if ( categorie != 0 ) {
-
 			$.ajax({
 			type: 'POST',
 			url: path,
@@ -14,9 +11,8 @@ $("document").ready(function() {
 				beforeSend: function() {
 					console.log('On charge');
 					$("#sscategories option").remove();
-					$("#sscategories").append($('<option>',{ value : 0 , text: "Toutes les sous-catégories"}));
+					$("#sscategories").append($('<option>',{ value:0, text: "Toutes les sous-catégories"}));
 					$("#sscategories").attr('disabled', 'disabled');
-
 				},
 				success: function(data) {
 				console.log('Requete ok',data);
@@ -25,13 +21,11 @@ $("document").ready(function() {
 						$("#sscategories").removeAttr('disabled');
 					});
 				}
-				
 			});
 		}
-
 		else {
 			$("#sscategories option").remove();
-			$("#sscategories").append($('<option>',{ value : 0 , text: "Toutes les sous-catégories" }));
+			$("#sscategories").append($('<option>',{ value:0, text: "Toutes les sous-catégories" }));
 			$("#sscategories").attr('disabled', 'disabled');
 		}
     });
