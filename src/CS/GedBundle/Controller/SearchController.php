@@ -114,7 +114,7 @@ class SearchController extends Controller
                     "type"=>$type,
                     "category"=>$SSCatégorie,
                     "date"=>$date,
-                    "name"=>$name
+                    "name"=>$name,
                     "bookmark"=>$bookmarkfile,
                     "com"=>$nbCom,
                 );

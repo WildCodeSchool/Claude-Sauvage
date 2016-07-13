@@ -14,11 +14,14 @@ class ParametersController extends Controller
     /**
      * @Route("/parameters/{id_file}", name="ged_parameters_file")
      */
-    public function ParametersAction(Request $request)
+    public function ParametersAction(Request $request, $id)
     {
 		$em = $this->getDoctrine()->getManager();
         $user = $this->getUser();
+        $file = 0;
 
+
+        //fonction d'upload
         $gedfiles = new Gedfiles();
         $form = $this->createForm(GedfilesType::class, $gedfiles);
         $form->handleRequest($request);
