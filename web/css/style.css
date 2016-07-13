@@ -103,6 +103,14 @@
 	border: 1px solid #ccc;
 }
 
+.select-type {
+	width: 185px;
+	
+}
+.select-type select {
+	width: 200px;
+}
+
 .search-btn{
 	border: 1px solid #ccc;
 }

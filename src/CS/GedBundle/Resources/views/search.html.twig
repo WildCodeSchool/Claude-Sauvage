@@ -4,7 +4,7 @@
 			<form action="{{ path('ged_search') }}" method="post">
 				<div class="col-md-3">
 					<div class="input-group">
-						<input type="text" class="form-control" name="Recherche" placeholder="Rechercher">
+						<input type="text" class="form-control" name="recherche" placeholder="Rechercher">
 						<span class="input-group-btn">
 							<button class="btn btn-default" type="submit">Ok</button>
 						</span>
@@ -13,7 +13,7 @@
 				</div>
 				<div class="col-md-3">
 			    	<div class="styled-select">
-				    	<select class="form-control search-select" id="categories" name="Catégorie">
+				    	<select class="form-control search-select" id="categories" name="categorie">
 				    		<option value="0" >Toutes les catégories</option>
 				    		{% for categorie in categories %}
 								{% if categorie.name != 'brouillon' %}
@@ -25,15 +25,15 @@
 				</div>
 				<div class="col-md-3">
 			    	<div class="styled-select">
-				    	<select class="form-control" name="SSCatégorie" id="sscategories" disabled>
-						    <option value="O" >Toutes les sous-catégories</option>
+				    	<select class="form-control" name="sscategories" id="sscategories" disabled>
+						    <option value="0">Toutes les sous-catégories</option>
 					    </select>
 					</div>
 				</div>
-				<div class="col-md-3">
-			    	<div class="styled-select">
-				    	<select class="form-control" name="Type">
-						    <option>Tout type de fichier</option>
+				<div class="col-md-2">
+			    	<div class="styled-select select-type">
+				    	<select class="form-control" name="type">
+						    <option value="0">Tout type de fichier</option>
 						    <option>Texte</option>
 						    <option>Image</option>
 						    <option>Audio</option>
