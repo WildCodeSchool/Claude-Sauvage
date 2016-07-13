@@ -1,17 +1,3 @@
-/* --------------------------------- Loader ---------------------------------*/
-
-.loader {
-	position : fixed;
-	z-index: 9999;
-	background : url(../flo_happy_head_rotate.gif) 50% 50% no-repeat;
-	background-color:#f1f1f1;
-	top : 0px;
-	left : 0px;
-	height : 100%;
-	width : 100%;
-	cursor : wait;
-}
-
 /* --------------------------------- Navbar top ---------------------------------*/
 
 .navbar{
@@ -76,10 +62,13 @@
 }
 
 /* Search bar */
+select > option:hover{
+                box-shadow: 0 0 10px 100px #fba858 inset;
+            }
 
 .search-bar{
-	padding:10px 0;
-	background-color:#fba858;
+	padding:10px 0 10px 40px; 
+	background-color:#f1f1f1;
 }
 
 .styled-select select {
@@ -134,7 +123,7 @@
 /*--------------------------------- Navbar left --------------------------------- */
 
 .nav-left{
-	padding: 20px 0 0 0;
+	padding: 55px 0 0 0;
 	background-color:#f1f1f1;
 }
 
