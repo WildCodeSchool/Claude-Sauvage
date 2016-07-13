@@ -31,6 +31,7 @@ class FileController extends Controller
         $linkgroups=$em->getRepository('GedBundle:Linkgroup')->findByIduser($user->getId());
         foreach ($linkgroups as $linkgroup) {
             $group=$em->getRepository('GedBundle:Groupe')->findOneById($linkgroup->getIdgroup());  
+            var_dump($group);
             $tabgroup[]=array(
                 'idgroup'=>$group->getId(),
                 'groupname'=>$group->getName(),

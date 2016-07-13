@@ -242,7 +242,7 @@ class ListController extends Controller
     		$idticket=$comment->getIdticket();
     		while($i<count($tab))
     		{
-    			if( $idticket = $tab[$i]['id'] )
+    			if( $idticket == $tab[$i]['id'] )
     			{
     				$counted=1;
     			}
