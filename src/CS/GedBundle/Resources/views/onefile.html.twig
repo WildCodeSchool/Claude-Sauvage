@@ -23,15 +23,19 @@
 							Partager dans un groupe existant:
 							<br/>
 							<div class="styled-select">
-								<form action="{{ path('ged_addfiletogroup', {'id':group['idgroup'], 'idfile': idfile } ) }}">
+								{% if tabgroup is defined %}
+									{# <form action="{{ path('ged_addfiletogroup', {'id':tabgroup['idgroup'], 'idfile': idfile } ) }}"> #}
 									<select>
+								
 										{% for group in tabgroup %}
 											<option value="">
 												<a href="">{{ group['groupname'] }}</a>
 											</option>
 										{% endfor %}
+									
 									</select>
-								</form>
+						{# 		</form> #}
+								{% endif %}
 							</div>
 						</div>
 						<div class="col-md-6">
