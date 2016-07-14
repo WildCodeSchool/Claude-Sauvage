@@ -24,8 +24,8 @@
 }
 
 .navbar-btn:hover{
-	background-color:#fba858;
-	border:#fba858 1px solid;
+	background-color:#909090;
+	border:#909090 1px solid;
 }
 
 /* --------------------------------- flashbag alert ---------------------------------*/
@@ -51,7 +51,7 @@
 	background-color: #f1f1f1!important;
 }
 .modal .btn-primary{
-	background-color:#fba858;
+	background-color:#b0b0b0;
 	border-color: #f1f1f1;
 }
 
@@ -62,9 +62,14 @@
 }
 
 /* Search bar */
-select > option:hover{
-                box-shadow: 0 0 10px 100px #fba858 inset;
-            }
+select option:checked,
+select option:hover {
+    box-shadow: 0 0 10px 100px #909090 inset;
+}
+
+select:focus > option:checked { 
+    background: #909090 !important;
+}
 
 .search-bar{
 	padding:10px 0 10px 40px; 
@@ -166,7 +171,7 @@ select > option:hover{
 }
 .nav-left li:hover{
 	border-radius: 5px !important;
-	background-color:#fba858;
+	background-color:#909090;
 }
 
 .drop-content{
@@ -206,7 +211,7 @@ select > option:hover{
 }
 
 .drop-btn a:hover, .btn:hover{
-	background-color:#fba858;
+	background-color:#909090;
 }
 .corbeille{
 	margin-top: 200px;
@@ -234,11 +239,11 @@ select > option:hover{
 }
 
 tr:hover td{
-	background-color: #e0e0e0;
+	background-color: #C0C0C0;
 }
 
 .modal-header{
-	background-color:#fba858;
+	background-color:#909090;
 }
 
 .modal-title{
