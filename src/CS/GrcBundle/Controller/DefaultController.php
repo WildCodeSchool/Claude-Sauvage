@@ -5,8 +5,11 @@ namespace CS\GrcBundle\Controller;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\JsonResponse;
+use Symfony\Component\HttpFoundation\RedirectResponse;
 use CS\GrcBundle\Entity\Ticket;
 use CS\GrcBundle\Form\TicketType;
+use CS\GrcBundle\Entity\Comment;
+use CS\GrcBundle\Form\CommentType;
 use DateTime;
 
 class DefaultController extends Controller
@@ -66,7 +69,7 @@ class DefaultController extends Controller
     $idsscat= $ticket->getIdsouscategory();
     $categorie = $em->getRepository('GrcBundle:Grccategory')->findOneById($idcat);
     $sscategorie = $em->getRepository('GrcBundle:Grcsouscategory')->findOneById($idsscat);
-  
+
     return $this->render('GrcBundle:Default:ticket.html.twig', array(
         'ticket'=>$ticket,
         'categorie'=>$categorie,
@@ -155,5 +158,29 @@ class DefaultController extends Controller
 
     $response = new JsonResponse();
     return $response->setData(array('sscatlist' => $sscatlist));
+    }
+
+    public function addCommentAction (Request $request)
+    {
+        $em=$this->getDoctrine()->getManager();
+        $user=$this->getUser();
+        
+        $idticket=$request->request->get('idticket');
+        $content=$request->request->get('content');
+
+        if (!empty($content))
+        {
+            $comment= new Comment();
+            $comment->setIdticket($idticket);
+            $comment->setIdsender($user->getId());
+            $comment->setContent($content);
+            $comment->setDate(new DateTime());
+
+            $em->persist($comment);
+            $em->flush();
+        }
+        $url = $this -> generateUrl('ticket', array( 'id'=>$idticket ));
+        $response = new RedirectResponse($url);
+        return $response;
     }
 }

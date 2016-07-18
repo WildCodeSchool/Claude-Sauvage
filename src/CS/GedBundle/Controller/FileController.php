@@ -127,6 +127,7 @@ class FileController extends Controller
         $content=$request->request->get('content');
 
         $file=$em->getRepository('GedBundle:Gedfiles')->findOneById($idfile);
+        
         if (!empty($content))
         {
             $gedcom= new Gedcom();
@@ -142,13 +143,17 @@ class FileController extends Controller
         $response = new RedirectResponse($url);
         return $response;
     }
-    public function addToGroupAction (Request $request, $id, $idfile)
+    public function addToGroupAction (Request $request, $idfile)
     {
         $em=$this->getDoctrine()->getManager();
+        $groupname=$request->request->get('groupname');
+        $id=$em->getRepository('GedBundle:Groupe')->findOneByName($groupname)->getId();
+
         $file=$em->getRepository('GedBundle:Gedfiles')->findOneById($idfile);
         $file->setIdgroup($id);
         $em->persist($file);
         $em->flush();
+        
         $url = $this -> generateUrl('one_file', array( 'id'=>$idfile ));
         $response = new RedirectResponse($url);
         return $response;

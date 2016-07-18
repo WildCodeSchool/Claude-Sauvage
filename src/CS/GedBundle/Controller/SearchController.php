@@ -12,243 +12,70 @@ use Symfony\Component\Serializer\Encoder\JsonEncoder;
 use Symfony\Component\Serializer\Normalizer\GetSetMethodNormalizer;
 use CS\GedBundle\Entity\Category;
 use CS\GedBundle\Entity\Gedfiles;
+use Symfony\Component\HttpFoundation\JsonResponse;
 
 class SearchController extends Controller
 {
-    /**
-     * @Route("/search", name="ged_search")
-     */
-    public function searchAction(Request $request)
+    public function ajaxsscatAction(Request $request)
     {
         $em = $this->getDoctrine()->getManager();
-        $user =$this->getUser();
 
-        $content = $this->getRequest()->request->get('Recherche');
-        $Catégorie = $this->getRequest()->request->get('Catégorie');
-        $SSCatégorie = $this->getRequest()->request->get('SSCatégorie');
-        $type = $this->getRequest()->request->get('Type');
+        $idCategorie = $request->request->get('categorie');
 
-        // définition plus tard du la recherche de type de fichier.
+        $ssCategories = $em->getRepository('GedBundle:Souscategory')->findByIdcategory($idCategorie);
 
-        if($SSCatégorie != "Toutes les sous-catégories" ){
+        foreach ($ssCategories as $ssCategorie){
+            $id = $ssCategorie->getId();
+            $name = $ssCategorie->getName();
 
-            $SSCatégorie = $em->getRepository('GedBundle:Category')->findOneByName($Catégorie);
-            $SSCatégorieId = $CatégorieInfo->getId();
-
-            //recherche mes fichier.
-
-            $Myfiles = $em->getRepository('GedBundle:Gedfiles')->findBy( array(
-                                                                                        'idcategory'=>$SSCatégorieId,
-                                                                                        'idowner'=>$user->getId(),
-                                                                            ))  ;
-            foreach ($Myfiles as $Myfile)
-            {
-                $type=$Myfile->getType();
-                $path=$Myfile->getPath();
-                $idfile=$Myfile->getId();
-                $date=$Myfile->getDate();
-                $name=$Myfile->getOriginalName();
-
-                $linktag = $em->getRepository('GedBundle:Linktag')->findByIdfile($idfile);
-                foreach ($linktag as $tag) {
-                    //on recupere l'id du premier tag
-                    $idtag=$tag->getIdtag();
-                    //on recupere la ligne de la table Gedtag correspondante à l'id d'au dessus
-                    $infostag=$em->getRepository('GedBundle:Gedtag')->findOneById($idtag);
-                    //on recupere le nom du tag et on met tout ca dans un tableau
-                    $tagname=$infostag->getName();
-                    $tagnames[]=array(
-                        'id'=>$idtag,
-                        'name'=>$tagname,
-                        );
-                    //on fout tout dans un tableau et on a des favoris tout neufs
-                }
-                if(empty($tagnames))
-                {
-                    $tagnames=1;
-                }
-
-                $tabFiles[]=array(
-                    "idfile"=>$idfile,
-                    "tagnames"=>$tagnames,
-                    "path"=>$path,
-                    "type"=>$type,
-                    "category"=>$Catégorie,
-                    "date"=>$date,
-                    "name"=>$name
+            $ssCategorieTab[]=array(
+                "id"=>$id,
+                "name"=>$name,
                 );
-            }
-
-             //recherche les fichier de mon / mes groupes.
-
-            $listgroups=$em->getRepository('GedBundle:Linkgroup')->findByIduser($user->getId());
-
-            foreach ($listgroups as $listgroup)
-            {
-                $grpId= $listgroup->getIdgroup();
-                $grpFiles=$em->getRepository('GedBundle:Gedfiles')->findByIdgroup($grpId);
-
-                foreach ($grpFiles as $grpFile)
-                {
-                    $type=$grpFile->getType();
-                    $path=$grpFile->getPath();
-                    $idfile=$grpFile->getId();
-                    $date=$grpFile->getDate();
-                    $name=$grpFile->getOriginalName();
-
-                    $linktag = $em->getRepository('GedBundle:Linktag')->findByIdfile($idfile);
-                    foreach ($linktag as $tag) {
-                        //on recupere l'id du premier tag
-                        $idtag=$tag->getIdtag();
-                        //on recupere la ligne de la table Gedtag correspondante à l'id d'au dessus
-                        $infostag=$em->getRepository('GedBundle:Gedtag')->findOneById($idtag);
-                        //on recupere le nom du tag et on met tout ca dans un tableau
-                        $tagname=$infostag->getName();
-                        $tagnames[]=array(
-                            'id'=>$idtag,
-                            'name'=>$tagname,
-                            );
-                        //on fout tout dans un tableau et on a des favoris tout neufs
-                    }
-                    if(empty($tagnames))
-                    {
-                        $tagnames=1;
-                    }
-
-                    $tabGrpFiles[]=array(
-                        "idfile"=>$idfile,
-                        "tagnames"=>$tagnames,
-                        "path"=>$path,
-                        "type"=>$type,
-                        "category"=>$Catégorie,
-                        "date"=>$date,
-                        "name"=>$name
-                    );
-                }
-            }
         }
 
-        elseif($Catégorie != "Toutes les catégories"){
-            $CatégorieInfo = $em->getRepository('GedBundle:Category')->findOneByName($Catégorie);
-            $CatégorieId = $CatégorieInfo->getId();
-
-            //recherche mes fichier.
-
-            $Myfiles = $em->getRepository('GedBundle:Gedfiles')->findBy( array(
-                                                                                        'idcategory'=>$CatégorieId,
-                                                                                        'idowner'=>$user->getId(),
-                                                                            ))  ;
-            foreach ($Myfiles as $Myfile)
-            {
-                $type=$Myfile->getType();
-                $path=$Myfile->getPath();
-                $idfile=$Myfile->getId();
-                $date=$Myfile->getDate();
-                $name=$Myfile->getOriginalName();
-
-                $linktag = $em->getRepository('GedBundle:Linktag')->findByIdfile($idfile);
-                foreach ($linktag as $tag) {
-                    //on recupere l'id du premier tag
-                    $idtag=$tag->getIdtag();
-                    //on recupere la ligne de la table Gedtag correspondante à l'id d'au dessus
-                    $infostag=$em->getRepository('GedBundle:Gedtag')->findOneById($idtag);
-                    //on recupere le nom du tag et on met tout ca dans un tableau
-                    $tagname=$infostag->getName();
-                    $tagnames[]=array(
-                        'id'=>$idtag,
-                        'name'=>$tagname,
-                        );
-                    //on fout tout dans un tableau et on a des favoris tout neufs
-                }
-                if(empty($tagnames))
-                {
-                    $tagnames=1;
-                }
-
-                $tabFiles[]=array(
-                    "idfile"=>$idfile,
-                    "tagnames"=>$tagnames,
-                    "path"=>$path,
-                    "type"=>$type,
-                    "category"=>$Catégorie,
-                    "date"=>$date,
-                    "name"=>$name
-                );
-            }
-
-             //recherche les fichier de mon / mes groupes.
-
-            $listgroups=$em->getRepository('GedBundle:Linkgroup')->findByIduser($user->getId());
-
-            foreach ($listgroups as $listgroup)
-            {
-                $grpId= $listgroup->getIdgroup();
-                $grpFiles=$em->getRepository('GedBundle:Gedfiles')->findByIdgroup($grpId);
-
-                foreach ($grpFiles as $grpFile)
-                {
-                    $type=$grpFile->getType();
-                    $path=$grpFile->getPath();
-                    $idfile=$grpFile->getId();
-                    $date=$grpFile->getDate();
-                    $name=$grpFile->getOriginalName();
-
-                    $linktag = $em->getRepository('GedBundle:Linktag')->findByIdfile($idfile);
-                    foreach ($linktag as $tag) {
-                        //on recupere l'id du premier tag
-                        $idtag=$tag->getIdtag();
-                        //on recupere la ligne de la table Gedtag correspondante à l'id d'au dessus
-                        $infostag=$em->getRepository('GedBundle:Gedtag')->findOneById($idtag);
-                        //on recupere le nom du tag et on met tout ca dans un tableau
-                        $tagname=$infostag->getName();
-                        $tagnames[]=array(
-                            'id'=>$idtag,
-                            'name'=>$tagname,
-                            );
-                        //on fout tout dans un tableau et on a des favoris tout neufs
-                    }
-                    if(empty($tagnames))
-                    {
-                        $tagnames=1;
-                    }
-
-                    $tabGrpFiles[]=array(
-                        "idfile"=>$idfile,
-                        "tagnames"=>$tagnames,
-                        "path"=>$path,
-                        "type"=>$type,
-                        "category"=>$Catégorie,
-                        "date"=>$date,
-                        "name"=>$name
-                    );
-                }
-            }
-
-            var_dump($tabFiles);exit;
-        }
-
-        else{
-        }
+        $response = new JsonResponse();
+        return $response->setData(array('ssCategorieTab' => $ssCategorieTab));
     }
 
-                
-   
+    public function searchAction(Request $request)
+    {
+        $em=$this->getDoctrine()->getManager();
+        $user =$this->getUser();
+
+        $searchRecherche=$request->request->get('recherche');
+        $searchCategorie=$request->request->get('categorie');
+        $searchSscategories=$request->request->get('sscategories');
+        $searchType=$request->request->get('type');
+
+        $file = $em->getRepository('GedBundle:Gedfiles')->findSearch('ALED');
+
+        var_dump($file);exit;
+
+        //si pas de sous catégorie défini.
+        if (empty($searchSscategories)||($searchSscategories==0)){
+            
+            //on recherche alors si la catégorie et défini.
+            if ($searchCategorie!=0){
+                echo $searchCategorie;
+            }
+            //Si la catégorie n'est pas défini alors.
+            else{
+                 echo'pas de catégorie & pas de sous catégorie';
+            }
+        }
+
+        //on obtien donc il de la sous catégorie.
+        else{
+            echo $searchSscategories;
+        }
+        var_dump($searchRecherche);
+        var_dump('--------------------------');
+        var_dump($searchCategorie);
+        var_dump('--------------------------');
+        var_dump($searchSscategories);
+        var_dump('--------------------------');
+        var_dump($searchType);exit;
+        
+    }    
 }
-
-
-        // $string = $this->getRequest()->request->get('recherche');
-
-        // $recherche = $em->getRepository('GedBundle:Category')->findBy(
-        // 														array('name' => $string,), // Critere
-	  					// 										array('id' => 'desc'),        // Tri
-								// 					  			5,                              // Limite
-								// 					  			0                               // Offset
-								// 							);
-        // $encoders = array(new XmlEncoder(), new JsonEncoder());
-        // $normalizers = array(new GetSetMethodNormalizer());
-        // $serializer = new Serializer($normalizers, $encoders);
-        // $jsonContent = $serializer->serialize($recherche, 'json');
-        // $response = new Response($jsonContent);
-
-        // var_dump($response);exit;
-        // return $response;

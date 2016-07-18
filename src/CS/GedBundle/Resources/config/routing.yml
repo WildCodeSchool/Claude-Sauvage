@@ -6,6 +6,11 @@ ged_search:
     path:     /search
     defaults: { _controller: GedBundle:Search:search }
 
+ged_ajax_sscat_search:
+    path:     /search/souscategorie
+    defaults: { _controller: GedBundle:Search:ajaxsscat }
+    methods:  [GET, POST]
+
 ged_all:
     path:     /all
     defaults: { _controller: GedBundle:List:all }
@@ -35,5 +40,5 @@ ged_editgroup:
     defaults: { _controller:GedBundle:Group:editGroup }
 
 ged_addfiletogroup:
-    path:    /addfiletogroup/{id}/{idfile}
+    path:    /addfiletogroup/{idfile}
     defaults: { _controller:GedBundle:File:addToGroup }
