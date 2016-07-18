@@ -31,14 +31,15 @@
 /* --------------------------------- flashbag alert ---------------------------------*/
 
 .alert{
-	width:50%;
 	margin-top:5px ;
 	margin-bottom: 0px;
-	margin-left: 10% !important;
-	height:40px;
-	padding:0px 40px;
+	padding:10px 40px;
 	text-align:center;
-	display:none;
+}
+
+.alert-dismissible .close{
+	top:-10px;
+	right:-30px;
 }
 
 .alert a{
@@ -46,7 +47,7 @@
 	color:#3c763d;
 }
 
-/* Modal envoi */
+/* --------------------------------- Modal envoi ---------------------------------*/
 .btn:active{
 	background-color: #f1f1f1!important;
 }

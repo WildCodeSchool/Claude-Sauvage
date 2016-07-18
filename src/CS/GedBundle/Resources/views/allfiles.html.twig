@@ -10,13 +10,11 @@
 				<th></th>
 				<th>Nom du fichier</th>
 				<th>Date</th>
-				<th>Partagé avec</th>
 				<th>Catégorie</th> 
 				<th>Tags</th>
-				<th>Com</th>
 				<th>Favori</th>
 				<th>Paramètres</th>
-				<th></th>
+				<th>Telecharger</th>
 			</tr> 
 		</thead> 
 		<tbody>
@@ -30,18 +28,17 @@
 								Ico
 							{% endif %}
 						</td>
-						
-						<td><a href="{{ path('one_file' , {'id': myfiles['fileId'] }) }}">{{ myfiles['name'] }}</a></td>
+						<td><a data-toggle="tooltip" data-placement="bottom" title="
+							Partagé avec: {% if myfiles['groupMemberName'] != 1 %}
+											{% for Member in myfiles['groupMemberName'] %}
+												{{ Member['groupMemberName'] }} ,
+											{% endfor %}
+											{% else %}
+												Aucun partage
+											{% endif %}
+							comentaires : {{ myfiles['comments'] }}" 
+							href="{{ path('one_file' , {'id': myfiles['fileId'] }) }}">{{ myfiles['name'] }}</a></td>
 						<td>{{ myfiles['date'] | date("d/m/Y") }}</td>
-						<td>
-							{% if myfiles['groupMemberName'] != 1 %}
-								{% for Member in myfiles['groupMemberName'] %}
-										{{ Member['groupMemberName'] }} ,
-								{% endfor %}
-							{% else %}
-								Aucun partage
-							{% endif %}
-						</td>
 						<td>{{ myfiles['category'] }}</td> 
 						<td>
 							{% if myfiles['tagnames'] != 1 %}
@@ -52,7 +49,6 @@
 								Aucun Tag
 							{% endif %}
 						</td>
-						<td><span class="badge">{{ myfiles['comments'] }}</span></td>
 						<td>
 							{% if myfiles['bookmark'] != 1 %}
 								<span class="glyphicon glyphicon-star-empty" aria-hidden="true"></span>
@@ -66,7 +62,7 @@
 						</td>
 						<td>
 							<a class="btn" href="{{ path('ged_download', { 'name' : myfiles['path'] }) }}">
-								<span class="glyphicon glyphicon-cloud-download" aria-hidden="true"></span> Telecharger
+								<span class="glyphicon glyphicon-cloud-download" aria-hidden="true"></span>
 							</a>
 						</td>
 					</tr>
@@ -85,5 +81,8 @@ $(document).ready(function() {
 		"order": [[1, "asc"]]
 	} );
 } );
+$(function () {
+  $('[data-toggle="tooltip"]').tooltip()
+})
 </script>
 {% endblock body %}

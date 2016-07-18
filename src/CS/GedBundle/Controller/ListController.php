@@ -437,6 +437,14 @@ class ListController extends Controller
 
     	//fonction d'upload
 
+    	//verification du nombre de fichiers brouillon.
+    	$brouillon=$em->getRepository('GedBundle:Gedfiles')->findBy(array(
+    																'idowner'=> $user->getId(),
+    																'idcategory' => 1
+    															)
+    														);
+    	$nbBrouillon=count($brouillon);
+
         $gedfiles = new Gedfiles();
 
         $form = $this->createForm(GedfilesType::class, $gedfiles);
@@ -466,9 +474,7 @@ class ListController extends Controller
             $em->persist($gedfiles);
             $em->flush();
 
-            $this->get('session')->getFlashBag()->set('success', 'Fichier envoyé');
-
-            return $this->redirectToRoute('ged_homepage');
+            $this->get('session')->getFlashBag()->set('success', 'Fichier '.$originalname.' envoyé');
 
         }
 
@@ -496,6 +502,7 @@ class ListController extends Controller
     		'file'=>$fileId,
     		'categories' => $categories,
 			'categoryTab'=> $categoryTab,
+			'nbBrouillon' => $nbBrouillon,
     	));
     }
 
