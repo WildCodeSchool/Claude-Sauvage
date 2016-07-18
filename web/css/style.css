@@ -267,6 +267,11 @@ tr:hover td{
 
 /*--------------------------------- page 1 fichier ---------------------------------*/
 
+.new-grp
+{
+	margin-left: 15px;
+}
+
 .button-container
 {
 	margin-bottom: 25px;
@@ -293,11 +298,6 @@ tr:hover td{
 {
 	height:500px;
 	overflow: auto;
-}
-
-.com-form
-{
-	
 }
 
 .one-comment
