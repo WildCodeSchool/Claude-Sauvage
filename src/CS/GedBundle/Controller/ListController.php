@@ -443,8 +443,6 @@ class ListController extends Controller
     		$tabcom=1;
     	}
 
-    	//fonction d'upload
-
     	//verification du nombre de fichiers brouillon.
     	$brouillon=$em->getRepository('GedBundle:Gedfiles')->findBy(array(
     																'idowner'=> $user->getId(),
@@ -453,6 +451,7 @@ class ListController extends Controller
     														);
     	$nbBrouillon=count($brouillon);
 
+    	//fonction d'upload
         $gedfiles = new Gedfiles();
 
         $form = $this->createForm(GedfilesType::class, $gedfiles);
@@ -621,16 +620,18 @@ class ListController extends Controller
 	    	
     		//récuperation des membres des groupes.
     		$groupMembers = $em->getRepository('GedBundle:Linkgroup')->findByIdgroup($myfile->getIdgroup());
+    		
+    		$tabInfoGroup=[];
     		foreach ($groupMembers as $groupMember) {
     			$groupMemberId = $groupMember->getIduser();
     			$groupMemberInfo = $em->getRepository('AppBundle:User')->findOneById($groupMemberId);
     			$groupMemberName = $groupMemberInfo->getUsername();
 
-    			$tabInfoGroup = array(
+    			$tabInfoGroup[] = array(
     					'groupMemberName'=>$groupMemberName,
-    			);
+    			);    			
     		}
-    		
+
     		//récupération de la sous-catégory.
     		if (!empty($myfile->getIdsouscategory)){
     			$sousCategoryInfo = $em->getRepository('GedBundle:Souscategory')->findOneById($myfile->getIdsouscategory());
@@ -695,19 +696,10 @@ class ListController extends Controller
     	foreach ($linkGroups as $group) {
     		$groupFiles = $em->getRepository('GedBundle:Gedfiles')->findByIdgroup($group->getIdgroup());
 
-    		//récuperation des membres des groupes.
-    		$groupMemberId = $group->getIduser();
-	    	$groupMemberInfo = $em->getRepository('AppBundle:User')->findOneById($groupMemberId);
-	    	$groupMemberName = $groupMemberInfo->getusername();
-
-			$tabInfoGroup = array(
-					'groupMemberName'=>$groupMemberName,
-			);
-
 	    	foreach ($groupFiles as $file) {
 
 	    		//récuperation de l'Id du fichier.
-    			$idFile = $myfile->getId();
+    			$idFile = $file->getId();
 
     			//récupération de l'id owner
     			$idowner = $file->getIdowner();
@@ -722,10 +714,10 @@ class ListController extends Controller
 	    		$dateFile = $file->getDate();
 
 	    		//récuperation du nom original.
-	    		$nameFile=$myfile->getOriginalName();
+	    		$nameFile=$file->getOriginalName();
 
 	    		//récuperation des favoris.
-	    		$bookmarkfile = $em->getRepository('GedBundle:Linkbookmark')->findOneByIdfile($myfile->getId());
+	    		$bookmarkfile = $em->getRepository('GedBundle:Linkbookmark')->findOneByIdfile($file->getId());
 
 	    		if (empty($bookmarkfile)){
 	    			$bookmarkfile = 0;
@@ -738,7 +730,7 @@ class ListController extends Controller
 		    	if (!empty($file->getIdsouscategory)){
 
 		    		$sousCategoryInfo = $em->getRepository('GedBundle:Souscategory')->findOneById($file->getIdsouscategory());
-		    		$sousCategory = $sousCategoryInfo->getName();
+		    		$category = $sousCategoryInfo->getName();
 		    	}
 
 		    	//sinon si la sous-catégorie n'existe pas on recupere la catégorie.
@@ -757,8 +749,6 @@ class ListController extends Controller
 		    	else {
 		    		$nbCom = count($comments);
 		    	}
-
-
 
 		    	//on recherches les tags lier a un fichier.
 		    	//on recherches les lien de tags par raport a l'id du fichier.
@@ -784,11 +774,24 @@ class ListController extends Controller
 		    		$sousCategory=0;
 		    	}
 
+		    	//on recupere les partages
+		    	$groupMembers = $em->getRepository('GedBundle:Linkgroup')->findByIdgroup($file->getIdgroup());
+    		
+	    		$tabInfoGroup=[];
+	    		foreach ($groupMembers as $groupMember) {
+	    			$groupMemberId = $groupMember->getIduser();
+	    			$groupMemberInfo = $em->getRepository('AppBundle:User')->findOneById($groupMemberId);
+	    			$groupMemberName = $groupMemberInfo->getUsername();
+
+	    			$tabInfoGroup[] = array(
+	    					'groupMemberName'=>$groupMemberName,
+	    			);    			
+	    		}
+
 		    	//On regroupe tout dans un tableau.
 		    	$tabGroupFiles[] = array(
 		    		'fileId'=>$idFile,
 		    		'category'=>$category,
-		    		'sousCategory'=>$sousCategory,
 		    		'groupMemberName'=>$tabInfoGroup,
 		    		'name'=>$nameFile,
 		    		'path'=>$pathFile,

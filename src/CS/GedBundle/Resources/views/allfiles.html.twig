@@ -28,16 +28,18 @@
 								Ico
 							{% endif %}
 						</td>
-						<td><a data-toggle="tooltip" data-placement="bottom" title="
+						<td>
+							<a data-toggle="tooltip" data-placement="bottom" title="
 							Partagé avec: {% if myfiles['groupMemberName'] != 1 %}
-											{% for Member in myfiles['groupMemberName'] %}
-												{{ Member }} ,
+											{% for member in  myfiles['groupMemberName'] %}
+												{{ member['groupMemberName'] }} ,
 											{% endfor %}
 											{% else %}
 												Aucun partage
 											{% endif %}
 							comentaires : {{ myfiles['comments'] }}" 
-							href="{{ path('one_file' , {'id': myfiles['fileId'] }) }}">{{ myfiles['name'] }}</a></td>
+							href="{{ path('one_file' , {'id': myfiles['fileId'] }) }}">{{ myfiles['name'] }}</a>
+						</td>
 						<td>{{ myfiles['date'] | date("d/m/Y") }}</td>
 						<td>{{ myfiles['category'] }}</td> 
 						<td>
@@ -79,15 +81,16 @@
 									Ico
 								{% endif %}
 							</td>
-							<td><a data-toggle="tooltip" data-placement="bottom" title="
+							<td>
+								<a data-toggle="tooltip" data-placement="bottom" title="
 								Partagé avec: {% if groupfiles['groupMemberName'] != 1 %}
-												{% for Member in groupfiles['groupMemberName'] %}
-													{{ Member }} ,
-												{% endfor %}
-												{% else %}
-													Aucun partage
-												{% endif %}
-								comentaires : {{ groupfiles['comments'] }}" 
+											{% for member in  groupfiles['groupMemberName'] %}
+												{{ member['groupMemberName'] }} ,
+											{% endfor %}
+											{% else %}
+												Aucun partage
+											{% endif %}
+								comentaires : {{ groupfiles['comments'] }}"								
 								href="{{ path('one_file' , {'id': groupfiles['fileId'] }) }}">{{ groupfiles['name'] }}</a></td>
 							<td>{{ groupfiles['date'] | date("d/m/Y") }}</td>
 							<td>{{ groupfiles['category'] }}</td> 
