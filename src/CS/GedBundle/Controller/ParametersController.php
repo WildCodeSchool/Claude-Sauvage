@@ -7,6 +7,8 @@ use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Symfony\Component\HttpFoundation\Request;
 use CS\GedBundle\Entity\Gedfiles;
 use CS\GedBundle\Form\GedfilesType;
+use CS\GedBundle\Entity\Gedtag;
+use CS\GedBundle\Entity\Linktag;
 use DateTime;
 
 class ParametersController extends Controller
@@ -18,7 +20,54 @@ class ParametersController extends Controller
     {
 		$em = $this->getDoctrine()->getManager();
         $user = $this->getUser();
-        $file = 0;
+        $addtag= $request->request->get('addtag');
+
+
+        $file = $em->getRepository('GedBundle:Gedfiles')->findOneById($id);
+        $linktags = $em->getRepository('GedBundle:Linktag')->findByIdfile($id);
+        foreach ($linktags as $linktag)
+        {
+            $tag=$em->getRepository('GedBundle:Gedtag')->findOneById($linktag->getIdtag());
+            $name=$tag->getName();
+            $tabtag[]=array(
+                'name'=>$name,
+                );
+        }
+        if(empty($tabtag))
+        {
+            $tabtag=0;
+        }
+        if(count($tabtag)<3 && !empty($addtag))
+        {
+            $newtag = new Gedtag;
+            $newtag->setName($addtag);
+            $em->persist($newtag);
+            $em->flush();
+            
+            $newlinktag = new Linktag;
+            $newlinktag ->setIdfile($id);
+            $newlinktag->setIdtag($newtag->getId());
+            $em->persist($newlinktag);
+            $em->flush();
+
+        }
+        elseif(count($tabtag) >= 3 && !empty($addtag))
+        {
+            $newtag = new Gedtag;
+            $newtag->setName($addtag);
+            $em->persist($newtag);
+            $em->flush();
+
+            $replacelinktag=$em->getRepository('GedBundle:Linktag')->findOneByIdfile($id); 
+            $em->remove($replacelinktag);
+            $em->flush();
+
+            $replacelinktag = new Linktag;
+            $replacelinktag->setIdfile($id);
+            $replacelinktag->setIdtag($newtag->getId());
+            $em->persist($replacelinktag);
+            $em->flush();
+        }
 
 
         //fonction d'upload
@@ -53,6 +102,7 @@ class ParametersController extends Controller
 
         return $this->render('GedBundle::parameters.html.twig', array(
             'form' => $form->createView(), 'user'=>$user,
+            'id'=>$id,
         ));
     }
 }

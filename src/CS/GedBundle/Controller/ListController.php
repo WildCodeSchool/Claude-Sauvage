@@ -614,7 +614,7 @@ class ListController extends Controller
     		//récuperation des membres des groupes.
     		$groupMembers = $em->getRepository('GedBundle:Linkgroup')->findByIdgroup($myfile->getIdgroup());
     		foreach ($groupMembers as $groupMember) {
-    			$groupMemberId = $groupMember->getIduser;
+    			$groupMemberId = $groupMember->getIduser();
     			$groupMemberInfo = $em->getRepository('AppBundle:User')->findOneById($groupMemberId);
     			$groupMemberName = $groupMemberInfo->getUsername();
 
@@ -687,7 +687,7 @@ class ListController extends Controller
     		$groupFiles = $em->getRepository('GedBundle:Gedfiles')->findByIdgroup($group->getIdgroup());
 
     		//récuperation des membres des groupes.
-    		$groupMemberId = $linkGroups->getIduser;
+    		$groupMemberId = $group->getIduser();
 	    	$groupMemberInfo = $em->getRepository('AppBundle:User')->findOneById($groupMemberId);
 	    	$groupMemberName = $groupMemberInfo->getusername();
 
