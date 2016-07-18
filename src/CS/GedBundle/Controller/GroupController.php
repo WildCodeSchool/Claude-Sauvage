@@ -166,11 +166,18 @@ class GroupController extends Controller
 		if(!empty($useradd))
 		{
 			$otheruser=$em->getRepository('AppBundle:User')->findOneByUsername($useradd);
-			$linkgroup = new Linkgroup();
-			$linkgroup->setIduser($otheruser->getId());
-			$linkgroup->setIdgroup($idgroup);
-			$em->persist($linkgroup);
-			$em->flush();
+			if (!empty($otheruser))
+			{
+				$linkgroup = new Linkgroup();
+				$linkgroup->setIduser($otheruser->getId());
+				$linkgroup->setIdgroup($idgroup);
+				$em->persist($linkgroup);
+				$em->flush();
+			}
+			else
+			{
+				echo "l'utilisateur n'existe pas";
+			}
 		}
 
 		if(!empty($userremove))

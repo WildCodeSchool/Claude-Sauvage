@@ -365,12 +365,11 @@ class ListController extends Controller
 
 
 
-    	$filescom=$em->getRepository('GedBundle:Gedcom')->findAll(
-    		array('date'=>'desc'),
-    		'all',
-    		0
+    	$filescom=$em->getRepository('GedBundle:Gedcom')->findBy(
+    		array(),
+    		array('id'=>'desc')
     		);
-    	$compteur=0;
+       	$compteur=0;
     	$tab[]=array('id'=>0);
     	foreach ($filescom as $filecom ) {
     		$i=0;
@@ -378,71 +377,72 @@ class ListController extends Controller
     		$idfile=$filecom->getIdfile();
     		while($i<count($tab))
     		{
-    			if( $idfile = $tab[$i]['id'] )
+    			if( $idfile == $tab[$i]['id'] )
     			{
     				$counted=1;
     			}
     			$i++;
     		}
-    		if ($counted=0 && $compteur<5)
+    		if ($counted == 0 && $compteur<4)
     		{
     			//on compte le fichier comme compté dans la liste
     			$tab[]=array('id'=>$idfile);
-    			
     			$file = $em->getRepository('GedBundle:Gedfiles')->findOneById($idfile);
-    			
-    			$type=$file->getType();
-    			$path=$file->getPath();
-    			$date=$file->getDate();
-    			$name=$file->getOriginalName();
+    			if(!empty($file))
+    			{
+	    			$type = $file->getType();
+	    			$path = $file->getPath();
+	    			$date = $filecom->getDate();
+	    			$name = $file->getOriginalName();
+	    			// if (empty($file->getIdsouscategory() ) )
+	    			// {
 
-    			// if (empty($file->getIdsouscategory() ) )
-    			// {
-
-				$categorytab=$em->getRepository('GedBundle:Category')->findOneById($file->getIdcategory());
-				$category=$categorytab->getName();
-    			// }
-    			// else
-    			// {
-    			// 	$categorytab=$em->getRepository('GedBundle:Souscategory')->findOneById($file->getIdsouscategory());
-    			// 	$category=$categorytab->getName();
-    			// }
-    			$linktag = $em->getRepository('GedBundle:Linktag')->findByIdfile($idfile);
-    			$tagnames = [];
-    			foreach ($linktag as $tag) {
-		    		//on recupere l'id du premier tag
-		    		$idtag=$tag->getIdtag();
-		    		//on recupere la ligne de la table Gedtag correspondante à l'id d'au dessus
-		    		$infostag=$em->getRepository('GedBundle:Gedtag')->findOneById($idtag);
-		    		//on recupere le nom du tag et on met tout ca dans un tableau
-		    		$tagname=$infostag->getName();
-		    		$tagnames[]=array(
-		    			'id'=>$idtag,
-		    			'name'=>$tagname,
-		    			);
-		    		//on fout tout dans un tableau et on a des favoris tout neufs
-		    	}
-		    	//s'il n'existe pas de tag, on assigne 1 au tableau des tags
-		    	if(empty($tagnames))
-		    	{
-		    		$tagnames=1;
-		    	}
-		    	$tabcom[]=array(
-	    		"idfile"=>$idfile,
-	    		"tagnames"=>$tagnames,
-	    		"path"=>$path,
-	    		"type"=>$type,
-	    		"category"=>$category,
-	    		"date"=>$date,
-	    		"name"=>$name
-	    		);
+					$categorytab=$em->getRepository('GedBundle:Category')->findOneById($file->getIdcategory());
+					$category=$categorytab->getName();
+	    			// }
+	    			// else
+	    			// {
+	    			// 	$categorytab=$em->getRepository('GedBundle:Souscategory')->findOneById($file->getIdsouscategory());
+	    			// 	$category=$categorytab->getName();
+	    			// }
+	    			$linktag = $em->getRepository('GedBundle:Linktag')->findByIdfile($idfile);
+	    			$tagnames = [];
+	    			foreach ($linktag as $tag) {
+			    		//on recupere l'id du premier tag
+			    		$idtag=$tag->getIdtag();
+			    		//on recupere la ligne de la table Gedtag correspondante à l'id d'au dessus
+			    		$infostag=$em->getRepository('GedBundle:Gedtag')->findOneById($idtag);
+			    		//on recupere le nom du tag et on met tout ca dans un tableau
+			    		$tagname=$infostag->getName();
+			    		$tagnames[]=array(
+			    			'id'=>$idtag,
+			    			'name'=>$tagname,
+			    			);
+			    		//on fout tout dans un tableau et on a des favoris tout neufs
+			    	}
+			    	//s'il n'existe pas de tag, on assigne 1 au tableau des tags
+			    	if(empty($tagnames))
+			    	{
+			    		$tagnames=1;
+			    	}
+			    	$tabcom[]=array(
+		    		"idfile"=>$idfile,
+		    		"tagnames"=>$tagnames,
+		    		"path"=>$path,
+		    		"type"=>$type,
+		    		"category"=>$category,
+		    		"date"=>$date,
+		    		"name"=>$name
+		    	
+		    		);
+    			}
     		}
+
     	};
     	if (empty($tabcom))
     	{
     		$tabcom=1;
     	}
-
     	//verification du nombre de fichiers brouillon.
     	$brouillon=$em->getRepository('GedBundle:Gedfiles')->findBy(array(
     																'idowner'=> $user->getId(),
