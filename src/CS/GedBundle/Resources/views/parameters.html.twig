@@ -5,7 +5,8 @@
 	</div>
 	<div>
 		<form action=" {{ path('ged_parameters_file', {'id': id} ) }}" method="post">
-			<input name="addtag"/>
+			<label for="addtag">Ajouter un tag:</label>
+			<input name="addtag" id="addtag"/>
 			<input type="submit" value="valider"/>
 		</form>
 	</div>

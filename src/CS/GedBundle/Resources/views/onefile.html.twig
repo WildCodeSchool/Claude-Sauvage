@@ -2,7 +2,7 @@
 {% block body %}
 <div class="all">	
 	<div class="col-md-4 button-container">
-		<button class="btn button-one-file">Télécharger</button>
+		<a class="btn button-one-file" href="{{ path('ged_download', { 'name': file.path }) }}">Télécharger</a>
 	</div>
 	<div class="col-md-4 button-container">
 		<button type="button" class="btn button-one-file" data-toggle="modal" data-target="#modal-partage">

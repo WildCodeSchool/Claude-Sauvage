@@ -20,7 +20,7 @@ $("document").ready(function() {
 						$("#sscategories").append($('<option>',{ value : value.id , text: value.name }));
 						$("#sscategories").removeAttr('disabled');
 					});
-				}
+				},
 			});
 		}
 		else {
