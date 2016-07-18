@@ -1,8 +1,18 @@
 {% extends "GedBundle::layout.html.twig" %}
 {% block body %}
-{% include "GedBundle::search.html.twig" %}
 {% include "GedBundle::nav.html.twig" %}
+{% include "GedBundle::search.html.twig" %}
 <div class="col-md-10">
+{% for flashMessage in app.session.flashbag.get('success') %}
+    <div class="alert alert-success alert-dismissible navbar-header pagination-centered" role="alert" id="flashbag">
+        <button type="button" class="close" data-dismiss="alert" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+        <strong>Succes</strong>
+    {{ flashMessage }}
+    {% if file is defined %}
+        <p><a href="{{ path('ged_parameters_file', { 'id' : file }) }}" title="">Vous pouvez maintenant régler les parametres du document ici.</a></p>
+    {% endif %}
+    </div>
+{% endfor %}
 	<div class="col-md-6 tab-cel ">
 		<h3 style="text-align:center;">Mes favoris</h3>
 		<table class="table compact stripe" id="table">

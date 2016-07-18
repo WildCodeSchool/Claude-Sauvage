@@ -11,11 +11,6 @@
         <script type="text/javascript" src="{{ asset('js/search.js') }}"></script>
     </head>
     <body>
-    <script type="text/javascript">
-    $(window).load(function() {
-        $(".loader").delay(1500).fadeOut('slow');
-        }); 
-    </script>
     <header>
         <nav class="navbar navbar-default">
             <div class="container-fluid">
@@ -28,16 +23,6 @@
                     </button>
                     <button type="button" class="ajout-fichier btn btn-default navbar-btn" data-toggle="modal" data-target="#addfile"><span class="glyphicon glyphicon-plus" aria-hidden="true"></span> Ajouter un document</button>
                 </div>
-                {% for flashMessage in app.session.flashbag.get('success') %}
-                    <div class="alert alert-success alert-dismissible navbar-header pagination-centered" role="alert" id="flashbag">
-                        <button type="button" class="close" data-dismiss="alert" aria-label="Close"><span aria-hidden="true">&times;</span></button>
-                        <strong>Succes</strong>
-                    {{ flashMessage }}
-                    {% if file is defined %}
-                        <p><a href="{{ path('ged_parameters_file', { 'id' : file }) }}" title="">Vous pouvez maintenant régler les parametres du document ici.</a></p>
-                    {% endif %}
-                    </div>
-                {% endfor %}
 {# Modal ajout fichier #}
                 <div class="modal fade" id="addfile" tabindex="-1" role="dialog" aria-labelledby="myModalLabel">
                     <div class="modal-dialog" role="document">
@@ -72,7 +57,6 @@
             </div>  
         </nav>
     </header>
-    <div class="loader"></div>
     {% block body %}
     {% endblock body %}
     <script type="text/javascript">   
