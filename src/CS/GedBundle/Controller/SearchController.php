@@ -50,7 +50,7 @@ class SearchController extends Controller
 
         $file = $em->getRepository('GedBundle:Gedfiles')->findSearch('ALED');
 
-        var_dump($file);exit;
+        // var_dump($file);exit;
 
         //si pas de sous catégorie défini.
         if (empty($searchSscategories)||($searchSscategories==0)){
