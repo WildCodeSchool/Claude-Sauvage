@@ -435,8 +435,6 @@ class ListController extends Controller
     		$tabcom=1;
     	}
 
-    	//fonction d'upload
-
     	//verification du nombre de fichiers brouillon.
     	$brouillon=$em->getRepository('GedBundle:Gedfiles')->findBy(array(
     																'idowner'=> $user->getId(),
@@ -445,6 +443,7 @@ class ListController extends Controller
     														);
     	$nbBrouillon=count($brouillon);
 
+    	//fonction d'upload
         $gedfiles = new Gedfiles();
 
         $form = $this->createForm(GedfilesType::class, $gedfiles);
@@ -726,7 +725,7 @@ class ListController extends Controller
 		    	if (!empty($file->getIdsouscategory)){
 
 		    		$sousCategoryInfo = $em->getRepository('GedBundle:Souscategory')->findOneById($file->getIdsouscategory());
-		    		$sousCategory = $sousCategoryInfo->getName();
+		    		$category = $sousCategoryInfo->getName();
 		    	}
 
 		    	//sinon si la sous-catégorie n'existe pas on recupere la catégorie.
@@ -772,10 +771,9 @@ class ListController extends Controller
 		    	$tabGroupFiles[] = array(
 		    		'fileId'=>$idFile,
 		    		'category'=>$category,
-		    		'sousCategory'=>$sousCategory,
 		    		'name'=>$nameFile,
 		    		'path'=>$pathFile,
-		    		'type'=>$icoFile,
+		    		'type'=>$typeFile,
 		    		'date'=>$dateFile,
 		    		'tagnames'=>$tabTags,
 		    		'comments'=>$nbCom,
