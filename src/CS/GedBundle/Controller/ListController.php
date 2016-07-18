@@ -750,16 +750,18 @@ class ListController extends Controller
 		    		$nbCom = count($comments);
 		    	}
 
-		    	//on recherches les tags lier a un fichier.
-		    	//on recherches les lien de tags par raport a l'id du fichier.
-		    	$linkTags=$em->getRepository('GedBundle:Linktag')->findByIdfile($group->getId());
+		    	//on recherche les tags liés a un fichier.
+		    	
+		    	//on recherche les liens de tags par rapport a l'id du fichier.
+		    	$linkTags=$em->getRepository('GedBundle:Linktag')->findByIdfile($file->getId());
 
-		    	//puis on fait une boucle pour parcourir notre abjet de liens de tag.
+		    	//puis on fait une boucle pour parcourir notre objet de liens de tag.
+		    	$tabTags = [];
 		    	foreach ($linkTags as $linkTag) {
 		    		$infoTag=$em->getRepository('GedBundle:Gedtag')->findOneById($linkTag->getIdtag());
 		    		$tagName=$infoTag->getName();
 
-		    		//on stoque tout dans un tableau.
+		    		//on stocke tout dans un tableau.
 		    		$tabTags[]= array(
 		    			'tagName'=>$tagName,
 		    			);
