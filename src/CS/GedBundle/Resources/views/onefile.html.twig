@@ -21,8 +21,7 @@
 						<div class="modal-body">
 							<div class="row">
 								<div class="col-md-6">
-									Partager dans un groupe existant:
-									<br/>
+									<p>Partager dans un groupe existant:</p>
 									<div class="styled-select">
 										<select name="groupname">
 											{% for group in tabgroup %}
@@ -34,9 +33,8 @@
 									</div>
 								</div>
 								<div class="col-md-6">
-									Créer un nouveau groupe
-									<br/>
-									<a href="{{ path('ged_newgroup') }}">nouveau groupe</a>
+									<p>Créer un nouveau groupe</p>
+									<a class="btn btn-default new-grp" href="{{ path('ged_newgroup') }}">nouveau groupe</a>
 								</div>
 							</div>
 						</div>
