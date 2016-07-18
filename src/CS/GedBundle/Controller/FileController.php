@@ -28,18 +28,18 @@ class FileController extends Controller
 		$file=$em->getRepository('GedBundle:Gedfiles')->findOneById($id);
         $comments=$em->getRepository('GedBundle:Gedcom')->findByIdfile($id);
         
-        // $linkgroups=$em->getRepository('GedBundle:Linkgroup')->findByIduser($user->getId());
-        // foreach ($linkgroups as $linkgroup) {
-        //     $group=$em->getRepository('GedBundle:Groupe')->findOneById($linkgroup->getIdgroup());  
-        //     $tabgroup[]=array(
-        //         'idgroup'=>$group->getId(),
-        //         'groupname'=>$group->getName(),
-        //         ); 
-        // }
-        // if(empty($tabgroup))
-        // {
-        //     $tabgroup=1;
-        // }
+        $linkgroups=$em->getRepository('GedBundle:Linkgroup')->findByIduser($user->getId());
+        foreach ($linkgroups as $linkgroup) {
+            $group=$em->getRepository('GedBundle:Groupe')->findOneById($linkgroup->getIdgroup());  
+            $tabgroup[]=array(
+                'idgroup'=>$group->getId(),
+                'groupname'=>$group->getName(),
+                ); 
+        }
+        if(empty($tabgroup))
+        {
+            $tabgroup=1;
+        }
         if(!empty($comments))
         {
             foreach ($comments as $comment)
@@ -114,7 +114,7 @@ class FileController extends Controller
     		'file'=>$file,
     		'textfile'=>$textfile,
             'tabcom'=>$tabcom,
-            // 'tabgroup'=>$tabgroup,
+            'tabgroup'=>$tabgroup,
 			));
 	}
     public function addCommentAction (Request $request)
@@ -142,13 +142,17 @@ class FileController extends Controller
         $response = new RedirectResponse($url);
         return $response;
     }
-    public function addToGroupAction (Request $request, $id, $idfile)
+    public function addToGroupAction (Request $request, $idfile)
     {
         $em=$this->getDoctrine()->getManager();
+        $groupname=$request->request->get('groupname');
+        $id=$em->getRepository('GedBundle:Groupe')->findOneByName($groupname)->getId();
+
         $file=$em->getRepository('GedBundle:Gedfiles')->findOneById($idfile);
         $file->setIdgroup($id);
         $em->persist($file);
         $em->flush();
+        
         $url = $this -> generateUrl('one_file', array( 'id'=>$idfile ));
         $response = new RedirectResponse($url);
         return $response;

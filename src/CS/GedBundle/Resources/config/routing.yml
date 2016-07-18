@@ -40,5 +40,5 @@ ged_editgroup:
     defaults: { _controller:GedBundle:Group:editGroup }
 
 ged_addfiletogroup:
-    path:    /addfiletogroup/{id}/{idfile}
+    path:    /addfiletogroup/{idfile}
     defaults: { _controller:GedBundle:File:addToGroup }
