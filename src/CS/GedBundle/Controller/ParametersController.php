@@ -95,8 +95,6 @@ class ParametersController extends Controller
             $em->persist($gedfiles);
             $em->flush();
 
-            $test="abc";
-
             $this->get('session')->getFlashBag()->set('success', 'Fichier envoyé');
 
             return $this->redirectToRoute('ged_homepage');
