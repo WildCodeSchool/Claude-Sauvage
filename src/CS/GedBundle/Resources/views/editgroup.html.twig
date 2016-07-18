@@ -1,23 +1,30 @@
 {% extends "GedBundle::layout.html.twig" %}
 {% block body %}
-<div class="col-md-6">
-	<form action="{{ path('ged_editgroup',{ 'id': id } ) }}" method="post">
-		<label for="groupname">Modifier le nom du groupe</label>
-		<input name="groupname"/>
-		<label for="useradd">Ajouter un utilisateur au groupe</label>
-		<input name="useradd"/>
-		<input type="submit" value="valider"/>
-	</form>
-</div>
-<div class="col-md-6">
-	<form action="{{ path('ged_editgroup',{ 'id': id } ) }}" method="post">
-		<label for="groupremove">Supprimer le groupe</label>
-		<input type="submit" value="valider" name="groupremove"/>
-	</form>
-	<form action="{{ path('ged_editgroup',{ 'id': id } ) }}" method="post">
-		<label for="userremove">Supprimer un utilisateur du groupe</label>
-		<input name="userremove"/>
-		<input type="submit" value="valider"/>
-	</form>
-</div>
+	<div>
+		{% if groupmembers != 1 %}
+			{% for member in groupmembers %}
+				{{ member['username'] }}
+			{% endfor %}
+		{% endif %}
+	</div>
+	<div class="col-md-6">
+		<form action="{{ path('ged_editgroup',{ 'id': id } ) }}" method="post">
+			<label for="groupname">Modifier le nom du groupe</label>
+			<input name="groupname"/>
+			<label for="useradd">Ajouter un utilisateur au groupe</label>
+			<input name="useradd"/>
+			<input type="submit" value="valider"/>
+		</form>
+	</div>
+	<div class="col-md-6">
+		<form action="{{ path('ged_editgroup',{ 'id': id } ) }}" method="post">
+			<label for="groupremove">Supprimer le groupe</label>
+			<input type="submit" value="valider" name="groupremove"/>
+		</form>
+		<form action="{{ path('ged_editgroup',{ 'id': id } ) }}" method="post">
+			<label for="userremove">Supprimer un utilisateur du groupe</label>
+			<input name="userremove"/>
+			<input type="submit" value="valider"/>
+		</form>
+	</div>
 {% endblock %}

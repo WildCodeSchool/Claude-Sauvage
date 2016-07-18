@@ -78,6 +78,7 @@ class ListController extends Controller
 	    	// }
 	    	//on recupere tous les tags correspondants au fichier
 	    	$linktag = $em->getRepository('GedBundle:Linktag')->findByIdfile($idfav);
+	    	$tagnames = [];
 	    	foreach ($linktag as $tag) {
 	    		//on recupere l'id du premier tag
 	    		$idtag=$tag->getIdtag();
@@ -407,6 +408,7 @@ class ListController extends Controller
     			// 	$category=$categorytab->getName();
     			// }
     			$linktag = $em->getRepository('GedBundle:Linktag')->findByIdfile($idfile);
+    			$tagnames = [];
     			foreach ($linktag as $tag) {
 		    		//on recupere l'id du premier tag
 		    		$idtag=$tag->getIdtag();
