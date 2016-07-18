@@ -115,7 +115,7 @@
 <div class="col-md-10">
 	<div class="col-md-6 tab-cel">
 		<h3 style="text-align:center;">Derniers commentés</h3>
-		<table class="table compact stripe" id="table">
+		<table class="table compact stripe" id="tablecom">
 			<thead> 
 				<tr> 
 					<th></th> 
@@ -211,6 +211,22 @@ $(document).ready(function() {
                 "searchable": false
             },],
 		"order": [[5, "asc"]]
+	} );
+	$('tablecom').DataTable( { 
+		"paging": false,
+		"info": false,
+		"sDom": '<"H"lr>t<"F"ip>',
+		"columnDefs": [
+			{ 
+				"orderable": false,
+				"targets": [3,4]
+			},
+			{
+                "targets": [ 5 ],
+                "visible": false,
+                "searchable": false
+            },],
+		"order": [[5, "desc"]]
 	} );
 } );
 </script>

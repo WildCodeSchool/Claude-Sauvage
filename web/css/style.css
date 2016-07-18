@@ -264,7 +264,17 @@ tr:hover td{
 #table a{
 	color:#000;
 }
+#tablecom .glyphicon-star-empty, #table .glyphicon-star{
+	font-size: 20px;
+}
 
+#tablecom .glyphicon-star{
+	color:yellow;
+}
+
+#tablecom a{
+	color:#000;
+}
 /*--------------------------------- page 1 fichier ---------------------------------*/
 
 .button-container

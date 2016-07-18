@@ -363,7 +363,17 @@ class ListController extends Controller
 		// prise d'idfile verification des droits et s'il a deja été compté et prise des infos
 		// notation de l'idfile dans un tableau pour le compter
 
-
+    	$linkgroup = $em->getRepository('GedBundle:Linkgroup')->findByIduser($user->getId());
+    	foreach ($linkgroup as $groupedfile) 
+    	{
+    		$openfile = $em->getRepository('GedBundle:Gedfiles')->findOneByIdgroup($groupedfile->getIdgroup());
+    		if(!empty($openfile))
+    		{
+    			$accessfiles[]=array(
+	    			'id'=>$openfile->getId(),
+	    			);
+    		}
+    	}
 
     	$filescom=$em->getRepository('GedBundle:Gedcom')->findBy(
     		array(),
@@ -373,6 +383,7 @@ class ListController extends Controller
     	$tab[]=array('id'=>0);
     	foreach ($filescom as $filecom ) {
     		$i=0;
+    		$j=0;
     		$counted=0;
     		$idfile=$filecom->getIdfile();
     		while($i<count($tab))
@@ -382,6 +393,14 @@ class ListController extends Controller
     				$counted=1;
     			}
     			$i++;
+    		}
+    		while($j<count($accessfiles))
+    		{
+    			if( $idfile != $accessfiles[$j]['id'] )
+    			{
+    				$counted=1;
+    			}
+    			$j++;
     		}
     		if ($counted == 0 && $compteur<4)
     		{
@@ -425,6 +444,7 @@ class ListController extends Controller
 			    	{
 			    		$tagnames=1;
 			    	}
+			    	$compteur++ ;
 			    	$tabcom[]=array(
 		    		"idfile"=>$idfile,
 		    		"tagnames"=>$tagnames,

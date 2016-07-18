@@ -21,7 +21,7 @@ class ParametersController extends Controller
 		$em = $this->getDoctrine()->getManager();
         $user = $this->getUser();
         $addtag= $request->request->get('addtag');
-
+        $created= 0;
 
         $file = $em->getRepository('GedBundle:Gedfiles')->findOneById($id);
         $linktags = $em->getRepository('GedBundle:Linktag')->findByIdfile($id);
@@ -39,17 +39,41 @@ class ParametersController extends Controller
         }
         if(count($tabtag)<3 && !empty($addtag))
         {
-            $newtag = new Gedtag;
-            $newtag->setName($addtag);
-            $em->persist($newtag);
-            $em->flush();
-            
-            $newlinktag = new Linktag;
-            $newlinktag ->setIdfile($id);
-            $newlinktag->setIdtag($newtag->getId());
-            $em->persist($newlinktag);
-            $em->flush();
-
+            $existingtags=$em->getRepository('GedBundle:Gedtag')->findAll();
+            foreach ($existingtags as $existingtag)
+            {
+                if($addtag == $existingtag->getName())
+                {
+                    $link=$em->getRepository('GedBundle:Linktag')->findOneByIdtag($existingtag->getId());
+                    if( $link->getIdfile() == $id )
+                    {
+                        echo "le tag a déjà été assigné à ce fichier";
+                        $created=1;
+                    }
+                    else
+                    {
+                        $newlinktag = new Linktag;
+                        $newlinktag ->setIdfile($id);
+                        $newlinktag->setIdtag($existingtag->getId());
+                        $em->persist($newlinktag);
+                        $em->flush();
+                        $created=1;
+                    }
+                }
+            }
+            if( $created == 0 )
+            {
+                $newtag = new Gedtag;
+                $newtag->setName($addtag);
+                $em->persist($newtag);
+                $em->flush();
+                
+                $newlinktag = new Linktag;
+                $newlinktag ->setIdfile($id);
+                $newlinktag->setIdtag($newtag->getId());
+                $em->persist($newlinktag);
+                $em->flush();
+            }
         }
         elseif(count($tabtag) >= 3 && !empty($addtag))
         {
