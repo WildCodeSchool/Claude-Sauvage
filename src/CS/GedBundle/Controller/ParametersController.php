@@ -9,6 +9,8 @@ use CS\GedBundle\Entity\Gedfiles;
 use CS\GedBundle\Form\GedfilesType;
 use CS\GedBundle\Entity\Gedtag;
 use CS\GedBundle\Entity\Linktag;
+use CS\GedBundle\Entity\Category;
+use CS\GedBundle\Entity\Souscategory;
 use DateTime;
 
 class ParametersController extends Controller
@@ -20,6 +22,16 @@ class ParametersController extends Controller
     {
 		$em = $this->getDoctrine()->getManager();
         $user = $this->getUser();
+        $category= $em->getRepository('GedBundle:Category')->findAll();
+        $souscategory=$em->getRepository('GedBundle:Souscategory')->findAll();
+        if(empty($category))
+        {
+            $category=0;
+        }
+       if(empty($souscategory))
+        {
+            $souscategory=0;
+        }
         $addtag= $request->request->get('addtag');
         $created= 0;
 
@@ -93,7 +105,22 @@ class ParametersController extends Controller
             $em->flush();
         }
 
-
+        $addcat= $request->request->get('addcat');
+        $addsscat= $request->request->get('addsscat');
+        if(!empty($addcat && $addcat != 0))
+        {
+            $newcategory=$em->getRepository('GedBundle:Gedfiles')->findOneById($id);
+            $newcategory->setIdcategory($em->getRepository('GedBundle:Category')->findOneByName($addcat)->getId());
+            $em->persist($newcategory);
+            $em->flush();
+        }
+        if(!empty($addsscat && $addsscat != 0))
+        {
+            $newsscategory=$em->getRepository('GedBundle:Gedfiles')->findOneById($id);
+            $newsscategory->setIdsouscategory($em->getRepository('GedBundle:Souscategory')->findOneByName($addsscat)->getId());
+            $em->persist($newsscategory);
+            $em->flush();
+        }
         //fonction d'upload
         $gedfiles = new Gedfiles();
         $form = $this->createForm(GedfilesType::class, $gedfiles);
@@ -125,8 +152,11 @@ class ParametersController extends Controller
             }
 
         return $this->render('GedBundle::parameters.html.twig', array(
-            'form' => $form->createView(), 'user'=>$user,
+            'form' => $form->createView(),
+            'user'=>$user,
             'id'=>$id,
+            'categories'=>$category,
+            'souscategories'=>$souscategory,
         ));
     }
 }
