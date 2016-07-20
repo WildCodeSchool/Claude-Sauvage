@@ -15,7 +15,7 @@
 			    	<select class="form-control search-select" id="categories" name="categorie">
 			    		<option value="0" >Toutes les catégories</option>
 			    		{% for categorie in categories %}
-							{% if categorie.name != 'brouillon' and categorie.name != 'Brouillon' %}
+							{% if categorie.name != 'brouillon' and categorie.name != 'Brouillon' and categorie.name != 'corbeille' %}
 							    <option value="{{ categorie.id }}">{{ categorie.name }}</option>
 							{% endif %}
 						{% endfor %}
