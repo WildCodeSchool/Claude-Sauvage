@@ -31,4 +31,46 @@ $("document").ready(function() {
 			$("#sscategories").attr('disabled', 'disabled');
 		}
     });
+	$('#fav').click(function() {
+		var fav = $(this).attr('value');
+		if ( $('#fav').is('.glyphicon-star-empty')){
+			$.ajax({
+			type: 'POST',
+			url: bookmark,
+			data: {fav: fav},
+			dataType : 'json',
+				beforeSend: function(data) {
+					console.log('On charge');
+					document.getElementById("fav").className = "glyphicon glyphicon-star";
+				},
+				success: function(data) {
+				console.log('Requete ok');
+					$.each(data.response, function(index,value) {
+					alert('value');
+					});
+					document.getElementById("fav").className = "glyphicon glyphicon-star";
+				}
+				// error: function() {
+				//     alert( "Une erreur est survenue !" )
+				//  },
+			});
+		}
+		else{
+			var fav = $(this).val();
+			$.ajax({
+			type: 'POST',
+			url: bookmark,
+			data: {fav: fav},
+			dataType : 'json',
+				beforeSend: function() {
+					console.log('On charge');
+					document.getElementById("fav").className = "glyphicon glyphicon-star-empty";
+				},
+				success: function() {
+				console.log('Requete ok');
+					document.getElementById("fav").className = "glyphicon glyphicon-star-empty";
+				}
+			});
+		}
+	});
 });

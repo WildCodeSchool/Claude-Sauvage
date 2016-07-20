@@ -42,3 +42,8 @@ ged_editgroup:
 ged_addfiletogroup:
     path:    /addfiletogroup/{idfile}
     defaults: { _controller:GedBundle:File:addToGroup }
+
+ged_bookmark:
+    path:     /bookmark
+    defaults: { _controller: GedBundle:Bookmark:bookmark }
+    methods:  [GET, POST]

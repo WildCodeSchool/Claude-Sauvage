@@ -1,7 +1,8 @@
 {% extends "GedBundle::layout.html.twig" %}
 {% block body %}
 <div class="all">	
-	<div class="col-md-4 col-md-offset-8 button-container">
+	<div class="col-md-6 col-md-offset-6 button-container">
+		<a class="btn btn_download " href="{{ path('ged_parameters_file', { 'id': file.id }) }}"><span class="glyphicon glyphicon-pencil" aria-hidden="true"></span> Paramètres</a>
 		<a class="btn btn_download " href="{{ path('ged_download', { 'name': file.path }) }}"><span class="glyphicon glyphicon-cloud-download" aria-hidden="true"></span> Télécharger</a>
 		<button type="button" class="btn" data-toggle="modal" data-target="#modal-partage"><span class="glyphicon glyphicon-user" aria-hidden="true"></span>
  			Partager
