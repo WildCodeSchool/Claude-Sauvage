@@ -27,7 +27,7 @@ class BookmarkController extends Controller
         																	);
 
 
-       if (empty($verifFav)){
+       if ($verifFav==null){
 	        $newfav= new Linkbookmark();
 	        $newfav->setIdfile($fav);
 	        $newfav->setIduser($user);
@@ -35,7 +35,6 @@ class BookmarkController extends Controller
 	        $em->persist($newfav);
 	        $em->flush();
         }
-
         else{
         	$em->remove($verifFav);
         	$em->flush();

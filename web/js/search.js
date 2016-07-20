@@ -39,24 +39,21 @@ $("document").ready(function() {
 			url: bookmark,
 			data: {fav: fav},
 			dataType : 'json',
-				beforeSend: function(data) {
+				beforeSend: function() {
 					console.log('On charge');
 					document.getElementById("fav").className = "glyphicon glyphicon-star";
 				},
-				success: function(data) {
+				success: function() {
 				console.log('Requete ok');
-					$.each(data.response, function(index,value) {
-					alert('value');
-					});
 					document.getElementById("fav").className = "glyphicon glyphicon-star";
-				}
-				// error: function() {
-				//     alert( "Une erreur est survenue !" )
-				//  },
+				},
+				error: function() {
+				    alert( "Une erreur est survenue !" )
+				 }
 			});
 		}
 		else{
-			var fav = $(this).val();
+			var fav = $(this).attr('value');
 			$.ajax({
 			type: 'POST',
 			url: bookmark,
