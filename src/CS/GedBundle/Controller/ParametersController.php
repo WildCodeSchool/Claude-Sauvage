@@ -9,6 +9,8 @@ use CS\GedBundle\Entity\Gedfiles;
 use CS\GedBundle\Form\GedfilesType;
 use CS\GedBundle\Entity\Gedtag;
 use CS\GedBundle\Entity\Linktag;
+use CS\GedBundle\Entity\Category;
+use CS\GedBundle\Entity\Souscategory;
 use DateTime;
 
 class ParametersController extends Controller
@@ -20,8 +22,18 @@ class ParametersController extends Controller
     {
 		$em = $this->getDoctrine()->getManager();
         $user = $this->getUser();
+        $category= $em->getRepository('GedBundle:Category')->findAll();
+        $souscategory=$em->getRepository('GedBundle:Souscategory')->findAll();
+        if(empty($category))
+        {
+            $category=0;
+        }
+       if(empty($souscategory))
+        {
+            $souscategory=0;
+        }
         $addtag= $request->request->get('addtag');
-
+        $created= 0;
 
         $file = $em->getRepository('GedBundle:Gedfiles')->findOneById($id);
         $linktags = $em->getRepository('GedBundle:Linktag')->findByIdfile($id);
@@ -39,17 +51,41 @@ class ParametersController extends Controller
         }
         if(count($tabtag)<3 && !empty($addtag))
         {
-            $newtag = new Gedtag;
-            $newtag->setName($addtag);
-            $em->persist($newtag);
-            $em->flush();
-            
-            $newlinktag = new Linktag;
-            $newlinktag ->setIdfile($id);
-            $newlinktag->setIdtag($newtag->getId());
-            $em->persist($newlinktag);
-            $em->flush();
-
+            $existingtags=$em->getRepository('GedBundle:Gedtag')->findAll();
+            foreach ($existingtags as $existingtag)
+            {
+                if($addtag == $existingtag->getName())
+                {
+                    $link=$em->getRepository('GedBundle:Linktag')->findOneByIdtag($existingtag->getId());
+                    if( !empty($link) && $link->getIdfile() == $id )
+                    {
+                        echo "le tag a déjà été assigné à ce fichier";
+                        $created=1;
+                    }
+                    else
+                    {
+                        $newlinktag = new Linktag;
+                        $newlinktag ->setIdfile($id);
+                        $newlinktag->setIdtag($existingtag->getId());
+                        $em->persist($newlinktag);
+                        $em->flush();
+                        $created=1;
+                    }
+                }
+            }
+            if( $created == 0 )
+            {
+                $newtag = new Gedtag;
+                $newtag->setName($addtag);
+                $em->persist($newtag);
+                $em->flush();
+                
+                $newlinktag = new Linktag;
+                $newlinktag ->setIdfile($id);
+                $newlinktag->setIdtag($newtag->getId());
+                $em->persist($newlinktag);
+                $em->flush();
+            }
         }
         elseif(count($tabtag) >= 3 && !empty($addtag))
         {
@@ -69,7 +105,23 @@ class ParametersController extends Controller
             $em->flush();
         }
 
-
+        $addcat= $request->request->get('addcat');
+        $addsscat= $request->request->get('addsscat');
+        
+        if(!empty($addcat) && $addcat != 0)
+        {
+            $newcategory=$em->getRepository('GedBundle:Gedfiles')->findOneById($id);
+            $newcategory->setIdcategory($addcat);
+            $em->persist($newcategory);
+            $em->flush();
+        }
+        if(!empty($addsscat) && $addsscat != 0)
+        {
+            $newsscategory=$em->getRepository('GedBundle:Gedfiles')->findOneById($id);
+            $newsscategory->setIdsouscategory($addsscat);
+            $em->persist($newsscategory);
+            $em->flush();
+        }
         //fonction d'upload
         $gedfiles = new Gedfiles();
         $form = $this->createForm(GedfilesType::class, $gedfiles);
@@ -101,8 +153,11 @@ class ParametersController extends Controller
             }
 
         return $this->render('GedBundle::parameters.html.twig', array(
-            'form' => $form->createView(), 'user'=>$user,
+            'form' => $form->createView(),
+            'user'=>$user,
             'id'=>$id,
+            'categories'=>$category,
+            'souscategories'=>$souscategory,
         ));
     }
 }

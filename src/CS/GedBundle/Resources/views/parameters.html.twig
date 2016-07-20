@@ -5,20 +5,38 @@
 	</div>
 	<div>
 		<form action=" {{ path('ged_parameters_file', {'id': id} ) }}" method="post">
-			<label for="addtag">Ajouter un tag:</label>
-			<input name="addtag" id="addtag"/>
+			<div class="col-md-2">
+				<label for="addtag">Ajouter une catégorie:</label>
+			</div>
+			<div class="col-md-3">
+		    	<div class="styled-select">
+			    	<select class="form-control search-select" id="categories" name="addcat">
+			    		<option value="0" >Toutes les catégories</option>
+			    		{% for categorie in categories %}
+							{% if categorie.name != 'brouillon' and categorie.name != 'Brouillon' and categorie.name != 'corbeille' %}
+							    <option value="{{ categorie.id }}">{{ categorie.name }}</option>
+							{% endif %}
+						{% endfor %}
+				    </select>
+				</div>
+		    	<div class="styled-select">
+			    	<select class="form-control" name="addsscat" id="sscategories" disabled>
+					    <option value="0">Toutes les sous-catégories</option>
+				    </select>
+				</div>
+			</div>
+			<div class="col-md-3">
+				<label for="addtag">Ajouter un tag:</label>
+				<input name="addtag" id="addtag"/>
+			</div>
 			<input type="submit" value="valider"/>
+		</form>
+		<form action="{{ path('ged_delete',{'id': id} ) }}" method="post">
+			<input type="submit" value="supprimer le fichier"></input>
 		</form>
 	</div>
 </div>
-<script type="text/javascript"> 
-$(document).ready(function() { 
-	$('table').DataTable( { 
-		"paging": false,
-		"info": false,
-		"sDom": '<"H"lr>t<"F"ip>',
-		"columnDefs": [{ "orderable": false, "targets": [2,4] }]
-	} );
-} );
+<script type="text/javascript">
+	var path =  "{{ path('ged_ajax_sscat_search') }}";
 </script>
 {% endblock body %}
