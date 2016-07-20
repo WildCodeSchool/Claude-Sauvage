@@ -109,7 +109,7 @@ class DeleteController extends Controller
 		foreach ($comments as $comment)
 		{
 			$em->remove($comment);
-			$em->flush;
+			$em->flush();
 		}	
 
 		$tags=$em->getRepository('GedBundle:Linktag')->findByIdfile($id);
