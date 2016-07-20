@@ -117,6 +117,13 @@ class DeleteController extends Controller
 		{
 			$em->remove($tag);
 			$em->flush();
+		}
+
+		$favs=$em->getRepository('GedBundle:Linkbookmark')->findByIdfile($id);
+		foreach ($favs as $fav)
+		{
+			$em->remove($fav);
+			$em->flush();
 		}	
 		$em->persist($trash);
 		$em->flush();
