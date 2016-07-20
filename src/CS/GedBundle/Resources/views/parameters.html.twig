@@ -10,7 +10,7 @@
 			</div>
 			<div class="col-md-3">
 		    	<div class="styled-select">
-			    	<select class="form-control search-select" id="categories" name="categorie">
+			    	<select class="form-control search-select" id="categories" name="addcat">
 			    		<option value="0" >Toutes les catégories</option>
 			    		{% for categorie in categories %}
 							{% if categorie.name != 'brouillon' and categorie.name != 'Brouillon' and categorie.name != 'corbeille' %}
@@ -20,7 +20,7 @@
 				    </select>
 				</div>
 		    	<div class="styled-select">
-			    	<select class="form-control" name="sscategories" id="sscategories" disabled>
+			    	<select class="form-control" name="addsscat" id="sscategories" disabled>
 					    <option value="0">Toutes les sous-catégories</option>
 				    </select>
 				</div>
@@ -30,6 +30,9 @@
 				<input name="addtag" id="addtag"/>
 			</div>
 			<input type="submit" value="valider"/>
+		</form>
+		<form action="{{ path('ged_delete',{'id': id} ) }}" method="post">
+			<input type="submit" value="supprimer le fichier"></input>
 		</form>
 	</div>
 </div>

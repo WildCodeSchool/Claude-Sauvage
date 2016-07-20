@@ -57,7 +57,7 @@ class ParametersController extends Controller
                 if($addtag == $existingtag->getName())
                 {
                     $link=$em->getRepository('GedBundle:Linktag')->findOneByIdtag($existingtag->getId());
-                    if( $link->getIdfile() == $id )
+                    if( !empty($link) && $link->getIdfile() == $id )
                     {
                         echo "le tag a déjà été assigné à ce fichier";
                         $created=1;
@@ -107,17 +107,18 @@ class ParametersController extends Controller
 
         $addcat= $request->request->get('addcat');
         $addsscat= $request->request->get('addsscat');
-        if(!empty($addcat && $addcat != 0))
+        
+        if(!empty($addcat) && $addcat != 0)
         {
             $newcategory=$em->getRepository('GedBundle:Gedfiles')->findOneById($id);
-            $newcategory->setIdcategory($em->getRepository('GedBundle:Category')->findOneByName($addcat)->getId());
+            $newcategory->setIdcategory($addcat);
             $em->persist($newcategory);
             $em->flush();
         }
-        if(!empty($addsscat && $addsscat != 0))
+        if(!empty($addsscat) && $addsscat != 0)
         {
             $newsscategory=$em->getRepository('GedBundle:Gedfiles')->findOneById($id);
-            $newsscategory->setIdsouscategory($em->getRepository('GedBundle:Souscategory')->findOneByName($addsscat)->getId());
+            $newsscategory->setIdsouscategory($addsscat);
             $em->persist($newsscategory);
             $em->flush();
         }
