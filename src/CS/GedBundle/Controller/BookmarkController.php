@@ -35,6 +35,7 @@ class BookmarkController extends Controller
 	        $em->persist($newfav);
 	        $em->flush();
         }
+        
         else{
         	$em->remove($verifFav);
         	$em->flush();
