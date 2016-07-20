@@ -374,6 +374,16 @@ class ListController extends Controller
 	    			);
     		}
     	}
+    	$files=$em->getRepository('GedBundle:Gedfiles')->findByIdowner($user->getId());
+    	foreach ($files as $file)
+    	{
+    		if(!empty($file))
+    		{
+    			$accessfiles[]=array(
+	    			'id'=>$file->getId(),
+	    			);
+    		}
+    	}
 		if(empty($accessfiles))
 		{
 			$accessfiles = 0 ;
