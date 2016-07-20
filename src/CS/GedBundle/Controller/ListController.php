@@ -373,12 +373,11 @@ class ListController extends Controller
 	    			'id'=>$openfile->getId(),
 	    			);
     		}
-    		else
-    		{
-    			$accessfiles=0;
-    		}
     	}
-
+		if(empty($accessfiles))
+		{
+			$accessfiles = 0 ;
+		}
     	$filescom=$em->getRepository('GedBundle:Gedcom')->findBy(
     		array(),
     		array('id'=>'desc')
