@@ -74,7 +74,7 @@ class ListController extends Controller
 	    	// }
 	    	// else
 	    	// {
-    		$category=$em->getRepository('GedBundle:Category')->findOneById($fav->getIdcategory());
+    		$category=$em->getRepository('GedBundle:Category')->findOneById($fav->getIdcategory())->getName();
 	    	// }
 	    	//on recupere tous les tags correspondants au fichier
 	    	$linktag = $em->getRepository('GedBundle:Linktag')->findByIdfile($idfav);
