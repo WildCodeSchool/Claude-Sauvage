@@ -16,6 +16,7 @@
 	font-size: 20px;
 	padding:8px !important;
 }
+
 .image-user{
 	width:34px;
 	height:34px;
@@ -26,6 +27,10 @@
 .navbar-btn:hover{
 	background-color:#909090;
 	border:#909090 1px solid;
+}
+
+.home{
+	padding:7px 10px!important;
 }
 
 /* --------------------------------- flashbag alert ---------------------------------*/
