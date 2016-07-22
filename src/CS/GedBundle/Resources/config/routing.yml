@@ -15,6 +15,10 @@ ged_all:
     path:     /all
     defaults: { _controller: GedBundle:List:all }
 
+ged_parameters_list:
+    path:     /a_definir
+    defaults: { _controller: GedBundle:List:parameters }
+
 ged_parameters_file:
     path:     /parameters/{id}
     defaults: { _controller: GedBundle:Parameters:parameters }

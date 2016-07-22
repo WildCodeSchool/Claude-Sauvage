@@ -9,14 +9,14 @@
 			{% for flashMessage in app.session.flashbag.get('success') %}
 		        <strong>Succes </strong>{{ flashMessage }}
 			    {% if file is defined %}
-			        <p><a href="{{ path('ged_parameters_file', { 'id' : file }) }}" title="">Vous pouvez maintenant régler les parametres du document ici.</a></p>
+			        <p><a href="{{ path('ged_parameters_file', { 'id' : file }) }}" title="">Vous pouvez maintenant regler les parametres du document ici.</a></p>
 			    {% endif %}
 			    <br />
 			{% endfor %}
 			{% if nbBrouillon == 1 %}
-				<p>Vous avez actuellement {{ nbBrouillon }} fichier, à définir.</p>
+				<p><a href="{{ path('ged_parameters_list') }}" title="">Vous avez actuellement {{ nbBrouillon }} fichier, à définir.</a></p>
 			{% else %}
-				<p>Vous avez actuellement {{ nbBrouillon }} fichiers, à définir.</p>
+				<p><a href="{{ path('ged_parameters_list') }}" title="">Vous avez actuellement {{ nbBrouillon }} fichiers, à définir.</a></p>
 			{% endif %}
 		</div>
 	{% else %}
