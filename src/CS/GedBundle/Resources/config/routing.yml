@@ -44,9 +44,13 @@ ged_addfiletogroup:
     defaults: { _controller:GedBundle:File:addToGroup }
 
 ged_bookmark:
-    path:     /bookmark
+    path:     /bookmark/edit
     defaults: { _controller: GedBundle:Bookmark:bookmark }
     methods:  [GET, POST]
+
+ged_bookmark_view:
+    path:     /bookmark
+    defaults: { _controller: GedBundle:Bookmark:bookmarkList }
 
 ged_delete:
     path:    /delete/{id}
