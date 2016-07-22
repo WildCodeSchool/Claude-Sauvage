@@ -67,13 +67,40 @@ class DefaultController extends Controller
 
     $idcat= $ticket->getIdcategory();
     $idsscat= $ticket->getIdsouscategory();
+    
+    if ($idcat != 0) {
     $categorie = $em->getRepository('GrcBundle:Grccategory')->findOneById($idcat);
+    $mycategory = $categorie->getName();
+    } else {
+        $mycategory = "Non définie";  
+    }
+    if ($idsscat != 0) {
     $sscategorie = $em->getRepository('GrcBundle:Grcsouscategory')->findOneById($idsscat);
+    $mysscategory = $sscategorie->getName();
+    } else {
+        $mysscategory = "Non définie";
+    }
+
+    $liststatus = $em->getRepository('GrcBundle:Grcstatus')->findAll();
+    $listpriorities = $em->getRepository('GrcBundle:Grcpriority')->findAll();
+    $listcategories = $em->getRepository('GrcBundle:Grccategory')->findAll();
+    $listsscategories = $em->getRepository('GrcBundle:Grcsouscategory')->findAll();
+
+    $listcomments = $em->getRepository('GrcBundle:Comment')->findBy(
+        array('idticket'=>$id),
+        array('date'=>'desc')
+    );
+
 
     return $this->render('GrcBundle:Default:ticket.html.twig', array(
         'ticket'=>$ticket,
-        'categorie'=>$categorie,
-        'sscategorie'=>$sscategorie,
+        'mycategory'=>$mycategory,
+        'mysscategory'=>$mysscategory,
+        'listcomments'=>$listcomments,
+        'liststatus'=>$liststatus,
+        'listpriorities'=>$listpriorities,
+        'listcategories'=>$listcategories,
+        'listsscategories'=>$listsscategories,
         ));
 	}
 
@@ -100,19 +127,20 @@ class DefaultController extends Controller
             //recuperer l'ID catégorie
             $idcategory=$ticket->getIdcategory();
             //recuperer l'ID sous-catégorie
-            $idsscategory=$ticket->getIdsouscategory();
-            
+            $idsscategory=$ticket->getIdsouscategory();       
             //allez chercher la catégorie 
+            if ($idcategory != 0) {
             $cat = $em->getRepository('GrcBundle:Grccategory')->findOneById($idcategory);
             $catname=$cat->getName();
-            
-            //allez chercher la sous-catégorie 
+            } else {
+                $catname="Non définie";
+            }
+            //allez chercher la sous-catégorie
+            if ($idsscategory != 0) {
             $sscat = $em->getRepository('GrcBundle:Grcsouscategory')->findOneById($idsscategory);
             $sscatname=$sscat->getName();
-
-            if(empty($tagnames))
-            {
-                $tagnames=1;
+            } else {
+                $sscatname="Non définie";
             }
             $ticketslist[]=array(
                 "idticket"=>$idticket,
@@ -124,10 +152,6 @@ class DefaultController extends Controller
                 "statusticket"=>$statusticket
                 );
         }
-        if(empty($tabfav))
-        {
-            $tabfav=1;
-        }
         if (empty($ticketslist))
         {
           $ticketslist=1;
@@ -135,6 +159,71 @@ class DefaultController extends Controller
 
     return $this->render('GrcBundle:Default:liste.html.twig', array(
         'ticketslist'=>$ticketslist,
+        ));
+
+    }
+
+    public function searchAction(Request $request)
+    {
+    
+    $em = $this->getDoctrine()->getManager();
+    $user = $this->container->get('security.context')->getToken()->getUser();
+    $iduser=$user->getId();
+    
+    $keyword = $request->request->get('keyword');
+    $mysearch = $em->getRepository('GrcBundle:Ticket')->recherche($keyword);
+
+    var_dump($mysearch);
+
+    foreach ($mysearch as $ticket) {
+            //recuperer l'ID du ticket
+            $idticket=$ticket->getId();    
+            //recuperer l'ID du ticket
+            $iddemandeur=$ticket->getIdsender(); 
+            //recuperer la date de creation du ticket
+            $dateticket=$ticket->getDate();
+            //recuperer la priorité
+            $prioticket=$ticket->getPriority();
+            //recuperer le status
+            $statusticket=$ticket->getStatus();
+            //recuperer l'ID catégorie
+            $idcategory=$ticket->getIdcategory();
+            //recuperer l'ID sous-catégorie
+            $idsscategory=$ticket->getIdsouscategory();
+            
+            //allez chercher la catégorie 
+            if ($idcategory != 0) {
+            $cat = $em->getRepository('GrcBundle:Grccategory')->findOneById($idcategory);
+            $catname=$cat->getName();
+            } else {
+                $catname="Non définie";
+            }
+            //allez chercher la sous-catégorie
+            if ($idsscategory != 0) {
+            $sscat = $em->getRepository('GrcBundle:Grcsouscategory')->findOneById($idsscategory);
+            $sscatname=$sscat->getName();
+            } else {
+                $sscatname="Non définie";
+            }
+
+            $searchlist[]=array(
+                "idticket"=>$idticket,
+                "catname"=>$catname,
+                "sscatname"=>$sscatname,
+                "iddemandeur"=>$iddemandeur,
+                "dateticket"=>$dateticket,
+                "prioticket"=>$prioticket,
+                "statusticket"=>$statusticket
+                );
+        }
+        if (empty($searchlist))
+        {
+          $searchlist=1;
+        }
+
+    return $this->render('GrcBundle:Default:search.html.twig', array(
+        'searchlist'=>$searchlist,
+        'keyword'=>$keyword,
         ));
 
     }
@@ -158,6 +247,67 @@ class DefaultController extends Controller
 
     $response = new JsonResponse();
     return $response->setData(array('sscatlist' => $sscatlist));
+    }
+
+    public function ajaxparamticketAction(Request $request)
+    { 
+    
+    $em = $this->getDoctrine()->getManager();
+    $status = $request->request->get('status');
+    $priority = $request->request->get('priority');
+    $category = $request->request->get('category');
+    $sscategory = $request->request->get('sscategory');
+    $ticketid = $request->request->get('ticketid');
+
+    $ticket = $em->getRepository('GrcBundle:Ticket')->findOneById($ticketid);
+
+    if ($status != 0){
+        $mystatus = $em->getRepository('GrcBundle:Grcstatus')->findOneById($status);
+        $statusname = $mystatus->getName();
+        $ticket->setStatus($statusname);
+       } else {
+        $statusname = "0";
+       }
+
+    if ($priority != 0){
+        $mypriority = $em->getRepository('GrcBundle:Grcpriority')->findOneById($priority);
+        $priorityname = $mypriority->getName();
+        $ticket->setPriority($priorityname);
+       } else {
+        $priorityname = "0";
+       }
+
+    if ($category != 0){
+        $mycategory = $em->getRepository('GrcBundle:Grccategory')->findOneById($category);
+        $categoryid = $mycategory->getId();
+        $categoryname = $mycategory->getName();
+        $ticket->setIdcategory($categoryid);
+            if ($sscategory != 0){
+                $mysscategory = $em->getRepository('GrcBundle:Grcsouscategory')->findOneById($sscategory);
+                $sscategoryid = $mysscategory->getId();
+                $sscategoryname = $mysscategory->getName();
+                $ticket->setIdsouscategory($sscategoryid);
+            } else {
+                $ticket->setIdsouscategory(0);
+                $sscategoryname = "Non définie";
+       }
+       } else {
+        $categoryname = "0";
+        $sscategoryname = "0";
+       }
+
+    $em->persist($ticket);
+    $em->flush();
+
+    $update[]=array(
+            "status"=>$statusname,
+            "priority"=>$priorityname,
+            "category"=>$categoryname,
+            "sscategory"=>$sscategoryname,
+            );
+
+    $response = new JsonResponse();
+    return $response->setData(array('update' => $update));
     }
 
     public function addCommentAction (Request $request)

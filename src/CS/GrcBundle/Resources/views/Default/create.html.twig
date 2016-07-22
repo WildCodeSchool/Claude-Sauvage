@@ -16,9 +16,9 @@
 			</select>
 
 			<select id="sscategories" name="sscat">
-				<option value="99">-- Sous-catégorie--</option>
-
+				<option value="0">-- Sous-catégorie--</option>
 			</select></br></br>
+
 			<p><b>Veuillez décrire votre demande:</b></p>
 			{{ form_widget(form.content) }}</br></br>
 
@@ -45,11 +45,13 @@ $("document").ready(function() {
 					console.log('On charge');
 					$("#sscategories option").remove();
 					$("#sscategories").append($('<option>',{ value : 0 , text: "-- Sous-catégorie--" }));
+					$("#sscategories").attr('disabled', 'disabled');
 				},
 				success: function(data) {
 				console.log('Requete ok',data);
 					$.each(data.sscatlist, function(index,value) {
 						$("#sscategories").append($('<option>',{ value : value.id , text: value.name }));
+						$("#sscategories").removeAttr('disabled');
 					});
 
 				},
@@ -59,6 +61,7 @@ $("document").ready(function() {
 			} else {
 				$("#sscategories option").remove();
 				$("#sscategories").append($('<option>',{ value : 0 , text: "-- Sous-catégorie--" }));
+				$("#sscategories").attr('disabled', 'disabled');
 			}
     });
 });

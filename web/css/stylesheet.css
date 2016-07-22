@@ -162,13 +162,8 @@ tr:hover td{
 	padding-bottom: 50px;
 }
 
-.statut_ticket{
-	position: relative;
-	margin-right: 20%;
-	margin-left: 20%;
-}
 
-.statut_ticket h2{
+.container_ticket h2{
 	width:100%;
 	margin-top: 0px;
 	margin-bottom: 30px;
@@ -176,16 +171,21 @@ tr:hover td{
 	font-weight: bold;
 }
 
-.statut{
-	position: absolute;
-	top: 0px;
-	left: 0px;
+.parametre{
+	margin-right: 35%;
+	margin-left: 35%;
+	margin-bottom: 25px;
+	padding-top:10px;
+	padding-bottom:10px;
+	text-align: center;
+	background-color: #F1F1F1;
+	border: solid 1px #a1a1a1;
 }
 
-.statut p{
+.parametre p{
 	font-size: 17px;
-	background-color: #F1F1F1;
 	padding: 5px;
+	margin:0px;
 }
 
 .demande_init{

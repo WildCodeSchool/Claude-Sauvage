@@ -6,8 +6,10 @@
 	<div class="searchbar row">
 		<div class="col-md-3 col-md-offset-1">
 			<div class="input-group">
-	    		<input type="text" placeholder="Rechercher" class="form-control">
-	    		<span class="input-group-btn"><button class="btn btn-default" type="button">ok</button></span>
+	    		<form method="post" action="{{ path('search') }}">
+	    			<input type="text" placeholder="Rechercher" class="form-control" name="keyword">
+	    			<button class="btn btn-default" type="submit">ok</button>
+				</form>
 	    	</div>
 		</div>
 		<div class="col-md-3 col-md-offset-1">

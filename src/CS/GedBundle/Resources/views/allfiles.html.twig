@@ -53,9 +53,9 @@
 						</td>
 						<td>
 							{% if myfiles['bookmark'] != 1 %}
-								<span class="glyphicon glyphicon-star-empty" aria-hidden="true" id="fav" value="{{myfiles.fileId}}"></span>
+								<span class="fav glyphicon glyphicon-star-empty" aria-hidden="true" value="{{myfiles.fileId}}"></span>
 							{% else %}
-								<span class="glyphicon glyphicon-star" aria-hidden="true" id="fav"></span>
+								<span class="fav glyphicon glyphicon-star" aria-hidden="true" value="{{myfiles.fileId}}"></span>
 							{% endif %}
 						</td>
 						<td>
