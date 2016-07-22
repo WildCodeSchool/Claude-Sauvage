@@ -409,9 +409,9 @@ class ListController extends Controller
     		}
     		while($j<count($accessfiles))
     		{
-    			if( $idfile != $accessfiles[$j]['id'] )
+    			if( $idfile == $accessfiles[$j]['id'] )
     			{
-    				$counted=1;
+    				$compteur++;
     			}
     			$j++;
     		}
@@ -457,7 +457,6 @@ class ListController extends Controller
 			    	{
 			    		$tagnames=1;
 			    	}
-			    	$compteur++ ;
 			    	$tabcom[]=array(
 		    		"idfile"=>$idfile,
 		    		"tagnames"=>$tagnames,
@@ -491,7 +490,7 @@ class ListController extends Controller
         $form->handleRequest($request);
 
         if ($form->isSubmitted() && $form->isValid()) {
-            
+            var_dump($form);
             $originalgetting=$form->getNormData()->getPath('originalName');
             $originalname=$originalgetting->getClientOriginalName();
 
