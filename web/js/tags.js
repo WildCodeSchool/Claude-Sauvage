@@ -13,12 +13,12 @@ $('document').ready(function(){
 
 	$('#addtagbtn').click(function(){
 		var content = $('#addtagfield').val();
-		alert(content);
 		$.ajax({
 			type: 'POST',
 			url: tagadd,
 			data: {idfile: idfile, content: content},
 			dataType : 'json',
 		});
-	})
+	});
+
 });

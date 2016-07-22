@@ -26,6 +26,20 @@ class ParametersController extends Controller
         $category= $em->getRepository('GedBundle:Category')->findAll();
         $souscategory=$em->getRepository('GedBundle:Souscategory')->findAll();
         
+        $linktags = $em->getRepository('GedBundle:Linktag')->findByIdfile($id);
+        //compte des tags du fichier
+        foreach ($linktags as $linktag)
+        {
+            $tag=$em->getRepository('GedBundle:Gedtag')->findOneById($linktag->getIdtag());
+            $name=$tag->getName();
+            $tabtag[]=array(
+                'name'=>$name,
+                'idlinktag'=>$linktag->getId(),
+                );
+        }
+        if (empty($tabtag)) {
+            $tabtag=1;
+        }
         if(empty($category))
         {
             $category=0;
@@ -38,17 +52,6 @@ class ParametersController extends Controller
         $file = $em->getRepository('GedBundle:Gedfiles')->findOneById($id);
         $linktags = $em->getRepository('GedBundle:Linktag')->findByIdfile($id);
         //compte des tags du fichier
-        foreach ($linktags as $linktag)
-        {
-            $tag=$em->getRepository('GedBundle:Gedtag')->findOneById($linktag->getIdtag());
-            $name=$tag->getName();
-            $tabtag[]=array(
-                'name'=>$name,
-                'idlinktag'=>$linktag->getId(),
-                );
-        }
-
-
         //ajout de categories
         $addcat= $request->request->get('addcat');
         $addsscat= $request->request->get('addsscat');
@@ -123,11 +126,10 @@ class ParametersController extends Controller
     }
     public function addTagAction (Request $request)
     {
-        var_dump($request);
         $em=$this->getDoctrine()->getManager();
         $addtag=$request->request->get('content');
         $user=$this->getUser();
-        $id = $request->request->get('id');
+        $id = $request->request->get('idfile');
         $created= 0;
         //ajout de tags
         $linktags = $em->getRepository('GedBundle:Linktag')->findByIdfile($id);
@@ -141,7 +143,6 @@ class ParametersController extends Controller
                 'idlinktag'=>$linktag->getId(),
                 );
         }
-
 
         if(empty($tabtag))
         {
@@ -162,9 +163,12 @@ class ParametersController extends Controller
                     }
                     else
                     {
-                        $newlinktag = new Linktag;
+                        var_dump($id);
+                        var_dump($existingtag->getId());
+                        $newlinktag = new Linktag();
                         $newlinktag ->setIdfile($id);
                         $newlinktag->setIdtag($existingtag->getId());
+
                         $em->persist($newlinktag);
                         $em->flush();
                         $created=1;
@@ -204,13 +208,25 @@ class ParametersController extends Controller
             $em->flush();
             $test=$addtag;
         }
+
+        
+        if(!empty($addtag))
+        {
+            $tabtag = [];
+            $tag=$em->getRepository('GedBundle:Gedtag')->findOneByName($addtag);
+            $linktag=$em->getRepository('GedBundle:Linktag')->findOneByIdtag($tag->getId());
+            $tabtag=array(
+                'name'=>$tag->getName(),
+                'idtag'=>$linktag->getId()
+                );
+        }
         else
         {
-            $test=1;
+            $tabtag=1;
         }
-        var_dump($addtag);
+
         $response = new JsonResponse();
-        return $response->setData(array('test' => $test));
+        return $response->setData(array('tabtag' => $tabtag));
 
     }
 }
