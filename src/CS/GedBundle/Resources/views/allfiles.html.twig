@@ -105,9 +105,9 @@
 							</td>
 							<td>
 								{% if groupfiles['bookmark'] != 1 %}
-									<span class="glyphicon glyphicon-star-empty" aria-hidden="true"></span>
+									<span class="fav glyphicon glyphicon-star-empty" aria-hidden="true" value="{{groupfiles.fileId}}"></span>
 								{% else %}
-									<span class="glyphicon glyphicon-star" aria-hidden="true"></span>
+									<span class="fav glyphicon glyphicon-star" aria-hidden="true" value="{{groupfiles.fileId}}"></span>
 								{% endif %}
 							</td>
 							<td>
