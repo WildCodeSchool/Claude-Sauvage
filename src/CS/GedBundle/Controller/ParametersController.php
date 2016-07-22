@@ -24,6 +24,7 @@ class ParametersController extends Controller
         $user = $this->getUser();
         $category= $em->getRepository('GedBundle:Category')->findAll();
         $souscategory=$em->getRepository('GedBundle:Souscategory')->findAll();
+        
         if(empty($category))
         {
             $category=0;
@@ -37,14 +38,18 @@ class ParametersController extends Controller
 
         $file = $em->getRepository('GedBundle:Gedfiles')->findOneById($id);
         $linktags = $em->getRepository('GedBundle:Linktag')->findByIdfile($id);
+        //compte des tags du fichier
         foreach ($linktags as $linktag)
         {
             $tag=$em->getRepository('GedBundle:Gedtag')->findOneById($linktag->getIdtag());
             $name=$tag->getName();
             $tabtag[]=array(
                 'name'=>$name,
+                'idlinktag'=>$linktag->getId(),
                 );
         }
+
+        //ajout de tags
         if(empty($tabtag))
         {
             $tabtag=0;
@@ -105,6 +110,8 @@ class ParametersController extends Controller
             $em->flush();
         }
 
+
+        //ajout de categories
         $addcat= $request->request->get('addcat');
         $addsscat= $request->request->get('addsscat');
         
@@ -122,6 +129,8 @@ class ParametersController extends Controller
             $em->persist($newsscategory);
             $em->flush();
         }
+
+
         //fonction d'upload
         $gedfiles = new Gedfiles();
         $form = $this->createForm(GedfilesType::class, $gedfiles);
@@ -158,6 +167,17 @@ class ParametersController extends Controller
             'id'=>$id,
             'categories'=>$category,
             'souscategories'=>$souscategory,
+            'tabtag'=>$tabtag,
         ));
+    }
+
+    public function removetagAction (Request $request, $id)
+    {
+        var_dump($id);exit;
+        $em=$this->getDoctrine()->getManager();
+        $linktag=$em->getRepository('GedBundle:Linktag')->findOneById($id);
+        $em->remove($linktag);
+        $em->flush();
+        echo "test";
     }
 }

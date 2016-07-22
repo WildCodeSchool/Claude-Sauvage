@@ -19,6 +19,11 @@ ged_parameters_file:
     path:     /parameters/{id}
     defaults: { _controller: GedBundle:Parameters:parameters }
 
+ged_removetag:
+    path:     /parameters/tagremove/{id}
+    defaults: { _controller: GedBundle:Parameters:removetag }
+    methods: [POST]
+
 one_file:
     path:     /file/{id}
     defaults: { _controller: GedBundle:File:show }
