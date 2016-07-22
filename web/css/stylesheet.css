@@ -42,7 +42,12 @@ src: url('../fonts/glyphicons-halflings-regular.eot?#iefix') format('embedded-op
 	margin-left: 0px;
 }
 
+.button_recherche{
+	float:right;
+}
 
+.search-field{
+}
 /** GRC Dashboard 
  */
 

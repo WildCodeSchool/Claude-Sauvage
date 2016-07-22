@@ -2,6 +2,7 @@
 
 {% block body %}
 	<div class="container_liste">
+	{% include "GrcBundle::Default/searchbar.html.twig" %}
 		<h2>Resultat de la recherche pour: "{{ keyword }}"</h2>
 		<table id"table_id" class="display liste_tickets">
 			<thead> 
