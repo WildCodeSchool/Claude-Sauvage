@@ -144,6 +144,29 @@ class BookmarkController extends Controller
 
             $category=$em->getRepository('GedBundle:Category')->findOneById($fav->getIdcategory())->getName();
 
+            //recuperationc des membres du groupe par fichier.
+            $groupMembers = $em->getRepository('GedBundle:Linkgroup')->findByIdgroup($fav->getIdgroup());
+            //pour chaque menbres dans le groupe, on recupere le nom.
+            $tabInfoGroup=[];
+            foreach ($groupMembers as $groupMember) {
+                $groupMemberId = $groupMember->getIduser();
+                $groupMemberInfo = $em->getRepository('AppBundle:User')->findOneById($groupMemberId);
+                $groupMemberName = $groupMemberInfo->getUsername();
+
+                $tabInfoGroup[] = array(
+                        'groupMemberName'=>$groupMemberName,
+                );              
+            }
+
+            //on compte les commentaires liés a un fichier.
+            $comments =$em->getRepository('GedBundle:Gedcom')->findByIdfile($idfav);
+            if (empty($comments)){
+                    $nbCom = 0;
+                }
+            else {
+                $nbCom = count($comments);
+            }
+
             //on recupere tous les tags correspondants au fichier
             $linktag = $em->getRepository('GedBundle:Linktag')->findByIdfile($idfav);
             $tagnames = [];
@@ -160,10 +183,16 @@ class BookmarkController extends Controller
                     );
                 //on fout tout dans un tableau et on a des favoris tout neufs
             }
+
             if(empty($tagnames))
             {
                 $tagnames=1;
             }
+
+            if (empty($tabInfoGroup)){
+                $tabInfoGroup = 1;
+            }
+
             $tabfav[]=array(
                 "idfile"=>$idfav,
                 "tagnames"=>$tagnames,
@@ -171,7 +200,9 @@ class BookmarkController extends Controller
                 "type"=>$type,
                 "category"=>$category,
                 "date"=>$date,
-                "name"=>$name
+                "name"=>$name,
+                'comments'=>$nbCom,
+                'groupMemberName'=>$tabInfoGroup,
                 );
         }
         if(empty($tabfav))
