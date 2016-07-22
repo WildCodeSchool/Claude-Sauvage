@@ -1,0 +1,33 @@
+<section>
+	<div class="searchbar row">
+		<div class="col-md-3 col-md-offset-2">
+	    	<form class="form-inline" method="post" action="{{ path('search') }}">
+	    		<div class="form-group">
+	    			<input type="text" placeholder="Rechercher" class="form-control search_field" name="keyword" size="35">
+	    		</div>
+	    		<button class="btn btn-default" type="submit">ok</button>
+			</form>
+		</div>
+		<div class="col-md-6 col-md-offset-1">
+			<form class="form-inline" method="post" action="">
+				<div class="form-group">
+					<select class="form-control search-select" name="Catégorie">
+						<option>Toutes les catégories
+						<option>Catégorie 1
+						<option>Catégorie 2
+						<option>Catégorie 3
+					</select>
+				</div>
+				<div class="form-group">
+					<select class="form-control search-select" name="Sous-catégorie">
+						<option>Toutes les sous-catégories
+						<option>Sous-catégorie 1
+						<option>Sous-catégorie 2
+						<option>Sous-catégorie 3
+					</select>
+				</div>
+				<button class="btn btn-default" type="submit">ok</button>
+			</form>
+		</div>
+	</div>
+</section>
