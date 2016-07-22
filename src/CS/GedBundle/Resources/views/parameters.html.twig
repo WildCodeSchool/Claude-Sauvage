@@ -29,6 +29,14 @@
 				<label for="addtag">Ajouter un tag:</label>
 				<input name="addtag" id="addtag"/>
 			</div>
+			<div class="col-md-3">
+				Ou éditer des tags existants
+				{% if tabtag != 1 %}
+					{% for tag in tabtag %}
+						<p class="tag" id="{{ tag.idlinktag }}">{{ tag.name }}<span class="glyphicon glyphicon-remove tagicon"></span></p>
+					{% endfor %}
+				{% endif %}
+			</div>	
 			<input type="submit" value="valider"/>
 		</form>
 		<form action="{{ path('ged_delete',{'id': id} ) }}" method="post">
@@ -36,7 +44,8 @@
 		</form>
 	</div>
 </div>
+<script type="text/javascript" src="{{ asset('js/tags.js') }}"></script>
 <script type="text/javascript">
-	var path =  "{{ path('ged_ajax_sscat_search') }}";
+	var tagremove="{{path('ged_removetag')}}";
 </script>
 {% endblock body %}

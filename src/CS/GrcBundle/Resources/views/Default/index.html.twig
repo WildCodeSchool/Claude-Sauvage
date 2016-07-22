@@ -1,38 +1,8 @@
 {% extends 'GrcBundle::layout.html.twig' %}
 
 {% block body %}
-
-<div class= "grc_dashboard">
-	<div class="searchbar row">
-		<div class="col-md-3 col-md-offset-1">
-			<div class="input-group">
-	    		<form method="post" action="{{ path('search') }}">
-	    			<input type="text" placeholder="Rechercher" class="form-control" name="keyword">
-	    			<button class="btn btn-default" type="submit">ok</button>
-				</form>
-	    	</div>
-		</div>
-		<div class="col-md-3 col-md-offset-1">
-			<form>
-				<select class="form-control search-select" name="Catégorie">
-					<option>Toutes les catégories
-					<option>Catégorie 1
-					<option>Catégorie 2
-					<option>Catégorie 3
-				</select>
-			</form>
-		</div>
-		<div class="col-md-3 col-md-offset-1">
-			<form>
-				<select class="form-control search-select" name="Sous-catégorie">
-					<option>Toutes les sous-catégories
-					<option>Sous-catégorie 1
-					<option>Sous-catégorie 2
-					<option>Sous-catégorie 3
-				</select>
-			</form>
-		</div>
-	</div>
+<div class="grc_dashboard">
+{% include "GrcBundle::Default/searchbar.html.twig" %}
 	<h1>Bienvenue sur votre outil de gestion de ticket</h1>
 	<div class="col-md-12 dashboard">
 		<div class="col-md-2 col-md-offset-2 tableau">

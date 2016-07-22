@@ -1,34 +1,7 @@
 {% extends 'GrcBundle::layout.html.twig' %}
 
 {% block body %}
-	<div class="searchbar row">
-		<div class="col-md-3 col-md-offset-1">
-			<div class="input-group">
-		    	<input type="text" placeholder="Rechercher" class="form-control">
-		    	<span class="input-group-btn"><button class="btn btn-default" type="button">ok</button></span>
-		    </div>
-		</div>
-		<div class="col-md-3 col-md-offset-1">
-			<form>
-				<select class="form-control search-select" name="Catégorie">
-				<option>Toute les catégories
-				<option>Catégorie 1
-				<option>Catégorie 2
-				<option>Catégorie 3
-				</select>
-			</form>
-		</div>
-		<div class="col-md-3 col-md-offset-1">
-			<form>
-				<select class="form-control search-select" name="Sous-catégorie">
-				<option>Toute les sous-catégories
-				<option>Sous-catégorie 1
-				<option>Sous-catégorie 2
-				<option>Sous-catégorie 3
-				</select>
-			</form>
-		</div>
-	</div>	
+{% include "GrcBundle::Default/searchbar.html.twig" %}
 	<div class="container_ticket">
 		<h2>Ticket N°{{ ticket.id }}</h2>
 		<div class="row parametre">
