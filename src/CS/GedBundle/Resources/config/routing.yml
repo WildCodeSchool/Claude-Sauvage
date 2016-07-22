@@ -24,6 +24,11 @@ ged_removetag:
     defaults: { _controller: GedBundle:Parameters:removeTag }
     methods: [GET, POST]
 
+ged_addtag:
+    path:    /parameters/tag/add
+    defaults: { _controller: GedBundle:Parameters:addTag }
+    methods: [GET, POST]
+
 one_file:
     path:     /file/{id}
     defaults: { _controller: GedBundle:File:show }

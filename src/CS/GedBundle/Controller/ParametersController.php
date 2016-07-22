@@ -4,6 +4,7 @@ namespace CS\GedBundle\Controller;
 
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
+use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
 use CS\GedBundle\Entity\Gedfiles;
 use CS\GedBundle\Form\GedfilesType;
@@ -33,8 +34,6 @@ class ParametersController extends Controller
         {
             $souscategory=0;
         }
-        $addtag= $request->request->get('addtag');
-        $created= 0;
 
         $file = $em->getRepository('GedBundle:Gedfiles')->findOneById($id);
         $linktags = $em->getRepository('GedBundle:Linktag')->findByIdfile($id);
@@ -47,67 +46,6 @@ class ParametersController extends Controller
                 'name'=>$name,
                 'idlinktag'=>$linktag->getId(),
                 );
-        }
-
-        //ajout de tags
-        if(empty($tabtag))
-        {
-            $tabtag=0;
-        }
-        if(count($tabtag)<3 && !empty($addtag))
-        {
-            $existingtags=$em->getRepository('GedBundle:Gedtag')->findAll();
-            foreach ($existingtags as $existingtag)
-            {
-                if($addtag == $existingtag->getName())
-                {
-                    $link=$em->getRepository('GedBundle:Linktag')->findOneByIdtag($existingtag->getId());
-                    if( !empty($link) && $link->getIdfile() == $id )
-                    {
-                        echo "le tag a déjà été assigné à ce fichier";
-                        $created=1;
-                    }
-                    else
-                    {
-                        $newlinktag = new Linktag;
-                        $newlinktag ->setIdfile($id);
-                        $newlinktag->setIdtag($existingtag->getId());
-                        $em->persist($newlinktag);
-                        $em->flush();
-                        $created=1;
-                    }
-                }
-            }
-            if( $created == 0 )
-            {
-                $newtag = new Gedtag;
-                $newtag->setName($addtag);
-                $em->persist($newtag);
-                $em->flush();
-                
-                $newlinktag = new Linktag;
-                $newlinktag ->setIdfile($id);
-                $newlinktag->setIdtag($newtag->getId());
-                $em->persist($newlinktag);
-                $em->flush();
-            }
-        }
-        elseif(count($tabtag) >= 3 && !empty($addtag))
-        {
-            $newtag = new Gedtag;
-            $newtag->setName($addtag);
-            $em->persist($newtag);
-            $em->flush();
-
-            $replacelinktag=$em->getRepository('GedBundle:Linktag')->findOneByIdfile($id); 
-            $em->remove($replacelinktag);
-            $em->flush();
-
-            $replacelinktag = new Linktag;
-            $replacelinktag->setIdfile($id);
-            $replacelinktag->setIdtag($newtag->getId());
-            $em->persist($replacelinktag);
-            $em->flush();
         }
 
 
@@ -182,5 +120,97 @@ class ParametersController extends Controller
         
         $em->remove($linktag);
         $em->flush();
+    }
+    public function addTagAction (Request $request)
+    {
+        var_dump($request);
+        $em=$this->getDoctrine()->getManager();
+        $addtag=$request->request->get('content');
+        $user=$this->getUser();
+        $id = $request->request->get('id');
+        $created= 0;
+        //ajout de tags
+        $linktags = $em->getRepository('GedBundle:Linktag')->findByIdfile($id);
+        //compte des tags du fichier
+        foreach ($linktags as $linktag)
+        {
+            $tag=$em->getRepository('GedBundle:Gedtag')->findOneById($linktag->getIdtag());
+            $name=$tag->getName();
+            $tabtag[]=array(
+                'name'=>$name,
+                'idlinktag'=>$linktag->getId(),
+                );
+        }
+
+
+        if(empty($tabtag))
+        {
+            $tabtag=0;
+        }
+        if(count($tabtag)<3 && !empty($addtag))
+        {
+            $existingtags=$em->getRepository('GedBundle:Gedtag')->findAll();
+            foreach ($existingtags as $existingtag)
+            {
+                if($addtag == $existingtag->getName())
+                {
+                    $link=$em->getRepository('GedBundle:Linktag')->findOneByIdtag($existingtag->getId());
+                    if( !empty($link) && $link->getIdfile() == $id )
+                    {
+                        echo "le tag a déjà été assigné à ce fichier";
+                        $created=1;
+                    }
+                    else
+                    {
+                        $newlinktag = new Linktag;
+                        $newlinktag ->setIdfile($id);
+                        $newlinktag->setIdtag($existingtag->getId());
+                        $em->persist($newlinktag);
+                        $em->flush();
+                        $created=1;
+                    }
+                }
+            }
+            if( $created == 0 )
+            {
+                $newtag = new Gedtag;
+                $newtag->setName($addtag);
+                $em->persist($newtag);
+                $em->flush();
+                
+                $newlinktag = new Linktag;
+                $newlinktag ->setIdfile($id);
+                $newlinktag->setIdtag($newtag->getId());
+                $em->persist($newlinktag);
+                $em->flush();
+            }
+            $test=$addtag;
+        }
+        elseif(count($tabtag) >= 3 && !empty($addtag))
+        {
+            $newtag = new Gedtag;
+            $newtag->setName($addtag);
+            $em->persist($newtag);
+            $em->flush();
+
+            $replacelinktag=$em->getRepository('GedBundle:Linktag')->findOneByIdfile($id); 
+            $em->remove($replacelinktag);
+            $em->flush();
+
+            $replacelinktag = new Linktag;
+            $replacelinktag->setIdfile($id);
+            $replacelinktag->setIdtag($newtag->getId());
+            $em->persist($replacelinktag);
+            $em->flush();
+            $test=$addtag;
+        }
+        else
+        {
+            $test=1;
+        }
+        var_dump($addtag);
+        $response = new JsonResponse();
+        return $response->setData(array('test' => $test));
+
     }
 }

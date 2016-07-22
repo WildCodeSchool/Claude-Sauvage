@@ -1,5 +1,5 @@
 $('document').ready(function(){
-	$('.tag').click(function(){
+	$('.tagicon').click(function(){
 		var idtag = $(this).attr('id');
 		$.ajax({
 			type: 'POST',
@@ -7,7 +7,18 @@ $('document').ready(function(){
 			data: {idtag: idtag},
 			dataType : 'json',
 		});
-		$(this).addClass("tagdisplay");
+		$("#"+idtag).addClass("tagdisplay");
 		console.log('ca marche'+idtag);
 	});
+
+	$('#addtagbtn').click(function(){
+		var content = $('#addtagfield').val();
+		alert(content);
+		$.ajax({
+			type: 'POST',
+			url: tagadd,
+			data: {idfile: idfile, content: content},
+			dataType : 'json',
+		});
+	})
 });
