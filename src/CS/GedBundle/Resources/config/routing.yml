@@ -40,5 +40,26 @@ ged_editgroup:
     defaults: { _controller:GedBundle:Group:editGroup }
 
 ged_addfiletogroup:
-    path:    /addfiletogroup/{id}/{idfile}
+    path:    /addfiletogroup/{idfile}
     defaults: { _controller:GedBundle:File:addToGroup }
+
+ged_bookmark:
+    path:     /bookmark
+    defaults: { _controller: GedBundle:Bookmark:bookmark }
+    methods:  [GET, POST]
+
+ged_delete:
+    path:    /delete/{id}
+    defaults: { _controller: GedBundle:Delete:deleteFile }
+
+ged_recover:
+    path:    /recover/{id}
+    defaults: { _controller: GedBundle:Delete:recoverFile }
+
+ged_deleteofdoom:
+    path:    /deleteofdoom/{id}
+    defaults: { _controller: GedBundle:Delete:deleteOfDoom }
+
+ged_trashbin:
+    path:    /trashbin
+    defaults: { _controller: GedBundle:Delete:showTrashbin }

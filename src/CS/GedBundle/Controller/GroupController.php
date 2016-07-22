@@ -19,7 +19,7 @@ class GroupController extends Controller
 	public function createGroupAction (Request $request)
 	{
 		$name = $request->request->get('name');
-
+		$checkpage = "newgroup";
 		$em=$this->getDoctrine()->getManager();
 		$user=$this->getUser();
 		$iduser=$user->getId();
@@ -32,7 +32,12 @@ class GroupController extends Controller
 			
 			$em->persist($group);
 			$em->flush();
-			var_dump($group);
+			
+			$linkgroup = new Linkgroup();
+			$linkgroup->setIduser($user->getId());
+			$linkgroup->setIdgroup($group->getId());
+			$em->persist($linkgroup);
+			$em->flush(); 
 
 			$idgroup=$group->getId();
 			
@@ -81,6 +86,7 @@ class GroupController extends Controller
 		return $this->render('GedBundle::newgroup.html.twig',array(
 			'form'=>$form->createView(),
 			'user'=>$user,
+			'checkpage'=>$checkpage,
 			));
 	}
 
@@ -95,7 +101,23 @@ class GroupController extends Controller
 		$userremove=$request->request->get('userremove');
 		$groupremove=$request->request->get('groupremove');
 
-
+		$linkgroup=$em->getRepository('GedBundle:Linkgroup')->findByIdgroup($idgroup);
+		$groupmembers = [];
+		if(!empty($linkgroup))
+		{
+			foreach ($linkgroup as $groupmember)
+			{
+				$iduser=$groupmember->getIduser();
+				$username=$em->getRepository('AppBundle:User')->findOneById($iduser)->getUsername();
+				$groupmembers[]=array(
+					'username'=>$username,
+					);
+			}
+		}
+		else
+		{
+			$groupmembers=1;
+		}
 		//fonction d'upload 
         $gedfiles = new Gedfiles();
 
@@ -144,11 +166,18 @@ class GroupController extends Controller
 		if(!empty($useradd))
 		{
 			$otheruser=$em->getRepository('AppBundle:User')->findOneByUsername($useradd);
-			$linkgroup = new Linkgroup();
-			$linkgroup->setIduser($otheruser->getId());
-			$linkgroup->setIdgroup($idgroup);
-			$em->persist($linkgroup);
-			$em->flush();
+			if (!empty($otheruser))
+			{
+				$linkgroup = new Linkgroup();
+				$linkgroup->setIduser($otheruser->getId());
+				$linkgroup->setIdgroup($idgroup);
+				$em->persist($linkgroup);
+				$em->flush();
+			}
+			else
+			{
+				echo "l'utilisateur n'existe pas";
+			}
 		}
 
 		if(!empty($userremove))
@@ -177,7 +206,8 @@ class GroupController extends Controller
 		return $this->render('GedBundle::editgroup.html.twig',array(
 			'form'=>$form->createView(),
 			'user'=>$user,
-			'id'=>$idgroup
+			'id'=>$idgroup,
+			'groupmembers'=>$groupmembers,
 		));
 	}
 }

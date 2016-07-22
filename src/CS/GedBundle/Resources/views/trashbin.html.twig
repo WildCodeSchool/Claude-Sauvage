@@ -1,0 +1,38 @@
+{% extends "GedBundle::layout.html.twig" %}
+{% block body %}
+	{% include "GedBundle::nav.html.twig" %}
+	<div class="col-md-10 tab-cel ">
+		<h3 style="text-align:center;">Poubelle</h3>
+		<table class="table compact stripe" id="table">
+			<thead> 
+				<tr> 
+					<th></th> 
+					<th>Nom du fichier</th>
+					<th>Récupérer</th>
+					<th>Supprimer définitivement</th>
+				</tr> 
+			</thead> 
+			<tbody>
+				{% if trashs is defined %}
+					{% for trash in trashs %}
+						<tr>
+							<td>{{ trash.originalname }}</td>
+							<td><a href="{{ path('ged_recover', {'id': trash.id } ) }}" class="btn">Récupérer</a></td>
+							<td><a href="{{ path('ged_deleteofdoom', {'id': trash.id } ) }}" class="btn">Supprimer</a></td>
+						</tr>
+					{% endfor %}
+				{% endif %}
+			</tbody>
+		</table>
+	</div>
+	<script type="text/javascript"> 
+$(document).ready(function() { 
+	$('table').DataTable( { 
+		"paging": false,
+		"info": false,
+		"sDom": '<"H"lr>t<"F"ip>',
+		"order": [[1, "asc"]]
+	} );
+});
+	</script>
+{% endblock %}

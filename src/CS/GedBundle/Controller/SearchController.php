@@ -34,8 +34,8 @@ class SearchController extends Controller
                 );
         }
 
-    $response = new JsonResponse();
-    return $response->setData(array('ssCategorieTab' => $ssCategorieTab));
+        $response = new JsonResponse();
+        return $response->setData(array('ssCategorieTab' => $ssCategorieTab));
     }
 
     public function searchAction(Request $request)
@@ -43,12 +43,14 @@ class SearchController extends Controller
         $em=$this->getDoctrine()->getManager();
         $user =$this->getUser();
 
-
         $searchRecherche=$request->request->get('recherche');
         $searchCategorie=$request->request->get('categorie');
         $searchSscategories=$request->request->get('sscategories');
         $searchType=$request->request->get('type');
 
+        $file = $em->getRepository('GedBundle:Gedfiles')->findSearch('ALED');
+
+        // var_dump($file);exit;
 
         //si pas de sous catégorie défini.
         if (empty($searchSscategories)||($searchSscategories==0)){
@@ -75,6 +77,5 @@ class SearchController extends Controller
         var_dump('--------------------------');
         var_dump($searchType);exit;
         
-    
     }    
 }

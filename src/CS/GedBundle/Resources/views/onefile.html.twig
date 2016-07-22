@@ -1,15 +1,15 @@
 {% extends "GedBundle::layout.html.twig" %}
 {% block body %}
 <div class="all">	
-	<div class="col-md-4 button-container">
-		<button class="btn button-one-file">Télécharger</button>
-	</div>
-	<div class="col-md-4 button-container">
-		<button type="button" class="btn button-one-file" data-toggle="modal" data-target="#modal-partage">
+	<div class="col-md-6 col-md-offset-6 button-container">
+		<a class="btn btn_download " href="{{ path('ged_parameters_file', { 'id': file.id }) }}"><span class="glyphicon glyphicon-pencil" aria-hidden="true"></span> Paramètres</a>
+		<a class="btn btn_download " href="{{ path('ged_download', { 'name': file.path }) }}"><span class="glyphicon glyphicon-cloud-download" aria-hidden="true"></span> Télécharger</a>
+		<button type="button" class="btn" data-toggle="modal" data-target="#modal-partage"><span class="glyphicon glyphicon-user" aria-hidden="true"></span>
  			Partager
 		</button>
-{# debut modal #}
+		<button class="btn" id="btn-com"><span class="glyphicon glyphicon-comment" aria-hidden="true"></span> Commentaires</button>
 	</div>
+{# debut modal #}
 	<div class="modal fade" id="modal-partage" tabindex="-1" role="dialog" aria-labelledby="myModalLabel">
 		<div class="modal-dialog" role="document">
 			<div class="modal-content">
@@ -17,40 +17,41 @@
 					<button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
 					<h4 class="modal-title" id="myModalLabel">Partager ce fichier</h4>
 				</div>
-				<div class="modal-body">
-					<div class="row">
-						<div class="col-md-6">
-							Partager dans un groupe existant:
-							<br/>
-							<div class="styled-select">
-								<form action="{{ path('ged_addfiletogroup', {'id':group['idgroup'], 'idfile': idfile } ) }}">
-									<select>
-										{% for group in tabgroup %}
-											<option value="">
-												<a href="">{{ group['groupname'] }}</a>
-											</option>
-										{% endfor %}
-									</select>
-								</form>
+				{% if tabgroup is defined %}
+					<form action="{{ path('ged_addfiletogroup', {'idfile': idfile } ) }}" method="post">
+						<div class="modal-body">
+							<div class="row">
+								<div class="col-md-6">
+									<p>Partager dans un groupe existant:</p>
+									<div class="styled-select">
+										<select name="groupname">
+											{% for group in tabgroup %}
+												<option name="groupname">
+													{{ group['groupname'] }}
+												</option>
+											{% endfor %}
+										</select>
+									</div>
+								</div>
+								<div class="col-md-6">
+									<p>Créer un nouveau groupe</p>
+									<a class="btn btn-default new-grp" href="{{ path('ged_newgroup') }}">nouveau groupe</a>
+								</div>
 							</div>
 						</div>
-						<div class="col-md-6">
-							Créer un nouveau groupe
-							<br/>
-							<a href="{{ path('ged_newgroup') }}">nouveau groupe</a>
+						<div class="modal-footer">
+							<button type="button" class="btn btn-default" data-dismiss="modal">Fermer</button>
+							{% if  tabgroup != 1 %}
+								<button type="submit" class="btn btn-default">Valider</button>
+							{% endif %}
 						</div>
-					</div>
-				</div>
-				<div class="modal-footer">
-					<button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
-				</div>
+					</form>
+				{% endif %}
 			</div>
 		</div>
 	</div>
 {# fin modal #}
-	<div class="col-md-4 button-container">
-		<button class="btn button-one-file" id="btn-com">Commentaires</button>
-	</div>
+	
 	<div class="col-md-12" id="file-part">
 		<p> ce fichier a l'id {{ idfile }}</p>
 		<p>il s'appelle {{ file.originalname }}</p>
