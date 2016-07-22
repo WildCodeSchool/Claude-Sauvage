@@ -33,7 +33,7 @@
 				Ou éditer des tags existants
 				{% if tabtag != 1 %}
 					{% for tag in tabtag %}
-						<p class="tag"id="{{ tag.idlinktag }}">{{ tag.name }}<span class="glyphicon glyphicon-remove tagicon"></span></p>
+						<p class="tag" id="{{ tag.idlinktag }}">{{ tag.name }}<span class="glyphicon glyphicon-remove tagicon"></span></p>
 					{% endfor %}
 				{% endif %}
 			</div>	
@@ -46,6 +46,6 @@
 </div>
 <script type="text/javascript" src="{{ asset('js/tags.js') }}"></script>
 <script type="text/javascript">
-	var tagremove =  "{{ path('ged_removetag', {'id': id }) }}";
+	var tagremove="{{path('ged_removetag')}}";
 </script>
 {% endblock body %}

@@ -171,13 +171,16 @@ class ParametersController extends Controller
         ));
     }
 
-    public function removetagAction (Request $request, $id)
+    public function removeTagAction (Request $request)
     {
-        var_dump($id);exit;
+        var_dump($request);
         $em=$this->getDoctrine()->getManager();
-        $linktag=$em->getRepository('GedBundle:Linktag')->findOneById($id);
+
+        $idtag=$request->request->get('idtag');
+        
+        $linktag=$em->getRepository('GedBundle:Linktag')->findOneById($idtag);
+        
         $em->remove($linktag);
         $em->flush();
-        echo "test";
     }
 }
