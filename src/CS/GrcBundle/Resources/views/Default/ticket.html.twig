@@ -30,49 +30,66 @@
 		</div>
 	</div>	
 	<div class="container_ticket">
-		<div class="statut_ticket">
-			<h2>Ticket N°{{ ticket.id }}</h2>
-			<div class="statut">
-				<p>Status: <b>{{ ticket.status }}</b></p>
-			</div>
+		<h2>Ticket N°{{ ticket.id }}</h2>
+		<div class="row parametre">
+				<p><b><span id="mystatus">{{ ticket.status }}</span></b>
+					<select id="status_update" name="status">
+							<option value="0">--Changer statut--</option>
+							{% for status in liststatus %}
+								<option value="{{ status.id }}">{{ status.name }}</option>
+							{% endfor %}
+					</select>
+				</p>
+				<p><b><span id="mypriority">{{ ticket.priority }}</span></b>
+					<select id="priority_update" name="priority">
+							<option value="0">--Définir priorité--</option>
+							{% for priority in listpriorities %}
+								<option value="{{ priority.id }}">{{ priority.name }}</option>
+							{% endfor %}						
+					</select>
+				</p>
+				<p><b><span id="mycategory">{{ mycategory }}</span></b>
+					<select id="category_update" name="category">
+							<option value="0">--Définir catégorie--</option>
+							{% for category in listcategories %}
+								<option value="{{ category.id }}">{{ category.name }}</option>
+							{% endfor %}						
+					</select>
+				</p>
+				<p><b><span id="mysscategory">{{ mysscategory }}</span></b>
+					<select id="sscategory_update" name="sscategory">
+							<option value="0">--Définir sous-catégorie--</option>						
+					</select>
+				</p>
+				<button class="btn btn-default" id="maj_para_ticket" type="button">Valider et mettre à jour</button>
 		</div>
 		<p><span class="sous_titre_com">Demande initiale: </span></p>
 		<div class="demande_init">
 			<div class="demande_init_titre">
-				<p>Demandeur: Mr Dupont<span>Date création: {{ ticket.date | date('d-m-Y') }}</span></p>
+				<p>Demandeur: Mr Dupont<span>Date création: {{ ticket.date | date('d-m-Y H:i:s') }}</span></p>
 			</div>
 			<div class="demande_init_contenu">
-				<p><b>{{ categorie.name }} / {{ sscategorie.name }}</b></p>
 				<p><b>Description: </b>Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.</p>
 				<p><b>Pièce jointe: </b>IMG_123456.jpg</p>
 			</div>
 		</div>
 		<p><span class="sous_titre_com">Historique des échanges: </span></p>
-		<div class="commentaire">
-			<div class="commentaire_entete">
-				<p>De: Mr le commercial<span>Date: 27/06/16</span></p>
-			</div>
-			<p>Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat.</p>
-			<p><b>Pièce jointe: </b>IMG_23456.jpg</p>
-		</div>
-		<div class="commentaire">
-			<div class="commentaire_entete">
-				<p>De: Mr le commercial<span>Date: 27/06/16</span></p>
-			</div>
-			<p>Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat.</p>
-			<p><b>Pièce jointe: </b>IMG_23456.jpg</p>
-		</div>
-		<div class="commentaire">
-			<div class="commentaire_entete">
-				<p>De: Mr le commercial<span>Date: 27/06/16</span></p>
-			</div>
-			<p>Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat.</p>
-			<p><b>Pièce jointe: </b>IMG_23456.jpg</p>
-		</div>
+		{% if listcomments is defined %}	
+			{% for comment in listcomments %}
+				<div class="commentaire">
+					<div class="commentaire_entete">
+						<p>De: Sender n° {{ comment.idsender }}<span>Date: {{ comment.date | date('d-m-Y H:i:s') }}</span></p>
+					</div>
+					<p>{{ comment.content }}</p>
+					<p><b>Pièce jointe: </b>IMG_23456.jpg</p>
+				</div>
+			{% endfor %}
+		{% endif %}
+
 
 		<div class="bloc_reponse">
 			<form method="post" action="{{ path('ticket_comment') }}">
-				<label for="content">laisser un commentaire:</label>
+				<label for="content">Laisser un commentaire:</label>
 				<textarea class="input_com" type="text" rows="3" name="content"></textarea>
 				<input name="idticket" value="{{ ticket.id }}" style="display:none;"/>
 				<button type="button" class="btn btn-default btn-com-left">Ajouter un fichier</button>
@@ -81,4 +98,91 @@
 		</div>
 		
 	</div>
+	<script type="text/javascript">
+		$("document").ready(function() {
+
+		$("#category_update").val(0);
+		$("#sscategory_update").attr('disabled', 'disabled');
+
+    	$("#maj_para_ticket").click(function() {
+
+			var status = $("#status_update").val();
+			var priority = $("#priority_update").val();
+			var category = $("#category_update").val();
+			var sscategory = $("#sscategory_update").val();
+			var ticketid = {{ ticket.id }};
+			console.log(status,priority,ticketid);
+            
+			$.ajax({
+				type: 'POST',
+				url: "{{ path('ajaxparamticket') }}",
+				data: {status: status, priority: priority, ticketid:ticketid, category: category, sscategory: sscategory },
+				dataType : 'json',
+			beforeSend: function() {
+					console.log('On charge');					
+				},
+			success: function(data) {
+					console.log('Requete ok',data.update[0].status);
+					if (data.update[0].status != "0"){
+					$("#mystatus").html(data.update[0].status);
+					}
+					if (data.update[0].priority != "0"){
+					$("#mypriority").html(data.update[0].priority);
+					}
+					if (data.update[0].category != "0"){
+					$("#mycategory").html(data.update[0].category);
+					}
+					if (data.update[0].sscategory != "0"){
+					$("#mysscategory").html(data.update[0].sscategory);
+					}					
+					$("#status_update").val(0);
+					$("#priority_update").val(0);
+					$("#category_update").val(0);
+					$("#sscategory_update").val(0);
+					$("#sscategory_update option").remove();
+					$("#sscategory_update").append($('<option>',{ value : 0 , text: "--Définir sous-catégorie--" }));
+					$("#sscategory_update").attr('disabled', 'disabled');
+				},
+			error: function() {
+				alert('La requête n\'a pas abouti'); }
+				});
+
+    	});
+
+    	$("#category_update").change(function() {
+
+		var categorie = $(this).val();
+            
+			if ( categorie != 0 ) {
+
+				$.ajax({
+				type: 'POST',
+				url: "{{ path('ajaxsscat') }}",
+				data: {categorie: categorie},
+				dataType : 'json',
+				beforeSend: function() {
+					console.log('On charge');
+					$("#sscategory_update option").remove();
+					$("#sscategory_update").append($('<option>',{ value : 0 , text: "-- Sous-catégorie--" }));
+					$("#sscategory_update").attr('disabled', 'disabled');
+				},
+				success: function(data) {
+				console.log('Requete ok',data);
+					$.each(data.sscatlist, function(index,value) {
+						$("#sscategory_update").append($('<option>',{ value : value.id , text: value.name }));
+						$("#sscategory_update").removeAttr('disabled');
+					});
+
+				},
+				error: function() {
+				alert('La requête n\'a pas abouti'); }
+				});
+			} else {
+				$("#sscategory_update option").remove();
+				$("#sscategory_update").append($('<option>',{ value : 0 , text: "-- Sous-catégorie--" }));
+				$("#sscategory_update").attr('disabled', 'disabled');
+			}
+    	});
+	});
+	</script>
 {% endblock %}

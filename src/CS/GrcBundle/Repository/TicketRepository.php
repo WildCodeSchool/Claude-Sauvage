@@ -12,4 +12,13 @@ use Doctrine\ORM\EntityRepository;
  */
 class TicketRepository extends EntityRepository
 {
+	public function recherche($keyword)
+	{
+    	$qb = $this->createQueryBuilder('u');
+    	$qb->select('u')
+			->where('u.id LIKE :keyword OR u.idcategory LIKE :keyword OR u.idsouscategory LIKE :keyword OR u.content LIKE :keyword')
+			->setParameter('keyword', '%'.$keyword.'%');
+
+    return $qb->getQuery()->getResult();
+	}
 }
