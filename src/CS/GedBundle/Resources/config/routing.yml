@@ -16,8 +16,12 @@ ged_all:
     defaults: { _controller: GedBundle:List:all }
 
 ged_parameters_list:
-    path:     /a_definir
+    path:     /define
     defaults: { _controller: GedBundle:List:parameters }
+
+ged_shared:
+    path:     /shared
+    defaults: { _controller: GedBundle:Share:shared }
 
 ged_parameters_file:
     path:     /parameters/{id}
@@ -60,6 +64,10 @@ ged_bookmark:
 ged_bookmark_view:
     path:     /bookmark
     defaults: { _controller: GedBundle:Bookmark:bookmarkList }
+
+ged_upload_view:
+    path:     /upload
+    defaults: { _controller: GedBundle:Upload:uploadList }
 
 ged_delete:
     path:    /delete/{id}

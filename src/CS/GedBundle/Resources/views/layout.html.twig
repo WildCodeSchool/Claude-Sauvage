@@ -21,6 +21,7 @@
                         <span class="icon-bar"></span>
                         <span class="icon-bar"></span>
                     </button>
+                    <a class="home btn btn-default navbar-btn" href="{{ path('ged_homepage') }}" title="Tous les fichiers"><span class="glyphicon glyphicon-home" aria-hidden="true"></span></a>
                     <button type="button" class="ajout-fichier btn btn-default navbar-btn" data-toggle="modal" data-target="#addfile"><span class="glyphicon glyphicon-plus" aria-hidden="true"></span>  Ajouter un document</button>
                     {% if checkpage is not defined or checkpage != "newgroup" %}
                         <a href="{{ path('ged_newgroup')}}"class="ajout-fichier btn btn-default navbar-btn" >
@@ -54,11 +55,6 @@
                         <li class="lien-user">
                             <a class="lien-user" href="#">Bienvenue {{ user | capitalize }}
                             <img class="image-user" alt="Default-User" src='{{ asset('uploads/profileimages/default/de5d596f0373130509ec704c95b7dfba.png') }}'>
-                            </a>
-                        </li>
-                        <li>
-                            <a class="home btn btn-default navbar-btn" href="{{ path('ged_homepage') }}" title="Tous les fichiers">
-                                <span class="glyphicon glyphicon-home" aria-hidden="true"></span>
                             </a>
                         </li>
                     </ul>

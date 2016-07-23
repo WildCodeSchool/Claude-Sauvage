@@ -2,7 +2,7 @@
 
 .navbar{
 	margin-bottom:0;
-	background-color:#f1f1f1;
+	background-color:#FBA858;
 	border:0;
 	border-radius:0;
 }
@@ -57,7 +57,7 @@
 	background-color: #f1f1f1!important;
 }
 .modal .btn-primary{
-	background-color:#b0b0b0;
+	background-color:#FBA858;
 	border-color: #f1f1f1;
 }
 
@@ -249,7 +249,7 @@ tr:hover td{
 }
 
 .modal-header{
-	background-color:#909090;
+	background-color:#FBA858;
 }
 
 .modal-title{
