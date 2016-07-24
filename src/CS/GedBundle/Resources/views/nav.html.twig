@@ -8,7 +8,7 @@
 				{% for categorie in categories %}
 					{% if categorie.name != 'brouillon' %}
 						<li>
-							<a href="#" class="btn btn-default">{{ categorie.name }}
+							<a href="{{ path('ged_category',{'id': categorie.id }) }}" class="btn btn-default">{{ categorie.name }}
 								{% set count = 0 %}
 								{% for sscategory in categoryTab %}
 									{% if sscategory['id'] == categorie.id %}
@@ -24,7 +24,7 @@
 							<ul class="drop-in-content">
 								{% for sscategory in categoryTab %}
 									{% if sscategory['id'] == categorie.id %}
-										<li><a href="#" class="btn btn-default">{{ sscategory['category'] }}</a></li>
+										<li><a href="{{ path('ged_sscategory',{'ssid': sscategory.ssid }) }}" class="btn btn-default">{{ sscategory['category'] }}</a></li>
 									{% endif %}
 								{% endfor %}
 							</ul>

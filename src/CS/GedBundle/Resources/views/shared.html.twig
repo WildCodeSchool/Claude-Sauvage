@@ -5,71 +5,6 @@
 <div class="col-md-10">
 	<h3 style="text-align:center;">Partagés avec moi</h3>
 	<table class="table compact stripe" id="table">
-			<thead> 
-				<tr> 
-					<th></th>
-					<th>Nom du fichier</th>
-					<th>Date</th>
-					<th>Catégorie</th> 
-					<th>Tags</th>
-					<th>Favori</th>
-					<th>Paramètres</th>
-					<th>Telecharger</th>
-				</tr> 
-			</thead> 
-			<tbody>
-				{% if tabpart is defined %}
-					{% for partaged in tabpart %}
-						<tr>
-							<td>{% if partaged['type'] == 'jpeg' or partaged['type'] == 'jpg' or partaged['type'] == 'png' or partaged['type'] == 'gif' %}
-								<span class="glyphicon glyphicon-picture" aria-hidden="true"></span>
-							{% else %}
-								Ico
-							{% endif %}
-							</td>
-							<td><a data-toggle="tooltip" data-placement="bottom" title="
-								Partagé avec: {% if partaged['groupMemberName'] != 1 %}
-												{% for member in  partaged['groupMemberName'] %}
-													{{ member['groupMemberName'] }} ,
-												{% endfor %}
-												{% else %}
-													Aucun partage
-												{% endif %}
-								comentaires : {{ partaged['comments'] }}"
-								href="{{ path('one_file' , {'id': partaged['idfile'] }) }}">{{ partaged['name'] }}</a></td>
-							<td>{{ partaged['date'].date| date("d/m/Y")  }}</td>
-							<td>{{ partaged['category'] }}</td> 
-							<td>
-								{% if partaged['tagnames'] != 1 %}
-									{% for tag in partaged['tagnames'] %}
-											{{ tag['name'] }} ,
-									{% endfor %}
-								{% else %}
-									Aucun Tag
-								{% endif %}
-							</td>
-							<td>
-								{% if partaged['bookmark'] != 1 %}
-									<span class="fav glyphicon glyphicon-star-empty" aria-hidden="true" value="{{partaged.idfile}}"></span>
-								{% else %}
-									<span class="fav glyphicon glyphicon-star" aria-hidden="true" value="{{partaged.idfile}}"></span>
-								{% endif %}
-							</td>
-							<td>
-								<a class="btn" href="{{ path('ged_parameters_file', { 'id' : partaged['idfile'] }) }}" title="">
-								<span class="glyphicon glyphicon-pencil" aria-hidden="true"></span></a>
-							</td>
-							<td>
-								<a class="btn" href="{{ path('ged_download', { 'name' : partaged['path'] }) }}">
-									<span class="glyphicon glyphicon-cloud-download" aria-hidden="true"></span>
-								</a>
-							</td>
-						</tr>
-					{% endfor %}
-				{% endif %}
-			</tbody>
-		</table>
-{# 	<table class="table compact stripe" id="table">
 		<thead> 
 			<tr> 
 				<th></th>
@@ -83,41 +18,49 @@
 			</tr> 
 		</thead> 
 		<tbody>
-			{% if tabfav is defined %}
-				{% for favorite in tabfav %}
-					<tr> 
-						<td>{% if favorite['type'] == 'jpeg' or favorite['type'] == 'jpg' or favorite['type'] == 'png' or favorite['type'] == 'gif' %}
+			{% if tabpart is defined %}
+				{% for partaged in tabpart %}
+					<tr>
+						<td>{% if partaged['type'] == 'jpeg' or partaged['type'] == 'jpg' or partaged['type'] == 'png' or partaged['type'] == 'gif' %}
 							<span class="glyphicon glyphicon-picture" aria-hidden="true"></span>
 						{% else %}
 							Ico
 						{% endif %}
 						</td>
 						<td><a data-toggle="tooltip" data-placement="bottom" title="
-								Partagé avec: {% if favorite['groupMemberName'] != 1 %}
-											{% for member in  favorite['groupMemberName'] %}
+							Partagé avec: {% if partaged['groupMemberName'] != 1 %}
+											{% for member in  partaged['groupMemberName'] %}
 												{{ member['groupMemberName'] }} ,
 											{% endfor %}
 											{% else %}
 												Aucun partage
 											{% endif %}
-								comentaires : {{ favorite['comments'] }}"
-								href="{{ path('one_file' , {'id': favorite['idfile'] }) }}">{{ favorite['name'] }}</a></td>
-						<td>{{ favorite['date']| date("d/m/Y") }}</td>
-						<td>{{ favorite['category'] }}</td>
+							comentaires : {{ partaged['comments'] }}"
+							href="{{ path('one_file' , {'id': partaged['idfile'] }) }}">{{ partaged['name'] }}</a></td>
+						<td>{{ partaged['date'].date| date("d/m/Y")  }}</td>
+						<td>{{ partaged['category'] }}</td> 
 						<td>
-							{% for tag in favorite['tagnames'] %}
-								{{ tag['name'] }} ,
-							{% endfor %}
+							{% if partaged['tagnames'] != 1 %}
+								{% for tag in partaged['tagnames'] %}
+										{{ tag['name'] }} ,
+								{% endfor %}
+							{% else %}
+								Aucun Tag
+							{% endif %}
 						</td>
 						<td>
-							<span class="fav glyphicon glyphicon-star" aria-hidden="true" value="{{favorite.idfile}}"></span>
+							{% if partaged['bookmark'] != 1 %}
+								<span class="fav glyphicon glyphicon-star-empty" aria-hidden="true" value="{{partaged.idfile}}"></span>
+							{% else %}
+								<span class="fav glyphicon glyphicon-star" aria-hidden="true" value="{{partaged.idfile}}"></span>
+							{% endif %}
 						</td>
 						<td>
-							<a class="btn" href="{{ path('ged_parameters_file', { 'id' : favorite['idfile'] }) }}" title="">
+							<a class="btn" href="{{ path('ged_parameters_file', { 'id' : partaged['idfile'] }) }}" title="">
 							<span class="glyphicon glyphicon-pencil" aria-hidden="true"></span></a>
 						</td>
 						<td>
-							<a class="btn" href="{{ path('ged_download', { 'name' : favorite['path'] }) }}">
+							<a class="btn" href="{{ path('ged_download', { 'name' : partaged['path'] }) }}">
 								<span class="glyphicon glyphicon-cloud-download" aria-hidden="true"></span>
 							</a>
 						</td>
@@ -125,7 +68,7 @@
 				{% endfor %}
 			{% endif %}
 		</tbody>
-	</table> #}
+	</table>
 </div>
 <script type="text/javascript"> 
 $(document).ready(function() { 

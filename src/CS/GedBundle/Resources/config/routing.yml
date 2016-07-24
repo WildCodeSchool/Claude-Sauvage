@@ -74,6 +74,14 @@ ged_upload_view:
     path:     /upload
     defaults: { _controller: GedBundle:Upload:uploadList }
 
+ged_category:
+    path:     /category/{id}
+    defaults: { _controller: GedBundle:Category:category }
+
+ged_sscategory:
+    path:     /sub-category/{ssid}
+    defaults: { _controller: GedBundle:Category:sscategory }
+
 ged_delete:
     path:    /delete/{id}
     defaults: { _controller: GedBundle:Delete:deleteFile }

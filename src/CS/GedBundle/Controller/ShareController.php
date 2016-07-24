@@ -40,10 +40,12 @@ class ShareController extends Controller
 
                     $categoryName=$categoryInfo->getName();
                     $categoryId=$categoryInfo->getIdcategory();
+                    $ssCategory=$categoryInfo->getId();
             
                     $categoryTab[] = array(
                         'category' => $categoryName,
                         'id' => $categoryId,
+                        'ssid'=>$ssCategory,
                     );
                 }
             }
@@ -162,7 +164,7 @@ class ShareController extends Controller
             {
                 $tagnames=1;
             }
-            
+
             //s'il n'existe pas de groupe, on assigne 1
             if (empty($tabInfoGroup)){
                 $tabInfoGroup = 1;
