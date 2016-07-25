@@ -185,20 +185,25 @@ class SearchController extends Controller
             }
 
             //RECHERCHE POUR LES GROUPES - Tags
-            
+
             $groupTags = $em->getRepository('GedBundle:Gedfiles')->findByIdgroup($idgrp);
 
             //faire une boucle pour cahque fichier trouvé.
             foreach ($groupTags as $filesAcces) {
                 //rechercher les differents liens de tag.
                 $filesTags = $em->getRepository('GedBundle:Linktag')->findByIdfile( $filesAcces->getId());
+
+                var_dump($filesTags);exit;
+
                 //pour chaque liens recupere le nom.
                 foreach ($filesTags as $filesTag) {
-                   $filesTag = $em->getRepository('GedBundle:Gedtag')->tagSearch($searchRecherche);
 
-                   //Pour chaque resultat de recherche par nom de tag.
-                    foreach ($filesTag as $fileTag){
-                        //prend le nom du fichier
+                    $idTag = $filesTag->getId();
+                    // tag par iD !!!!
+                    $Tag = $em->getRepository('GedBundle:Gedtag')->tagSearch($searchRecherche, $idTag);
+
+                    //Pour chaque resultat de recherche par nom de tag & par id.
+                    //prend le nom du fichier
                         $name = $fileTag->getName();
                         //Stoque le dans un tableau
                         $grpTagTab[]=array(
@@ -208,7 +213,6 @@ class SearchController extends Controller
                 }
             }
         }
-        var_dump($tagTab);exit;
         
 
 
@@ -233,15 +237,15 @@ class SearchController extends Controller
         // else{
         //     echo 'ss-catégorie a la valeur'.$searchSscategories;
         // }
-        var_dump('recherche = '.$searchRecherche);
-        var_dump('-------------------------');
-        var_dump($nameTab);
-        var_dump('-------------------------');
-        var_dump($tagTab);
-        var_dump('-------------------------');
-        var_dump($grpNameTab);
-        var_dump('-------------------------');
-        var_dump($grpTagTab);
+        // var_dump('recherche = '.$searchRecherche);
+        // var_dump('-------------------------');
+        // var_dump($nameTab);
+        // var_dump('-------------------------');
+        // var_dump($tagTab);
+        // var_dump('-------------------------');
+        // var_dump($grpNameTab);
+        // var_dump('-------------------------');
+        // var_dump($grpTagTab);
         
         return $response->setData(array('nameTab' => $nameTab,'tagTab' => $tagTab, 'grpNameTab' => $grpNameTab, 'grpNameTab' => $grpTagTab,));
     }   

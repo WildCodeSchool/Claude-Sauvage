@@ -35,7 +35,7 @@
 						{% set counttag = counttag + 1 %}
 					{% endfor %}
 				{% endif %}
-				<div class="counttag" id="{{ counttag }}">{{ counttag }}<div>
+				<div class="counttag" id="{{ counttag }}">{{ counttag }}</div>
 			</div>
 		<form action="{{ path('ged_delete',{'id': id} ) }}" method="post">
 			<input type="submit" value="supprimer le fichier"></input>

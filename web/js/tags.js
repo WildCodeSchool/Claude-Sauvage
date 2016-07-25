@@ -14,7 +14,7 @@
 		$("#addtagfield").removeAttr('disabled');
 		counttag --;
 	});
-	if( counttag=<2 || 1)
+	if( counttag<=2 || 1)
 	{
 		$("#addtagfield").removeAttr('disabled');
 		$('#addtagbtn').click(function(){
@@ -22,7 +22,7 @@
 			console.log(content);
 			$.ajax({
 				type: 'POST',
-				url: "{{ path('ged_addtag') }}",
+				url: tagadd,
 				data: {idfile: idfile, content: content},
 				dataType : 'json',
 				success: function(data){
