@@ -41,8 +41,7 @@ class GedfilesRepository extends EntityRepository
 			->where('f.originalname LIKE :word')
 			->setParameter('word', '%'.$word.'%')
 			->andWhere('f.idgroup = :id')
-			->setParameter('id', $idgrp)
-			->setMaxResults(3);
+			->setParameter('id', $idgrp);
 
 		// On récupère la Query à partir du QueryBuilder
 	    $query = $queryBuilder->getQuery();

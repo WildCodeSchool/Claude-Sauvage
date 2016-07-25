@@ -193,26 +193,30 @@ class SearchController extends Controller
 
             //faire une boucle pour cahque fichier trouvé.
             foreach ($groupTags as $filesAcces) {
-                //rechercher les differents liens de tag.
-                $filesTags = $em->getRepository('GedBundle:Linktag')->findByIdfile( $filesAcces->getId());
+                
+                $accesid =$filesAcces->getId();
 
-                var_dump($filesTags);exit;
+                //rechercher les differents liens de tag.
+                $filesTags = $em->getRepository('GedBundle:Linktag')->findByIdfile($accesid);
 
                 //pour chaque liens recupere le nom.
                 foreach ($filesTags as $filesTag) {
 
-                    $idTag = $filesTag->getId();
+                    $idFileTag = $filesTag->getIdtag();
+
                     // tag par iD !!!!
-                    $Tag = $em->getRepository('GedBundle:Gedtag')->tagSearch($searchRecherche, $idTag);
+                    $tags = $em->getRepository('GedBundle:Gedtag')->tagSearch($searchRecherche, $idFileTag);
 
                     //Pour chaque resultat de recherche par nom de tag & par id.
-                    //prend le nom du fichier
-                        $name = $fileTag->getName();
-                        //Stoque le dans un tableau
-                        $grpTagTab[]=array(
-                            "name"=>$name,
-                        );
+                    foreach ($tags as $tag) {
                     
+                        //prend le nom du fichier
+                        $name = $tag->getName();
+
+                        //Stoque le dans un tableau
+                        $grpTagTab[]=array('name'=>$name);
+                    }
+                    var_dump($grpTagTab);
                 }
             }
         }
