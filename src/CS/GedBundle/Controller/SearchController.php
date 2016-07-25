@@ -150,9 +150,12 @@ class SearchController extends Controller
             $filesTags = $em->getRepository('GedBundle:Linktag')->findByIdfile( $filesAcces->getId());
             //pour chaque liens recupere le nom.
             foreach ($filesTags as $filesTag) {
-               $filesTag = $em->getRepository('GedBundle:Gedtag')->tagSearch($searchRecherche);
 
-               //Pour chaque resultat de recherche par nom de tag.
+                $idTag = $filesTag->getId();
+
+                $filesTag = $em->getRepository('GedBundle:Gedtag')->tagSearch($searchRecherche, $idTag);
+
+                //Pour chaque resultat de recherche par nom de tag.
                 foreach ($filesTag as $fileTag){
                     //prend le nom du fichier
                     $name = $fileTag->getName();
@@ -246,6 +249,8 @@ class SearchController extends Controller
         // var_dump($grpNameTab);
         // var_dump('-------------------------');
         // var_dump($grpTagTab);
+
+        $response = new JsonResponse();
         
         return $response->setData(array('nameTab' => $nameTab,'tagTab' => $tagTab, 'grpNameTab' => $grpNameTab, 'grpNameTab' => $grpTagTab,));
     }   

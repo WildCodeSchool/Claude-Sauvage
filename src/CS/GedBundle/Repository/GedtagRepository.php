@@ -19,8 +19,8 @@ class GedtagRepository extends EntityRepository
 		$queryBuilder
 			->where('f.name LIKE :word')
 			->setParameter('word', '%'.$word.'%')
-			->andWhere('f.id = :id')
-			->setParameter('id', $idtag)
+			->andWhere('f.id = :idtag')
+			->setParameter('idtag', $idtag)
 
 		// On récupère la Query à partir du QueryBuilder
 	    $query = $queryBuilder->getQuery();
