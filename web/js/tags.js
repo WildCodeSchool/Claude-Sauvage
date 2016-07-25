@@ -1,4 +1,4 @@
-// $(document).ready(function(){
+$(document).ready(function(){
 	var counttag= $('.counttag').attr('id');
 	console.log(counttag);
 
@@ -14,7 +14,7 @@
 		$("#addtagfield").removeAttr('disabled');
 		counttag --;
 	});
-	if( counttag<=2 || 1)
+	if( counttag<=2)
 	{
 		$("#addtagfield").removeAttr('disabled');
 		$('#addtagbtn').click(function(){
@@ -39,4 +39,4 @@
 	else{
 		$("#addtagfield").attr('disabled', 'disabled');
 	};
-// });
+});
