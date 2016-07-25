@@ -25,17 +25,16 @@
 				    </select>
 				</div>
 			</div>
-			<div class="col-md-3">
-				<label for="addtag">Ajouter un tag:</label>
-				<input name="addtag" id="addtag"/>
-			</div>
 			<div class="col-md-3" id="taglist">
 				Ou éditer des tags existants
+				{% set counttag = 0 %}
 				{% if tabtag != 1 %}
 					{% for tag in tabtag %}
 						<p class="tag" id="{{ tag.idlinktag }}">{{ tag.name }}<span class="glyphicon glyphicon-remove tagicon" id="{{ tag.idlinktag }}"></span></p>
+						{% set counttag=counttag+1 %}
 					{% endfor %}
 				{% endif %}
+				<div class="counttag tagdisplay" id="{{ counttag }}"><div>
 			</div>	
 			<input type="submit" value="valider"/>
 		</form>
