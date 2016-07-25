@@ -38,44 +38,140 @@ class SearchController extends Controller
         return $response->setData(array('ssCategorieTab' => $ssCategorieTab));
     }
 
+    public function autocompletionAction(Request $request)
+    {
+        $em=$this->getDoctrine()->getManager();
+        $user =$this->getUser()->getId();
+
+        $nameTab=[];
+        $tagTab=[];
+
+        $searchRecherche=$request->request->get('recherche');
+
+        // $searchCategorie=$request->request->get('categorie');
+        // $searchSscategories=$request->request->get('sscategories');
+        // $searchType=$request->request->get('type');
+
+
+        //recherche le nom du fichier
+        $fileNames = $em->getRepository('GedBundle:Gedfiles')->nameSearch($searchRecherche,$user);
+
+        //récuperation de tout les fichiers des groupes ou est l'utilisateur.
+        // $linkGroups = $em->getRepository('GedBundle:Linkgroup')->findByIduser($user);
+
+        // var_dump($linkGroups);
+
+        
+
+        //Pour chaque resultat de recherche par nom de fichier.
+        foreach ($fileNames as $fileName){
+            //prend le nom du fichier
+            $name = $fileName->getOriginalName();
+            //Stoque le dans un tableau
+            $nameTab[]=array(
+                "name"=>$name,
+            );
+        }
+
+        //recherche le nom du tag
+        $fileTags = $em->getRepository('GedBundle:Gedtag')->tagSearch($searchRecherche);
+
+        //Pour chaque resultat de recherche par nom de tag.
+        foreach ($fileTags as $fileTag){
+            //prend le nom du fichier
+            $name = $fileTag->getName();
+            //Stoque le dans un tableau
+            $tagTab[]=array(
+                "name"=>$name,
+            );
+        }
+
+        // //si pas de sous catégorie défini.
+        // if (empty($searchSscategories)||($searchSscategories==0)){
+            
+        //     //on recherche alors si la catégorie et défini.
+        //     if ($searchCategorie!=0){
+
+        //         echo 'catégorie a la valeur'.$searchCategorie;
+        //     }
+        //     //Si la catégorie n'est pas défini alors.
+        //     else{
+        //          echo'pas de catégorie & pas de sous catégorie';
+        //     }
+        // }
+
+        // //on obtien donc il de la sous catégorie.
+        // else{
+        //     echo 'ss-catégorie a la valeur'.$searchSscategories;
+        // }
+
+        $response = new JsonResponse();
+        
+        return $response->setData(array('nameTab' => $nameTab,'tagTab' => $tagTab));
+    }
+
     public function searchAction(Request $request)
     {
         $em=$this->getDoctrine()->getManager();
         $user =$this->getUser();
 
+        $nameTab=[];
+        $tagTab=[];
+
         $searchRecherche=$request->request->get('recherche');
-        $searchCategorie=$request->request->get('categorie');
-        $searchSscategories=$request->request->get('sscategories');
-        $searchType=$request->request->get('type');
 
-        $file = $em->getRepository('GedBundle:Gedfiles')->findSearch('ALED');
+        // $searchCategorie=$request->request->get('categorie');
+        // $searchSscategories=$request->request->get('sscategories');
+        // $searchType=$request->request->get('type');
 
-        // var_dump($file);exit;
 
-        //si pas de sous catégorie défini.
-        if (empty($searchSscategories)||($searchSscategories==0)){
+        //recherche le nom du fichier
+        $fileNames = $em->getRepository('GedBundle:Gedfiles')->nameSearch($searchRecherche);
+
+        //recherche le nom du tag
+        $fileTags = $em->getRepository('GedBundle:Gedtag')->tagSearch($searchRecherche);
+
+        //Pour chaque resultat de recherche par nom de fichier.
+        foreach ($fileNames as $fileName){
+            //prend le nom du fichier
+            $name = $fileName->getOriginalName();
+            //Stoque le dans un tableau
+            $nameTab[]=array(
+                "name"=>$name,
+            );
+        }
+
+        //Pour chaque resultat de recherche par nom de tag.
+        foreach ($fileTags as $fileTag){
+            //prend le nom du fichier
+            $name = $fileTag->getName();
+            //Stoque le dans un tableau
+            $tagTab[]=array(
+                "name"=>$name,
+            );
+        }
+
+        // //si pas de sous catégorie défini.
+        // if (empty($searchSscategories)||($searchSscategories==0)){
             
-            //on recherche alors si la catégorie et défini.
-            if ($searchCategorie!=0){
-                echo $searchCategorie;
-            }
-            //Si la catégorie n'est pas défini alors.
-            else{
-                 echo'pas de catégorie & pas de sous catégorie';
-            }
-        }
+        //     //on recherche alors si la catégorie et défini.
+        //     if ($searchCategorie!=0){
 
-        //on obtien donc il de la sous catégorie.
-        else{
-            echo $searchSscategories;
-        }
-        var_dump($searchRecherche);
-        var_dump('--------------------------');
-        var_dump($searchCategorie);
-        var_dump('--------------------------');
-        var_dump($searchSscategories);
-        var_dump('--------------------------');
-        var_dump($searchType);exit;
+        //         echo 'catégorie a la valeur'.$searchCategorie;
+        //     }
+        //     //Si la catégorie n'est pas défini alors.
+        //     else{
+        //          echo'pas de catégorie & pas de sous catégorie';
+        //     }
+        // }
+
+        // //on obtien donc il de la sous catégorie.
+        // else{
+        //     echo 'ss-catégorie a la valeur'.$searchSscategories;
+        // }
+
+        $response = new JsonResponse();
         
-    }    
+        return $response->setData(array('nameTab' => $nameTab,'tagTab' => $tagTab));
+    }   
 }

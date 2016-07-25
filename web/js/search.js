@@ -15,7 +15,7 @@ $("document").ready(function() {
 					$("#sscategories").attr('disabled', 'disabled');
 				},
 				success: function(data) {
-				console.log('Requete ok',data);
+					console.log('Requete ok',data);
 					$("#sscategories option").remove();
 					$("#sscategories").append($('<option>',{ value:0, text: "Toutes les sous-catégories" }));
 					$.each(data.ssCategorieTab, function(index,value) {
@@ -52,6 +52,42 @@ $("document").ready(function() {
 			});
 			$(this).removeClass('glyphicon-star');
 			$(this).addClass('glyphicon-star-empty');
+		}
+	});
+	$("#search").keyup(function() {
+		var search = $(this).val();
+		var lengthSearch = search.length;
+
+		if(lengthSearch >=3){
+			
+
+			$.ajax({
+				type: 'POST',
+				url: autocompletion,
+				data: {recherche: search},
+				dataType : 'json',
+
+				beforeSend: function() {
+					$("#test option").remove();
+					$("#test").attr('disabled', 'disabled');
+				},
+
+				success: function(data) {					
+					console.log('Requete ok',data);
+					$.each(data.nameTab, function(index,value) {
+						$("#test").append($('<option>',{ value : value.id , text: value.name }));
+						$("#test").removeAttr('disabled');
+					});
+					$.each(data.tagTab, function(index,value) {
+						$("#test").append($('<option>',{ value : value.id , text: value.name }));
+						$("#test").removeAttr('disabled');
+					});
+				},
+
+				error: function() {
+					console.log('Requete fail');					
+				},
+			});		
 		}
 	});
 });
