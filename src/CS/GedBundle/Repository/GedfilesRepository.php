@@ -12,22 +12,45 @@ use Doctrine\ORM\EntityRepository;
  */
 class GedfilesRepository extends EntityRepository
 {
-	public function findSearch($word)
+	public function nameSearch($word, $id)
 	{
 		$queryBuilder = $this->createQueryBuilder('f');
 
 		$queryBuilder
 			->where('f.originalname LIKE :word')
-			->setParameter('word', '%'.$word.'%');
-			// ->getResult();
+			->setParameter('word', '%'.$word.'%')
+			->andWhere('f.idowner = :id')
+			->setParameter('id', $id)
+			->setMaxResults(3);
 
-		// $query = $queryBuilder->getQuery();
+		// On récupère la Query à partir du QueryBuilder
+	    $query = $queryBuilder->getQuery();
 
+	    // On récupère les résultats à partir de la Query
+	    $results = $query->getResult();
 
+		// On retourne ces résultats
+	    return $results;
+	}
 
-		// $results = $queryBuilder->getResult();
+	public function grpNameSearch($word, $idgrp)
+	{
+		$queryBuilder = $this->createQueryBuilder('f');
 
-		return $queryBuilder;
+		$queryBuilder
+			->where('f.originalname LIKE :word')
+			->setParameter('word', '%'.$word.'%')
+			->andWhere('f.idgroup = :id')
+			->setParameter('id', $idgrp)
+			->setMaxResults(3);
 
+		// On récupère la Query à partir du QueryBuilder
+	    $query = $queryBuilder->getQuery();
+
+	    // On récupère les résultats à partir de la Query
+	    $results = $query->getResult();
+
+		// On retourne ces résultats
+	    return $results;
 	}
 }

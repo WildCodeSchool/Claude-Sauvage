@@ -3,7 +3,10 @@
 		<form action="{{ path('ged_search') }}" method="post">
 			<div class="col-md-3">
 				<div class="input-group">
-					<input type="text" class="form-control" name="recherche" placeholder="Rechercher">
+					<input id="search" type="text" class="form-control" name="recherche" placeholder="Rechercher">
+					<select class="form-control" name="test" id="test" disabled>
+					    <option value="0">Toutes les sous-catégories</option>
+				    </select>
 					<span class="input-group-btn">
 						<button class="btn btn-default" type="submit">Ok</button>
 					</span>
