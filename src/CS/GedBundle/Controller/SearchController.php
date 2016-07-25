@@ -45,6 +45,8 @@ class SearchController extends Controller
 
         $nameTab=[];
         $tagTab=[];
+        $grpNameTab=[];
+        $grpTagTab=[];
 
         $searchRecherche=$request->request->get('recherche');
 
@@ -56,13 +58,6 @@ class SearchController extends Controller
         //recherche le nom du fichier
         $fileNames = $em->getRepository('GedBundle:Gedfiles')->nameSearch($searchRecherche,$user);
 
-        //récuperation de tout les fichiers des groupes ou est l'utilisateur.
-        // $linkGroups = $em->getRepository('GedBundle:Linkgroup')->findByIduser($user);
-
-        // var_dump($linkGroups);
-
-        
-
         //Pour chaque resultat de recherche par nom de fichier.
         foreach ($fileNames as $fileName){
             //prend le nom du fichier
@@ -72,6 +67,9 @@ class SearchController extends Controller
                 "name"=>$name,
             );
         }
+
+        //récuperation de tout les fichiers des groupes ou est l'utilisateur.
+        $linkGroups = $em->getRepository('GedBundle:Linkgroup')->findByIduser($user);
 
         //recherche le nom du tag
         $fileTags = $em->getRepository('GedBundle:Gedtag')->tagSearch($searchRecherche);
@@ -113,10 +111,12 @@ class SearchController extends Controller
     public function searchAction(Request $request)
     {
         $em=$this->getDoctrine()->getManager();
-        $user =$this->getUser();
+        $user =$this->getUser()->getId();
 
         $nameTab=[];
         $tagTab=[];
+        $grpNameTab=[];
+        $grpTagTab=[];
 
         $searchRecherche=$request->request->get('recherche');
 
@@ -124,12 +124,10 @@ class SearchController extends Controller
         // $searchSscategories=$request->request->get('sscategories');
         // $searchType=$request->request->get('type');
 
+        //RECHERCHE POUR L' UTILISATEUR - Fichiers
 
         //recherche le nom du fichier
-        $fileNames = $em->getRepository('GedBundle:Gedfiles')->nameSearch($searchRecherche);
-
-        //recherche le nom du tag
-        $fileTags = $em->getRepository('GedBundle:Gedtag')->tagSearch($searchRecherche);
+        $fileNames = $em->getRepository('GedBundle:Gedfiles')->nameSearch($searchRecherche, $user);
 
         //Pour chaque resultat de recherche par nom de fichier.
         foreach ($fileNames as $fileName){
@@ -141,15 +139,81 @@ class SearchController extends Controller
             );
         }
 
-        //Pour chaque resultat de recherche par nom de tag.
-        foreach ($fileTags as $fileTag){
-            //prend le nom du fichier
-            $name = $fileTag->getName();
-            //Stoque le dans un tableau
-            $tagTab[]=array(
-                "name"=>$name,
-            );
+        //RECHERCHE POUR L' UTILISATEUR - Tags
+
+        //pour chaque fichier au quel l'utilisateur a acces recherche le nom du tag
+        $filesAccess = $em->getRepository('GedBundle:Gedfiles')->findByIdowner($user);
+
+        //faire une boucle pour cahque fichier trouvé.
+        foreach ($filesAccess as $filesAcces) {
+            //rechercher les differents liens de tag.
+            $filesTags = $em->getRepository('GedBundle:Linktag')->findByIdfile( $filesAcces->getId());
+            //pour chaque liens recupere le nom.
+            foreach ($filesTags as $filesTag) {
+               $filesTag = $em->getRepository('GedBundle:Gedtag')->tagSearch($searchRecherche);
+
+               //Pour chaque resultat de recherche par nom de tag.
+                foreach ($filesTag as $fileTag){
+                    //prend le nom du fichier
+                    $name = $fileTag->getName();
+                    //Stoque le dans un tableau
+                    $tagTab[]=array(
+                        "name"=>$name,
+                    );
+                }
+            }
         }
+       
+        //RECHERCHE POUR LES GROUPES - Fichiers
+
+        //récuperation de tout les fichiers des groupes ou est l'utilisateur.
+        $linkGroups = $em->getRepository('GedBundle:Linkgroup')->findByIduser($user);
+
+        foreach ($linkGroups as $group) {
+            
+            $idgrp = $group->getIdgroup();
+
+            $groupFiles = $em->getRepository('GedBundle:Gedfiles')->grpNameSearch($searchRecherche, $idgrp);
+
+            foreach ($groupFiles as $file) {
+
+                $name = $file->getOriginalName();
+                //Stoque le dans un tableau
+                $grpNameTab[]=array(
+                    "name"=>$name,
+                );
+            }
+
+            //RECHERCHE POUR LES GROUPES - Tags
+            
+            $groupTags = $em->getRepository('GedBundle:Gedfiles')->findByIdgroup($idgrp);
+
+            //faire une boucle pour cahque fichier trouvé.
+            foreach ($groupTags as $filesAcces) {
+                //rechercher les differents liens de tag.
+                $filesTags = $em->getRepository('GedBundle:Linktag')->findByIdfile( $filesAcces->getId());
+                //pour chaque liens recupere le nom.
+                foreach ($filesTags as $filesTag) {
+                   $filesTag = $em->getRepository('GedBundle:Gedtag')->tagSearch($searchRecherche);
+
+                   //Pour chaque resultat de recherche par nom de tag.
+                    foreach ($filesTag as $fileTag){
+                        //prend le nom du fichier
+                        $name = $fileTag->getName();
+                        //Stoque le dans un tableau
+                        $grpTagTab[]=array(
+                            "name"=>$name,
+                        );
+                    }
+                }
+            }
+        }
+        var_dump($tagTab);exit;
+        
+
+
+
+        //CONDITION DE TRI 
 
         // //si pas de sous catégorie défini.
         // if (empty($searchSscategories)||($searchSscategories==0)){
@@ -169,9 +233,16 @@ class SearchController extends Controller
         // else{
         //     echo 'ss-catégorie a la valeur'.$searchSscategories;
         // }
-
-        $response = new JsonResponse();
+        var_dump('recherche = '.$searchRecherche);
+        var_dump('-------------------------');
+        var_dump($nameTab);
+        var_dump('-------------------------');
+        var_dump($tagTab);
+        var_dump('-------------------------');
+        var_dump($grpNameTab);
+        var_dump('-------------------------');
+        var_dump($grpTagTab);
         
-        return $response->setData(array('nameTab' => $nameTab,'tagTab' => $tagTab));
+        return $response->setData(array('nameTab' => $nameTab,'tagTab' => $tagTab, 'grpNameTab' => $grpNameTab, 'grpNameTab' => $grpTagTab,));
     }   
 }

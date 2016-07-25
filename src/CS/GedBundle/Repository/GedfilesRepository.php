@@ -32,4 +32,25 @@ class GedfilesRepository extends EntityRepository
 		// On retourne ces résultats
 	    return $results;
 	}
+
+	public function grpNameSearch($word, $idgrp)
+	{
+		$queryBuilder = $this->createQueryBuilder('f');
+
+		$queryBuilder
+			->where('f.originalname LIKE :word')
+			->setParameter('word', '%'.$word.'%')
+			->andWhere('f.idgroup = :id')
+			->setParameter('id', $idgrp)
+			->setMaxResults(3);
+
+		// On récupère la Query à partir du QueryBuilder
+	    $query = $queryBuilder->getQuery();
+
+	    // On récupère les résultats à partir de la Query
+	    $results = $query->getResult();
+
+		// On retourne ces résultats
+	    return $results;
+	}
 }
