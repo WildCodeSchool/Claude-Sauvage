@@ -26,25 +26,26 @@
 				</div>
 			</div>
 		</form>
-			<div class="col-md-3" id="taglist">
-				Ou éditer des tags existants
-				{% set counttag = 0 %}
-				{% if tabtag != 1 %}
-					{% for tag in tabtag %}
-						<p class="tag" id="{{ tag.idlinktag }}">{{ tag.name }}<span class="glyphicon glyphicon-remove tagicon" id="{{ tag.idlinktag }}"></span></p>
-						{% set counttag = counttag + 1 %}
-					{% endfor %}
-				{% endif %}
-				<div class="counttag" id="{{ counttag }}">{{ counttag }}<div>
-			</div>
-		<form action="{{ path('ged_delete',{'id': id} ) }}" method="post">
-			<input type="submit" value="supprimer le fichier"></input>
-		</form>
-	</div>
-	<div>
-		<input id="addtagfield"/>
-		<button id="addtagbtn">ajout</button>
-	</div>
+		</div>
+		<div class="col-md-3" id="taglist">
+			Ou éditer des tags existants
+			{% set counttag = 0 %}
+			{% if tabtag != 1 %}
+				{% for tag in tabtag %}
+					<p class="tag" id="{{ tag.idlinktag }}">{{ tag.name }}<span class="glyphicon glyphicon-remove tagicon" id="{{ tag.idlinktag }}"></span></p>
+					{% set counttag = counttag + 1 %}
+				{% endfor %}
+			{% endif %}
+			<div class="counttag" id="{{ counttag }}">{{ counttag }}<div>
+		</div>
+		<div>
+			<input id="addtagfield"/>
+			<button id="addtagbtn">ajout</button>
+		</div>
+	
+	<form action="{{ path('ged_delete',{'id': id} ) }}" method="post">
+		<input type="submit" value="supprimer le fichier"></input>
+	</form>
 </div>
 <script type="text/javascript">
 	var idfile = "{{ id }}";
