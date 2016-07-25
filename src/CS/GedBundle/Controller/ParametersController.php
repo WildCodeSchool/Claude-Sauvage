@@ -127,10 +127,11 @@ class ParametersController extends Controller
     public function addTagAction (Request $request)
     {
         $em=$this->getDoctrine()->getManager();
-        $addtag=$request->request->get('content');
         $user=$this->getUser();
         $id = $request->request->get('idfile');
+        $addtag=$request->request->get('content');
         $created= 0;
+        $done = 0;
         //ajout de tags
         $linktags = $em->getRepository('GedBundle:Linktag')->findByIdfile($id);
         //compte des tags du fichier
@@ -163,8 +164,6 @@ class ParametersController extends Controller
                     }
                     else
                     {
-                        var_dump($id);
-                        var_dump($existingtag->getId());
                         $newlinktag = new Linktag();
                         $newlinktag ->setIdfile($id);
                         $newlinktag->setIdtag($existingtag->getId());
@@ -188,25 +187,46 @@ class ParametersController extends Controller
                 $em->persist($newlinktag);
                 $em->flush();
             }
-            $test=$addtag;
         }
         elseif(count($tabtag) >= 3 && !empty($addtag))
         {
-            $newtag = new Gedtag;
-            $newtag->setName($addtag);
-            $em->persist($newtag);
-            $em->flush();
+            $existingtags=$em->getRepository('GedBundle:Gedtag')->findAll();
+            foreach ($existingtags as $existingtag)
+            {
+                if($done == 0)
+                {
+                    if($addtag == $existingtag->getName())
+                    {
+                        $replacelinktag=$em->getRepository('GedBundle:Linktag')->findOneByIdfile($id); 
+                        $em->remove($replacelinktag);
+                        $em->flush();
 
-            $replacelinktag=$em->getRepository('GedBundle:Linktag')->findOneByIdfile($id); 
-            $em->remove($replacelinktag);
-            $em->flush();
+                        $replacelinktag = new Linktag;
+                        $replacelinktag->setIdfile($id);
+                        $replacelinktag->setIdtag($newtag->getId());
+                        $em->persist($replacelinktag);
+                        $em->flush();
+                        $done = 1;
+                    }
+                }
+            }
+            if($done == 0)
+            {
+                $newtag = new Gedtag;
+                $newtag->setName($addtag);
+                $em->persist($newtag);
+                $em->flush();
+                $replacelinktag=$em->getRepository('GedBundle:Linktag')->findOneByIdfile($id); 
+                $em->remove($replacelinktag);
+                $em->flush();
 
-            $replacelinktag = new Linktag;
-            $replacelinktag->setIdfile($id);
-            $replacelinktag->setIdtag($newtag->getId());
-            $em->persist($replacelinktag);
-            $em->flush();
-            $test=$addtag;
+                $replacelinktag = new Linktag;
+                $replacelinktag->setIdfile($id);
+                $replacelinktag->setIdtag($newtag->getId());
+                $em->persist($replacelinktag);
+                $em->flush();
+                $done = 1;
+            }
         }
 
         

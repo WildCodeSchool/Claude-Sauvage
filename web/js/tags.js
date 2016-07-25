@@ -1,40 +1,7 @@
-
-$('document').ready(function(){
-	var counttag = $('.counttag').attr('id');
+// $(document).ready(function(){
+	var counttag= $('.counttag').attr('id');
 	console.log(counttag);
-	if( counttag < 3 ){
-		$("#addtagfield").removeAttr('disabled');
-		$('#addtagbtn').click(function(){
-			var content = $('#addtagfield').val();
-			$.ajax({
-				type: 'POST',
-				url: tagadd,
-				data: {idfile: idfile, content: content},
-				dataType : 'json',
-				success: function(data){
-					console.log(data.tabtag.idtag);
-					$("#taglist").append($('<p>',{ 'id': data.tabtag.idtag }));
-					$("#"+data.tabtag.idtag).text(data.tabtag.name);
-					$("#"+data.tabtag.idtag).append($('<span>',{'class': 'tagicon glyphicon glyphicon-remove', 'id': data.tabtag.idtag}));
-					$("#"+data.tabtag.idtag).addClass('tag');
-					$('.tagicon').click(function(){
-						var idtag = $(this).attr('id');
-						$.ajax({
-							type: 'POST',
-							url: tagremove,
-							data: {idtag: idtag},
-							dataType : 'json',
-						});
-						$("#"+idtag).addClass("tagdisplay");
-						console.log('ca marche'+idtag);
-					});
-				}
-			});
-		});
-	}
-	else{
-		$("#addtagfield").attr('disabled', 'disabled');
-	};
+
 	$('.tagicon').click(function(){
 		var idtag = $(this).attr('id');
 		$.ajax({
@@ -47,4 +14,29 @@ $('document').ready(function(){
 		$("#addtagfield").removeAttr('disabled');
 		counttag --;
 	});
-});
+	if( counttag=<2 || 1)
+	{
+		$("#addtagfield").removeAttr('disabled');
+		$('#addtagbtn').click(function(){
+			var content = $('#addtagfield').val();
+			console.log(content);
+			$.ajax({
+				type: 'POST',
+				url: "{{ path('ged_addtag') }}",
+				data: {idfile: idfile, content: content},
+				dataType : 'json',
+				success: function(data){
+					console.log(data.tabtag.idtag);
+					$("#taglist").append($('<p>',{ 'id': data.tabtag.idtag }));
+					$("#"+data.tabtag.idtag).text(data.tabtag.name);
+					$("#"+data.tabtag.idtag).append($('<span>',{'class': 'tagicon glyphicon glyphicon-remove', 'id': data.tabtag.idtag}));
+					$("#"+data.tabtag.idtag).addClass('tag');
+				},
+
+			});
+		});
+	}
+	else{
+		$("#addtagfield").attr('disabled', 'disabled');
+	};
+// });
