@@ -103,9 +103,9 @@ class SearchController extends Controller
         //     echo 'ss-catégorie a la valeur'.$searchSscategories;
         // }
 
-        $response = new JsonResponse();
+        // $response = new JsonResponse();
         
-        return $response->setData(array('nameTab' => $nameTab,'tagTab' => $tagTab));
+        // return $response->setData(array('nameTab' => $nameTab,'tagTab' => $tagTab));
     }
 
     public function searchAction(Request $request)
@@ -212,7 +212,7 @@ class SearchController extends Controller
                         $grpTagTab[]=array(
                             "name"=>$name,
                         );
-                    }
+                    
                 }
             }
         }
@@ -250,8 +250,8 @@ class SearchController extends Controller
         // var_dump('-------------------------');
         // var_dump($grpTagTab);
 
-        $response = new JsonResponse();
+        // $response = new JsonResponse();
         
-        return $response->setData(array('nameTab' => $nameTab,'tagTab' => $tagTab, 'grpNameTab' => $grpNameTab, 'grpNameTab' => $grpTagTab,));
+        // return $response->setData(array('nameTab' => $nameTab,'tagTab' => $tagTab, 'grpNameTab' => $grpNameTab, 'grpNameTab' => $grpTagTab,));
     }   
 }
