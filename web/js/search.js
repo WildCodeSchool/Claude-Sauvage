@@ -62,11 +62,14 @@ $("document").ready(function() {
 			timer = setTimeout(callback, ms);
 		};
 	})();
+	var go=0;
 	$('#search').keyup(function() {
 		delay(function(){
-			alert('Time elapsed!');
+			go=1;
+			console.log(go);
 		}, 1000 );
 	});
+	alert(go);
 	$("#search").keyup(function() {
 		var search = $(this).val();
 		var lengthSearch = search.length;
