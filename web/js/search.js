@@ -54,6 +54,19 @@ $("document").ready(function() {
 			$(this).addClass('glyphicon-star-empty');
 		}
 	});
+
+	var delay = (function(){
+		var timer = 0;
+		return function(callback, ms){
+			clearTimeout (timer);
+			timer = setTimeout(callback, ms);
+		};
+	})();
+	$('#search').keyup(function() {
+		delay(function(){
+			alert('Time elapsed!');
+		}, 1000 );
+	});
 	$("#search").keyup(function() {
 		var search = $(this).val();
 		var lengthSearch = search.length;

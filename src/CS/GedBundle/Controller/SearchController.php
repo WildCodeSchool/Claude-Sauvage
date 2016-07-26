@@ -46,6 +46,8 @@ class SearchController extends Controller
 
         $searchRecherche=$request->request->get('recherche');
 
+        $exist = 0;
+
         //RECHERCHE POUR L' UTILISATEUR - Fichiers
 
         //recherche le nom du fichier
@@ -101,12 +103,28 @@ class SearchController extends Controller
             $groupFiles = $em->getRepository('GedBundle:Gedfiles')->grpNameSearch($searchRecherche, $idgrp);
 
             foreach ($groupFiles as $file) {
-
+                //prend le nom du fichier
                 $name = $file->getOriginalName();
-                //Stoque le dans un tableau
-                $grpNameTab[]=array(
-                    "name"=>$name,
-                );
+
+                if(isset($nameTab))
+                {
+                    //Vérifie que chaque tag n'est pas egal a un nom de mes tag
+                    foreach ($nameTab as $fileName){
+                        if ($fileName == $name) {
+                            //prend le nom du fichier, Stoque le dans un tableau
+                            $exist = 1;
+                        }
+                    }
+                    if ($exist == 1)
+                    {
+                        $grpNameTab[]=array('name'=>$name);
+                        $exist = 0;
+                    }
+                }
+                else
+                {
+                    $grpNameTab[]=array('name'=>$name);
+                }
             }
 
             //RECHERCHE POUR LES GROUPES - Tags
@@ -131,12 +149,28 @@ class SearchController extends Controller
 
                     //Pour chaque resultat de recherche par nom de tag & par id.
                     foreach ($tags as $tag) {
-                    
                         //prend le nom du fichier
                         $name = $tag->getName();
 
-                        //Stoque le dans un tableau
-                        $grpTagTab[]=array('name'=>$name);
+                        if(isset($tagTab))
+                        {
+                            //Vérifie que chaque tag n'est pas egal a un nom de mes tag
+                            foreach ($tagTab as $fileName){
+                                if ($fileName == $name) {
+                                    //prend le nom du fichier, Stoque le dans un tableau
+                                    $exist = 1;
+                                }
+                            }
+                            if ($exist == 1)
+                            {
+                                $grpTagTab[]=array('name'=>$name);
+                                $exist = 0;
+                            }
+                        }
+                        else
+                        {
+                           $grpTagTab[]=array('name'=>$name); 
+                        }
                     }                    
                 }
             }
