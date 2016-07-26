@@ -3,15 +3,12 @@
 		<form action="{{ path('ged_search') }}" method="post">
 			<div class="col-md-3">
 				<div class="input-group">
-					<input id="search" type="text" class="form-control" name="recherche" placeholder="Rechercher">
-					<select class="form-control" name="test" id="test" disabled>
-					    <option value="0">Toutes les sous-catégories</option>
-				    </select>
+					<input id="search" type="text" class="form-control" name="recherche" placeholder="Rechercher" autocomplete="off">
 					<span class="input-group-btn">
 						<button class="btn btn-default" type="submit">Ok</button>
 					</span>
 				</div>
-				<div class="resultat" id="search-result"></div>
+				<div id="auto" class="col-md-10"></div>
 			</div>
 			<div class="col-md-3">
 		    	<div class="styled-select">

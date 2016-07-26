@@ -20,7 +20,8 @@ class GedtagRepository extends EntityRepository
 			->where('f.name LIKE :word')
 			->setParameter('word', '%'.$word.'%')
 			->andWhere('f.id = :id')
-			->setParameter('id', $id);
+			->setParameter('id', $id)
+			->setMaxResults(1);
 
 		// On récupère la Query à partir du QueryBuilder
 	    $query = $queryBuilder->getQuery();

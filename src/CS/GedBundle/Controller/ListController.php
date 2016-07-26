@@ -1044,129 +1044,6 @@ class ListController extends Controller
 	    					);
     	}
 
-    	//récuperation de tout les fichiers des groupes ou est l'utilisateur.
-    	$linkGroups = $em->getRepository('GedBundle:Linkgroup')->findByIduser($user->getId());
-
-		//pour chaque fichiers recupéré recherche ca.														
-    	foreach ($linkGroups as $group) {
-    		$groupFiles = $em->getRepository('GedBundle:Gedfiles')->findByIdgroup($group->getIdgroup());
-
-	    	foreach ($groupFiles as $file) {
-
-	    		//récuperation de l'Id du fichier.
-    			$idFile = $file->getId();
-
-    			//récupération de l'id owner
-    			$idowner = $file->getIdowner();
-
-	    		//récuperation du type de ficher.
-	    		$typeFile = $file->getType();
-
-	    		//récuperation du nom du ficher.
-	    		$pathFile = $file->getPath();
-
-	    		//récuperation de la date.
-	    		$dateFile = $file->getDate();
-
-	    		//récuperation du nom original.
-	    		$nameFile=$file->getOriginalName();
-
-	    		//récuperation des favoris.
-	    		$bookmarkfile = $em->getRepository('GedBundle:Linkbookmark')->findOneByIdfile($file->getId());
-
-	    		if (empty($bookmarkfile)){
-	    			$bookmarkfile = 0;
-	    		}
-	    		else{
-	    			$bookmarkfile = 1;
-	    		}
-
-	    		//on recupere la sous-catégory.
-		    	if (!empty($file->getIdsouscategory)){
-
-		    		$sousCategoryInfo = $em->getRepository('GedBundle:Souscategory')->findOneById($file->getIdsouscategory());
-		    		$category = $sousCategoryInfo->getName();
-		    	}
-
-		    	//sinon si la sous-catégorie n'existe pas on recupere la catégorie.
-		    	else {
-		    		$categoryInfo = $em->getRepository('GedBundle:Category')->findOneById($file->getIdcategory());
-		    		$category= $categoryInfo->getName();
-		    	}
-			    	    	
-				//on compte les commentaires liés a un fichier.
-		    	$comments =$em->getRepository('GedBundle:Gedcom')->findByIdfile($file->getId());
-
-		    	//on compte le nombre de commentaires.
-		    	if (empty($comments)){
-		    		$nbCom = 0;
-		    	}
-		    	else {
-		    		$nbCom = count($comments);
-		    	}
-
-		    	//on recherche les tags liés a un fichier.
-		    	
-		    	//on recherche les liens de tags par rapport a l'id du fichier.
-		    	$linkTags=$em->getRepository('GedBundle:Linktag')->findByIdfile($file->getId());
-
-		    	//puis on fait une boucle pour parcourir notre objet de liens de tag.
-		    	$tabTags = [];
-		    	foreach ($linkTags as $linkTag) {
-		    		$infoTag=$em->getRepository('GedBundle:Gedtag')->findOneById($linkTag->getIdtag());
-		    		$tagName=$infoTag->getName();
-
-		    		//on stocke tout dans un tableau.
-		    		$tabTags[]= array(
-		    			'tagName'=>$tagName,
-		    			);
-		    	}
-
-		    	//on verifie que le tableau n'est pas vide, sinon on lui attribue la veleur 1.
-		    	if (empty($tabTags)){
-		    		$tabTags = 1;
-		    	}
-		    	if (empty($sousCategory))
-		    	{
-		    		$sousCategory=0;
-		    	}
-
-		    	//on recupere les partages
-		    	$groupMembers = $em->getRepository('GedBundle:Linkgroup')->findByIdgroup($file->getIdgroup());
-    		
-	    		$tabInfoGroup=[];
-	    		foreach ($groupMembers as $groupMember) {
-	    			$groupMemberId = $groupMember->getIduser();
-	    			$groupMemberInfo = $em->getRepository('AppBundle:User')->findOneById($groupMemberId);
-	    			$groupMemberName = $groupMemberInfo->getUsername();
-
-	    			$tabInfoGroup[] = array(
-	    					'groupMemberName'=>$groupMemberName,
-	    			);    			
-	    		}
-
-		    	//On regroupe tout dans un tableau.
-		    	$tabGroupFiles[] = array(
-		    		'fileId'=>$idFile,
-		    		'category'=>$category,
-		    		'groupMemberName'=>$tabInfoGroup,
-		    		'name'=>$nameFile,
-		    		'path'=>$pathFile,
-		    		'type'=>$typeFile,
-		    		'date'=>$dateFile,
-		    		'tagnames'=>$tabTags,
-		    		'comments'=>$nbCom,
-		    		'bookmark'=>$bookmarkfile,
-		    		'idowner'=>$idowner,
-		    	);
-	    	}
-	    }
-
-	    //on verifie que le tableau n'est pas vide, sinon on lui attribue la valeur 1.
-	    if (empty($tabGroupFiles)){
-		    		$tabGroupFiles = 1;
-		}
-
 		//on verifie que le tableau n'est pas vide, sinon on lui attribue la valeur 1.
 	    if (empty($tabMyFiles)){
 		    		$tabMyFiles = 1;
@@ -1176,7 +1053,7 @@ class ListController extends Controller
 																	'form' => $form->createView(),
 																	'user'=> $user,
 																	'tabMyFiles' => $tabMyFiles,
-																	'tabGroupFiles' => $tabGroupFiles,
+																	// 'tabGroupFiles' => $tabGroupFiles,
 																	'categories' => $categories,
 																	'categoryTab'=> $categoryTab,
 																	));
