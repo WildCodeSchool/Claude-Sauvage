@@ -6,6 +6,7 @@ use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\RedirectResponse;
+use Symfony\Component\HttpFoundation\JsonResponse;
 use CS\GedBundle\Entity\Gedfiles;
 use CS\GedBundle\Form\GedfilesType;
 use AppBundle\Entity\User;
@@ -129,6 +130,7 @@ class FileController extends Controller
         
         if (!empty($content))
         {
+            $comtab=[];
             $gedcom= new Gedcom();
             $gedcom->setIdfile($idfile);
             $gedcom->setIduser($user->getId());
@@ -137,10 +139,21 @@ class FileController extends Controller
 
             $em->persist($gedcom);
             $em->flush();
+            
+            $comtab[]=array(
+                'idcom'=>$gedcom->getId(),
+                'owner'=>$em->getRepository('AppBundle:User')->findOneById($gedcom->getIduser())->getUsername(),
+                'date'=>$gedcom->getDate(),
+                'content'=>$gedcom->getContent(),
+                );
         }
-        $url = $this -> generateUrl('one_file', array( 'id'=>$idfile ));
-        $response = new RedirectResponse($url);
-        return $response;
+        else
+        {
+            $comtab = 0;
+        }
+
+        $response = new JsonResponse();
+        return $response->setData(array('comtab' => $comtab));
     }
     public function addToGroupAction (Request $request, $idfile)
     {

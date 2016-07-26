@@ -46,9 +46,10 @@ one_file:
     path:     /file/{id}
     defaults: { _controller: GedBundle:File:show }
 
-new_comment:
+ged_newcomment:
     path:     /newcom
     defaults: { _controller: GedBundle:File:addComment }
+    methods: [GET, POST]
 
 ged_download:
     pattern: /download/{name}
@@ -61,6 +62,14 @@ ged_newgroup:
 ged_editgroup:
     path:     /editgroup/{id}
     defaults: { _controller:GedBundle:Group:editGroup }
+
+ged_addusertogroup:
+    path:    /editgroup/member/new
+    defaults: { _controller:GedBundle:Group:addUser }
+    methods: [GET, POST]
+ged_removeuserfromgroup:
+    path:    /editgroup/member/remove
+    defaults: { _controller: GedBundle:Group:removeUser }
 
 ged_addfiletogroup:
     path:    /addfiletogroup/{idfile}

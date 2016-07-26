@@ -76,18 +76,18 @@
 			{% endif %}
 		</div>
 		<div class="com-form showform" id="form">
-			<form action="{{ path('new_comment') }}" method="post">
 				<label for="content">laisser un commentaire:</label>
 				<br/>
-				<textarea name="content"></textarea>
+				<textarea name="content" id="comcontent"></textarea>
 				<input name="idfile" value="{{ idfile }}" style="display:none;"/>
 				<br/>
-				<input type="submit" value="valider"/>
-			</form>
+				<input type="submit" value="valider" id="addcomment"/>
 		</div>
 	</div>
 </div>
 <script>
+	var newcomment="{{ path('ged_newcomment') }}";
+	var idfile ="{{ idfile }}";
 	$(document).ready(function(){
 
 		$('#btn-com').click(function(){
@@ -100,8 +100,8 @@
 		$('#modal-partage').on('shown.bs.modal', function () {
   		$('#modal-partage').focus()
 		})
-
 	});
 	
 </script>
+<script type="text/javascript" src="{{ asset('js/comments.js') }}"></script>
 {% endblock body %}
