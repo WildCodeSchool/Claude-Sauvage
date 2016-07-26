@@ -67,7 +67,7 @@
 	color:#000;
 }
 
-/* Search bar */
+/* --------------------------------- Search bar ---------------------------------*/
 select option:checked,
 select option:hover {
     box-shadow: 0 0 10px 100px #909090 inset;
@@ -116,20 +116,6 @@ select:focus > option:checked {
 }
 .search-bar .btn-default:hover{
 	background-color: #f1f1f1;
-}
-
-.search-result{
-	max-width: 300px;
-	border: solid #F7CA18 1px;
-	border-radius: 5px;
-	color: #F7CA18;
-	font-family:'Lobster';
-	font-size: 18px;
-	z-index: 2000;
-	max-height: 500px;
-	display: none;
-	background-color: black;
-	position: absolute;
 }
 /*--------------------------------- Navbar left --------------------------------- */
 
@@ -255,7 +241,29 @@ tr:hover td{
 .modal-title{
 	text-align: center;
 }
+/*--------------------------------- autocomplétion ---------------------------------*/
+#auto{
+	background-color: #fff;
+	border:#d1d1d1 solid 1px;
+	display:none;
+}
 
+#auto h5{
+	margin:5px 0 5px 0;
+}
+
+#auto p{
+	padding:2px 0 2px 20px;
+	margin:0px;
+}
+
+#auto p:hover{
+	background-color: #FBA858;
+}
+
+.bold{
+	font-weight: bold;
+}
 /*--------------------------------- tout les fichiers ---------------------------------*/
 
 #table .glyphicon-star-empty, #table .glyphicon-star{

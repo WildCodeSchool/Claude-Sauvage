@@ -1,0 +1,38 @@
+{% extends "GedBundle::layout.html.twig" %}
+{% block body %}
+{% include "GedBundle::nav.html.twig" %}
+{% include "GedBundle::search.html.twig" %}
+<div class="col-md-10">	
+	<h3 style="text-align:center;">Tous les fichiers</h3>
+	<table class="table compact stripe" id="table">
+		<thead> 
+			<tr> 
+				<th></th>
+				<th>Nom du fichier</th>
+				<th>Date</th>
+				<th>Catégorie</th> 
+				<th>Tags</th>
+				<th>Favori</th>
+				<th>Paramètres</th>
+				<th>Telecharger</th>
+			</tr> 
+		</thead> 
+		<tbody>
+		</tbody>
+	</table>
+</div>
+<script type="text/javascript"> 
+$(document).ready(function() { 
+	$('table').DataTable( { 
+		"paging": false,
+		"info": false,
+		"sDom": '<"H"lr>t<"F"ip>',
+		"columnDefs": [{ "orderable": false, "targets": [3,4] }],
+		"order": [[1, "asc"]]
+	} );
+} );
+$(function () {
+  $('[data-toggle="tooltip"]').tooltip()
+});
+</script>
+{% endblock body %}

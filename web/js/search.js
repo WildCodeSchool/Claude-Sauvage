@@ -57,10 +57,9 @@ $("document").ready(function() {
 	$("#search").keyup(function() {
 		var search = $(this).val();
 		var lengthSearch = search.length;
+		var count = 0;
 
 		if(lengthSearch >=3){
-			
-
 			$.ajax({
 				type: 'POST',
 				url: autocompletion,
@@ -68,26 +67,65 @@ $("document").ready(function() {
 				dataType : 'json',
 
 				beforeSend: function() {
-					$("#test option").remove();
-					$("#test").attr('disabled', 'disabled');
+					console.log('Requete en cours');
+					$("#auto p").remove();
+					$("#auto h5").remove();
+					$("#auto").css("display", "none");
 				},
 
 				success: function(data) {					
 					console.log('Requete ok',data);
-					$.each(data.nameTab, function(index,value) {
-						$("#test").append($('<option>',{ value : value.id , text: value.name }));
-						$("#test").removeAttr('disabled');
-					});
-					$.each(data.tagTab, function(index,value) {
-						$("#test").append($('<option>',{ value : value.id , text: value.name }));
-						$("#test").removeAttr('disabled');
+					$("#auto").css("display", "block");
+					if (data.nameTab.length!=0){			
+						$("#auto").append($('<h5>',{ text: 'Mes Fichiers' }).addClass('bold'));
+						$.each(data.nameTab, function(index,value) {
+							if (count<=3){
+								$("#auto").append($('<p>',{ text: value.name }));
+								count ++;
+							}
+						});
+					}
+					if (data.tagTab.length!=0){
+						$("#auto").append($('<h5>',{ text: 'Mes Tags' }).addClass('bold'));
+						$.each(data.tagTab, function(index,value) {
+							if (count<=3){
+								$("#auto").append($('<p>',{ text: value.name }));
+								count ++;
+							}
+						});
+					}
+					if (data.grpNameTab.length!=0){
+						$("#auto").append($('<h5>',{ text: 'Fichier de mes groupes' }).addClass('bold'));
+						$.each(data.grpNameTab, function(index,value) {
+							if (count<=3){
+								$("#auto").append($('<p>',{ text: value.name }));
+								count ++;
+							}
+						});
+					}
+					if (data.grpTagTab.length!=0){
+						$("#auto").append($('<h5>',{ text: 'Tags de mes groupes' }).addClass('bold'));
+						$.each(data.grpTagTab, function(index,value) {
+							if (count<=3){
+								$("#auto").append($('<p>',{ text: value.name }));
+								count ++;
+							}
+						});
+					}
+					$("#auto p").click(function(){
+						var remplace = $(this).text()
+						$("#search").val(remplace)
 					});
 				},
 
 				error: function() {
 					console.log('Requete fail');					
 				},
-			});		
+			});	
+		}
+		else{
+			$("#auto p").remove();
+			$("#auto").css("display", "none");
 		}
 	});
 });
