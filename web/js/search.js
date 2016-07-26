@@ -69,7 +69,6 @@ $("document").ready(function() {
 			console.log(go);
 		}, 1000 );
 	});
-	alert(go);
 	$("#search").keyup(function() {
 		var search = $(this).val();
 		var lengthSearch = search.length;
