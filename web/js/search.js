@@ -76,37 +76,41 @@ $("document").ready(function() {
 				success: function(data) {					
 					console.log('Requete ok',data);
 					$("#auto").css("display", "block");
-					if (data.nameTab.length!=0){			
+					if (data.nameTab.length!=0){
+						count = 0;			
 						$("#auto").append($('<h5>',{ text: 'Mes Fichiers' }).addClass('bold'));
 						$.each(data.nameTab, function(index,value) {
-							if (count<=3){
+							if (count<3){
 								$("#auto").append($('<p>',{ text: value.name }));
 								count ++;
 							}
 						});
 					}
 					if (data.tagTab.length!=0){
+						count = 0;
 						$("#auto").append($('<h5>',{ text: 'Mes Tags' }).addClass('bold'));
 						$.each(data.tagTab, function(index,value) {
-							if (count<=3){
+							if (count<3){
 								$("#auto").append($('<p>',{ text: value.name }));
 								count ++;
 							}
 						});
 					}
 					if (data.grpNameTab.length!=0){
+						count = 0;
 						$("#auto").append($('<h5>',{ text: 'Fichier de mes groupes' }).addClass('bold'));
 						$.each(data.grpNameTab, function(index,value) {
-							if (count<=3){
+							if (count<3){
 								$("#auto").append($('<p>',{ text: value.name }));
 								count ++;
 							}
 						});
 					}
 					if (data.grpTagTab.length!=0){
+						count = 0;
 						$("#auto").append($('<h5>',{ text: 'Tags de mes groupes' }).addClass('bold'));
 						$.each(data.grpTagTab, function(index,value) {
-							if (count<=3){
+							if (count<3){
 								$("#auto").append($('<p>',{ text: value.name }));
 								count ++;
 							}
@@ -116,15 +120,20 @@ $("document").ready(function() {
 						var remplace = $(this).text()
 						$("#search").val(remplace)
 					});
+					if(data.nameTab.length==0 && data.tagTab.length==0 && data.grpNameTab.length==0 && data.grpTagTab.length==0){
+						$("#auto h5").remove();
+						$("#auto").append($('<h5>',{ text: 'Aucun résultat' }));
+					}
 				},
 
 				error: function() {
-					console.log('Requete fail');					
+					console.log('Requete fail');
 				},
 			});	
 		}
 		else{
 			$("#auto p").remove();
+			$("#auto h5").remove();
 			$("#auto").css("display", "none");
 		}
 	});
