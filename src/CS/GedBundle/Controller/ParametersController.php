@@ -50,6 +50,7 @@ class ParametersController extends Controller
         }
 
         $file = $em->getRepository('GedBundle:Gedfiles')->findOneById($id);
+        $filename=$file->getOriginalname();
         $linktags = $em->getRepository('GedBundle:Linktag')->findByIdfile($id);
         //compte des tags du fichier
         //ajout de categories
@@ -109,6 +110,7 @@ class ParametersController extends Controller
             'categories'=>$category,
             'souscategories'=>$souscategory,
             'tabtag'=>$tabtag,
+            'filename'=>$filename,
         ));
     }
 

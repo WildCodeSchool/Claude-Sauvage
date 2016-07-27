@@ -361,20 +361,20 @@ class ListController extends Controller
     	}
 
     	//DERNIERS COMMENTÉS
-		// requete sur les commentaires (par date la plus récente)
-		// prise d'idfile verification des droits et s'il a deja été compté et prise des infos
-		// notation de l'idfile dans un tableau pour le compter
 
     	$linkgroup = $em->getRepository('GedBundle:Linkgroup')->findByIduser($user->getId());
     	foreach ($linkgroup as $groupedfile) 
     	{
-    		$openfile = $em->getRepository('GedBundle:Gedfiles')->findOneByIdgroup($groupedfile->getIdgroup());
-    		if(!empty($openfile))
-    		{
-    			$accessfiles[]=array(
-	    			'id'=>$openfile->getId(),
-	    			);
-    		}
+    		$openfiles = $em->getRepository('GedBundle:Gedfiles')->findByIdgroup($groupedfile->getIdgroup());
+	    	foreach ($openfiles as $openfile)
+	    	{
+	    		if(!empty($openfile))
+	    		{
+	    			$accessfiles[]=array(
+		    			'id'=>$openfile->getId(),
+		    			);
+	    		}
+	    	}
     	}
     	$files=$em->getRepository('GedBundle:Gedfiles')->findByIdowner($user->getId());
     	foreach ($files as $file)
@@ -417,7 +417,7 @@ class ListController extends Controller
     			}
     			$j++;
     		}
-    		if ($counted == 0 && $compteur<4)
+    		if ($counted == 0 && $compteur<=5)
     		{
     			//on compte le fichier comme compté dans la liste
     			$tab[]=array('id'=>$idfile);
