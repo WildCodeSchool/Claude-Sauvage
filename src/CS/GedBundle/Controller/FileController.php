@@ -28,7 +28,20 @@ class FileController extends Controller
 		$user=$this->getUser();
 		$file=$em->getRepository('GedBundle:Gedfiles')->findOneById($id);
         $comments=$em->getRepository('GedBundle:Gedcom')->findByIdfile($id);
-        
+        if(!empty($file->getIdgroup()))
+        {
+            $filegroup=[];
+            $filegroupobj=$em->getRepository('GedBundle:Groupe')->findOneById($file->getIdgroup());
+            $filegroup=array(
+                'name'=>$filegroupobj->getName(),
+                'idcreator'=>$filegroupobj->getIdcreator(),
+                'id'=>$filegroupobj->getId(),
+                );
+        }
+        else
+        {
+            $filegroup=null;
+        }
         $linkgroups=$em->getRepository('GedBundle:Linkgroup')->findByIduser($user->getId());
         foreach ($linkgroups as $linkgroup) {
             $group=$em->getRepository('GedBundle:Groupe')->findOneById($linkgroup->getIdgroup());  
@@ -116,6 +129,7 @@ class FileController extends Controller
     		'textfile'=>$textfile,
             'tabcom'=>$tabcom,
             'tabgroup'=>$tabgroup,
+            'filegroup'=>$filegroup,
 			));
 	}
     public function addCommentAction (Request $request)

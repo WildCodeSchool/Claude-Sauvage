@@ -184,6 +184,7 @@ class GroupController extends Controller
 			'user'=>$user,
 			'id'=>$idgroup,
 			'groupmembers'=>$groupmembers,
+			'group'=>$group,
 		));
 	}
 	public function addUserAction(Request $request)
