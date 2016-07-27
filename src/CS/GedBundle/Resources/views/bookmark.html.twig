@@ -35,7 +35,7 @@
 											{% else %}
 												Aucun partage
 											{% endif %}
-								comentaires : {{ favorite['comments'] }}"
+								Commentaires : {{ favorite['comments'] }}"
 								href="{{ path('one_file' , {'id': favorite['idfile'] }) }}">{{ favorite['name'] }}</a></td>
 						<td>{{ favorite['date']| date("d/m/Y") }}</td>
 						<td>{{ favorite['category'] }}</td>

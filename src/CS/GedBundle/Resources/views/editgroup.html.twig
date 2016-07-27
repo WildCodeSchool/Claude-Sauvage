@@ -29,6 +29,7 @@
 			<label for="useradd">Ajouter un utilisateur au groupe</label>
 			<input name="useradd" id="useraddfield"/>
 			<input type="submit" value="ajouter user" id="useraddbtn" class="btn btn-default"/>
+			<label>Ou supprimer des utilisateurs du groupe:</label>
 			<div id="memberslist">
 				{% if groupmembers != 1 %}
 					{% for member in groupmembers %}
