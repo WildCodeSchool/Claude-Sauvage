@@ -224,6 +224,9 @@ select:focus > option:checked {
 }
 
 /*--------------------------------- Dashboard ---------------------------------*/
+h3{
+	text-align: center;
+}
 
 .tab-cel{
 	padding: 0 5px;
@@ -246,13 +249,14 @@ tr:hover td{
 	background-color: #fff;
 	border:#d1d1d1 solid 1px;
 	display:none;
+	margin-top: 33px;
 	position: absolute;
 	z-index: 2;
-	padding:5px;
+	padding:0;
 }
 
 #auto h5{
-	margin:5px 0 5px 0;
+	margin:5px 0 5px 5px;
 }
 
 #auto p{

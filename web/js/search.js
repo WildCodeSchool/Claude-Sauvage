@@ -74,7 +74,7 @@ $("document").ready(function() {
 		var lengthSearch = search.length;
 		var count = 0;
 
-		if(lengthSearch >=3){
+		if(lengthSearch >=1){
 			$.ajax({
 				type: 'POST',
 				url: autocompletion,
@@ -132,8 +132,9 @@ $("document").ready(function() {
 						});
 					}
 					$("#auto p").click(function(){
-						var remplace = $(this).text()
-						$("#search").val(remplace)
+						var remplace = $(this).text();
+						$("#search").val(remplace);
+						$('form').submit();
 					});
 					if(data.nameTab.length==0 && data.tagTab.length==0 && data.grpNameTab.length==0 && data.grpTagTab.length==0){
 						$("#auto h5").remove();
