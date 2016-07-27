@@ -266,9 +266,6 @@ class SearchController extends Controller
             }
         }
 
-
-        $exist = 0;
-
         //si sous-catégory est remseingné
         if (($searchSscategorie != null) && ($searchSscategorie != 0)){
             var_dump('sous catégory est remseingné');
@@ -343,6 +340,7 @@ class SearchController extends Controller
             $idfile = $filesAcces->getId();
 
             //pour chaque liens recupere le nom.
+            $mycount=0;
             foreach ($filesTags as $filesTag) {
 
                 $idTag = $filesTag->getIdtag();
@@ -350,6 +348,7 @@ class SearchController extends Controller
                 $tags = $em->getRepository('GedBundle:Gedtag')->tagSearch($searchRecherche, $idTag);
 
                 //Pour chaque resultat de recherche par nom de tag.
+                
                 foreach ($tags as $tag){
                     //prend le nom du fichier
                     $name = $tag->getName();
@@ -381,15 +380,16 @@ class SearchController extends Controller
                             else{
                                 $bookmark = 1;
                             }
-
+                            
                             if(isset($nameTab))
                             {
                                 //Vérifie que chaque nom n'est pas egal a un nom de ficher
                                 foreach ($nameTab as $fileName){
                                     //si le nom du fichier et egale au nom d'un fichier de nametab
                                     //prend le nom du fichier, Stoque le dans un tableau
-                                    $myfileName= $fileName['name'];
-                                    if ($myfileName != $name) {
+                                    $myfileName = $fileName['name'];
+
+                                    if (($myfileName != $name)&& $mycount==0) {
                                         $nameTab[]=array(
                                                             'name'=>$name,
                                                             "id"=>$id,
@@ -397,6 +397,7 @@ class SearchController extends Controller
                                                             "path"=>$path,
                                                             "bookmark"=>$bookmark,
                                                         );
+                                        $mycount++;
                                     }
                                 }
                             }
@@ -422,7 +423,7 @@ class SearchController extends Controller
         $linkGroups = $em->getRepository('GedBundle:Linkgroup')->findByIduser($idUser);
         
         foreach ($linkGroups as $group) {
-            
+
             $idgrp = $group->getIdgroup();
 
             $groupFiles = $em->getRepository('GedBundle:Gedfiles')->grpNameSearch($searchRecherche, $idgrp, array('date' => 'desc'));
@@ -479,13 +480,13 @@ class SearchController extends Controller
             }
 
             //RECHERCHE POUR LES GROUPES - Tags
-
+            $filesWithTagTab=[];
             $groupTags = $em->getRepository('GedBundle:Gedfiles')->findByIdgroup($idgrp);
-
             $inc=0;
+            $count=0;
             //faire une boucle pour cahque fichier trouvé.
             foreach ($groupTags as $filesAcces) {
-                
+                   
                 $accesid =$filesAcces->getId();
 
                 //rechercher les differents liens de tag.
@@ -494,50 +495,96 @@ class SearchController extends Controller
                 //pour chaque liens recupere le nom.
                 foreach ($filesTags as $filesTag) {
                     
-
                     $idFileTag = $filesTag->getIdtag();
 
-                    // tag par iD !!!!
-                    $tags = $em->getRepository('GedBundle:Gedtag')->tagSearch($searchRecherche, $idFileTag, array('id' => 'desc'));
-
+                    // tag par id !!!!
+                    $tags = $em->getRepository('GedBundle:Gedtag')->tagSearch($searchRecherche, $idFileTag);
+                    
                     //Pour chaque resultat de recherche par nom de tag.
                     foreach ($tags as $tag){
+                        
                         //prend le nom du fichier
                         $name = $tag->getName();
+
                         $idTag = $tag->getId();
 
-                        $linkTag= $em->getRepository('GedBundle:linkTag')->findOneByIdtag($idTag)->getIdfile();
+                        $linksTag= $em->getRepository('GedBundle:linkTag')->findByIdtag($idTag);
 
-                        $filesWithTag= $em->getRepository('GedBundle:Gedfiles')->findOneById($linkTag);
+                        foreach ($linksTag as $linkTag) {
+                            $idFile = $linkTag->getIdfile();
 
-                        $name = $filesWithTag->getOriginalName();
-                        //son id
-                        $id = $filesWithTag->getId();
-                        //son type
-                        $type = $filesWithTag->getType();
-                        //son chemin
-                        $path = $filesWithTag->getPath();
+                            $filesWithTag= $em->getRepository('GedBundle:Gedfiles')->findOneById($idFile);
 
-                        //récuperation des favoris.
-                        $bookmark = $em->getRepository('GedBundle:Linkbookmark')->findOneByIdfile($id);
+                            $filesWithTagTab[] = array('name'=>$filesWithTag);
 
-                        if (empty($bookmark)){
-                        $bookmark = 0;
+                            
+                            
                         }
+                        
+                        foreach ($filesWithTagTab[$count] as $fileWithTag ) {
+                                $count++;
 
-                        else{
-                            $bookmark = 1;
-                        }
+                                $name = $fileWithTag->getOriginalName();
 
-                        if(isset($nameTab))
-                        {
-                            //Vérifie que chaque nom n'est pas egal a un nom de ficher
-                            foreach ($nameTab as $fileName){
+                                //son id
+                                $id = $fileWithTag->getId();
+                                //son type
+                                $type = $fileWithTag->getType();
+                                //son chemin
+                                $path = $fileWithTag->getPath();
+
+                                //récuperation des favoris.
+                                $bookmark = $em->getRepository('GedBundle:Linkbookmark')->findOneByIdfile($id);
+
+                                if (empty($bookmark)){
+                                $bookmark = 0;
+                                }
+
+                                else{
+                                    $bookmark = 1;
+                                }
                                 
-                                //si le nom du fichier et egale au nom d'un fichier de nametab
-                                //prend le nom du fichier, Stoque le dans un tableau
-                                            // $myfileName= $fileName['name'];
-                                if (($fileName != $name) && $inc==0) {
+                                if(isset($grpNameTab))
+                                {   
+                                    foreach ($grpNameTab as $fileName) {
+                                        
+                                        //si le nom du fichier et egale au nom d'un fichier de nametab
+                                        //prend le nom du fichier, Stoque le dans un tableau
+                                        $myfileName= $fileName['name'];
+                                        
+                                        if (($myfileName != $name) && $inc==0) {
+                                            $grpNameTab[]=array(
+                                                                'name'=>$name,
+                                                                "id"=>$id,
+                                                                "type"=>$type,
+                                                                "path"=>$path,
+                                                                "bookmark"=>$bookmark,
+                                                            );
+                                            $inc++;
+                                        }
+                                    }
+                                }
+                                if(isset($nameTab))
+                                {
+                                    //Vérifie que chaque nom n'est pas egal a un nom de ficher
+                                    foreach ($nameTab as $fileName){
+                                        //si le nom du fichier et egale au nom d'un fichier de nametab
+                                        //prend le nom du fichier, Stoque le dans un tableau
+                                        $myfileName= $fileName['name'];
+                                        
+                                        if (($myfileName != $name) && $inc==0) {
+                                            $grpNameTab[]=array(
+                                                                'name'=>$name,
+                                                                "id"=>$id,
+                                                                "type"=>$type,
+                                                                "path"=>$path,
+                                                                "bookmark"=>$bookmark,
+                                                            );
+                                        }
+                                    }
+                                }                   
+                                elseif($inc==0)
+                                {
                                     $grpNameTab[]=array(
                                                         'name'=>$name,
                                                         "id"=>$id,
@@ -545,22 +592,10 @@ class SearchController extends Controller
                                                         "path"=>$path,
                                                         "bookmark"=>$bookmark,
                                                     );
+
                                     $inc++;
                                 }
                             }
-                        }
-                        if($inc == 0)
-                        {
-                            
-                            $grpNameTab[]=array(
-                                                'name'=>$name,
-                                                "id"=>$id,
-                                                "type"=>$type,
-                                                "path"=>$path,
-                                                "bookmark"=>$bookmark,
-                                            );
-                            $inc++;
-                        }
                     }                 
                 }
             }
