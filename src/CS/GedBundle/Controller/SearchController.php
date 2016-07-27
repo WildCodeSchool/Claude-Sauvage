@@ -51,12 +51,13 @@ class SearchController extends Controller
         //RECHERCHE POUR L' UTILISATEUR - Fichiers
 
         //recherche le nom du fichier
-        $fileNames = $em->getRepository('GedBundle:Gedfiles')->nameSearch($searchRecherche, $user);
+        $fileNames = $em->getRepository('GedBundle:Gedfiles')->nameSearch($searchRecherche, $user, array('date' => 'desc'));
 
         //Pour chaque resultat de recherche par nom de fichier.
         foreach ($fileNames as $fileName){
             //prend le nom du fichier
             $name = $fileName->getOriginalName();
+            $name = 
             //Stoque le dans un tableau
             $nameTab[]=array(
                 "name"=>$name,
@@ -196,39 +197,14 @@ class SearchController extends Controller
 
     public function searchAction(Request $request)
     {
-        //récuperation & atribution de l entitiy manager.
         $em=$this->getDoctrine()->getManager();
-
-        //récuperation de l'utilisateur courant.
         $user =$this->getUser();
-        $iduser=$user->getId();
+        $idUser=$user->getId();
 
-        $categories = $em->getRepository('GedBundle:Category')->findAll();
-
-        //récuperation des sous-catégories.
-        $categoryTab = [];
-        foreach ($categories as $category) {
-
-            $categoryInfos = $em->getRepository('GedBundle:Souscategory')->findByIdcategory($category->getId());
-
-            if (!empty($categoryInfos)){
-
-                //On place les sous-catégorie dans un tableau si elle sont définie.
-                foreach ($categoryInfos as $categoryInfo) {
-
-                    $categoryName=$categoryInfo->getName();
-                    $categoryId=$categoryInfo->getIdcategory();
-                    $ssCategory=$categoryInfo->getId();
-            
-                    $categoryTab[] = array(
-                        'category' => $categoryName,
-                        'id' => $categoryId,
-                        'ssid'=>$ssCategory,
-                    );
-
-                }
-            }
-        }
+        $searchRecherche=$request->request->get('recherche');
+        $searchCategorie=$request->request->get('categorie');
+        $searchSscategorie=$request->request->get('sscategories');
+        $searchtype=$request->request->get('type');
 
         //création d'une nouvelle instance de l'entité Gedfiles.
         $gedfiles = new Gedfiles();
@@ -268,36 +244,77 @@ class SearchController extends Controller
 
         }
 
-        $nameTab=[];
-        $tagTab=[];
-        $grpNameTab=[];
-        $grpTagTab=[];
+        //récupération des Category.
+        $categories = $em->getRepository('GedBundle:Category')->findAll();
 
-        $searchRecherche=$request->request->get('recherche');
+        //récuperation des sous-catégories.
+        $categoryTab = [];
+        foreach ($categories as $category) {
 
-        // $searchCategorie=$request->request->get('categorie');
-        // $searchSscategories=$request->request->get('sscategories');
-        // $searchType=$request->request->get('type');
+            $categoryInfos = $em->getRepository('GedBundle:Souscategory')->findByIdcategory($category->getId());
+
+            if (!empty($categoryInfos)){
+
+                //On place les sous-catégorie dans un tableau si elle sont définie.
+                foreach ($categoryInfos as $categoryInfo) {
+
+                    $categoryName=$categoryInfo->getName();
+                    $categoryId=$categoryInfo->getIdcategory();
+                    $ssCategory=$categoryInfo->getId();
+            
+                    $categoryTab[] = array(
+                        'category' => $categoryName,
+                        'id' => $categoryId,
+                        'ssid'=>$ssCategory,
+                    );
+                }
+            }
+        }
+
+
+        $exist = 0;
 
         //RECHERCHE POUR L' UTILISATEUR - Fichiers
 
         //recherche le nom du fichier
-        $fileNames = $em->getRepository('GedBundle:Gedfiles')->nameSearch($searchRecherche, $user);
+        $fileNames = $em->getRepository('GedBundle:Gedfiles')->nameSearch($searchRecherche, $idUser, array('date' => 'desc'));
 
         //Pour chaque resultat de recherche par nom de fichier.
         foreach ($fileNames as $fileName){
             //prend le nom du fichier
             $name = $fileName->getOriginalName();
+            //son id
+            $id = $fileName->getId();
+            //son type
+            $type = $fileName->getType();
+            //son chemin
+            $path = $fileName->getPath();
+
+            //récuperation des favoris.
+            $bookmark = $em->getRepository('GedBundle:Linkbookmark')->findOneByIdfile($id);
+
+            if (empty($bookmark)){
+            $bookmark = 0;
+            }
+
+            else{
+                $bookmark = 1;
+            }
+
             //Stoque le dans un tableau
             $nameTab[]=array(
                 "name"=>$name,
+                "id"=>$id,
+                "type"=>$type,
+                "path"=>$path,
+                "bookmark"=>$bookmark,
             );
         }
 
         //RECHERCHE POUR L' UTILISATEUR - Tags
 
         //pour chaque fichier au quel l'utilisateur a acces recherche le nom du tag
-        $filesAccess = $em->getRepository('GedBundle:Gedfiles')->findByIdowner($user);
+        $filesAccess = $em->getRepository('GedBundle:Gedfiles')->findByIdowner($idUser);
 
         //faire une boucle pour cahque fichier trouvé.
         foreach ($filesAccess as $filesAcces) {
@@ -308,16 +325,47 @@ class SearchController extends Controller
 
                 $idTag = $filesTag->getIdtag();
 
-                $filesTag = $em->getRepository('GedBundle:Gedtag')->tagSearch($searchRecherche, $idTag);
+                $filesTag = $em->getRepository('GedBundle:Gedtag')->tagSearch($searchRecherche, $idTag, array('id' => 'desc'));
 
                 //Pour chaque resultat de recherche par nom de tag.
                 foreach ($filesTag as $fileTag){
                     //prend le nom du fichier
                     $name = $fileTag->getName();
-                    //Stoque le dans un tableau
-                    $tagTab[]=array(
-                        "name"=>$name,
-                    );
+                    $id = $fileTag->getId();
+
+                    $filesWithTag= $em->getRepository('GedBundle:Gedfiles')->findById($id);
+
+                    foreach ($filesWithTag as $fileWithTag => $value) {
+
+                        $name = $fileName->getOriginalName();
+                        //son id
+                        $id = $fileName->getId();
+                        //son type
+                        $type = $fileName->getType();
+                        //son chemin
+                        $path = $fileName->getPath();
+
+                        //récuperation des favoris.
+                        $bookmark = $em->getRepository('GedBundle:Linkbookmark')->findOneByIdfile($id);
+
+                        if (empty($bookmark)){
+                        $bookmark = 0;
+                        }
+
+                        else{
+                            $bookmark = 1;
+                        }
+
+                        //Stoque le dans un tableau
+                        $nameTab[]=array(
+                            "name"=>$name,
+                            "id"=>$id,
+                            "type"=>$type,
+                            "path"=>$path,
+                            "bookmark"=>$bookmark,
+                        );
+                        var_dump($nameTab);
+                    }
                 }
             }
         }
@@ -325,21 +373,67 @@ class SearchController extends Controller
         //RECHERCHE POUR LES GROUPES - Fichiers
 
         //récuperation de tout les fichiers des groupes ou est l'utilisateur.
-        $linkGroups = $em->getRepository('GedBundle:Linkgroup')->findByIduser($user);
+        $linkGroups = $em->getRepository('GedBundle:Linkgroup')->findByIduser($idUser);
 
         foreach ($linkGroups as $group) {
             
             $idgrp = $group->getIdgroup();
 
-            $groupFiles = $em->getRepository('GedBundle:Gedfiles')->grpNameSearch($searchRecherche, $idgrp);
+            $groupFiles = $em->getRepository('GedBundle:Gedfiles')->grpNameSearch($searchRecherche, $idgrp, array('date' => 'desc'));
 
             foreach ($groupFiles as $file) {
-
+                //prend le nom du fichier
                 $name = $file->getOriginalName();
-                //Stoque le dans un tableau
-                $grpNameTab[]=array(
-                    "name"=>$name,
-                );
+                //son id
+                $id = $file->getId();
+                //son type
+                $type = $file->getType();
+                //son chemin
+                $path = $file->getPath();
+
+                //récuperation des favoris.
+                $bookmark = $em->getRepository('GedBundle:Linkbookmark')->findOneByIdfile($id);
+
+                if (empty($bookmark)){
+                $bookmark = 0;
+                }
+
+                else{
+                    $bookmark = 1;
+                }
+
+                if(isset($nameTab))
+                {
+                    //Vérifie que chaque tag n'est pas egal a un nom de mes tag
+                    foreach ($nameTab as $fileName){
+                        if ($fileName == $name) {
+                            //si le nom du fichier et egale au nom d'un fichier de nametab
+                            //prend le nom du fichier, Stoque le dans un tableau
+                            $exist = 1;
+                        }
+                    }
+                    if ($exist == 1)
+                    {
+                        $grpNameTab[]=array(
+                                            'name'=>$name,
+                                            "id"=>$id,
+                                            "type"=>$type,
+                                            "path"=>$path,
+                                            "bookmark"=>$bookmark,
+                                            );
+                        $exist = 0;
+                    }
+                }
+                else
+                {
+                    $grpNameTab[]=array(
+                                        'name'=>$name,
+                                        "id"=>$id,
+                                        "type"=>$type,
+                                        "path"=>$path,
+                                        "bookmark"=>$bookmark,
+                                        );
+                }
             }
 
             //RECHERCHE POUR LES GROUPES - Tags
@@ -360,21 +454,37 @@ class SearchController extends Controller
                     $idFileTag = $filesTag->getIdtag();
 
                     // tag par iD !!!!
-                    $tags = $em->getRepository('GedBundle:Gedtag')->tagSearch($searchRecherche, $idFileTag);
+                    $tags = $em->getRepository('GedBundle:Gedtag')->tagSearch($searchRecherche, $idFileTag, array('id' => 'desc'));
 
                     //Pour chaque resultat de recherche par nom de tag & par id.
                     foreach ($tags as $tag) {
-                    
                         //prend le nom du fichier
                         $name = $tag->getName();
 
-                        //Stoque le dans un tableau
-                        $grpTagTab[]=array('name'=>$name);
+                        if(isset($tagTab))
+                        {
+                            //Vérifie que chaque tag n'est pas egal a un nom de mes tag
+                            foreach ($tagTab as $fileName){
+                                if ($fileName == $name) {
+                                    //prend le nom du fichier, Stoque le dans un tableau
+                                    $exist = 1;
+                                }
+                            }
+                            if ($exist == 1)
+                            {
+                                $grpTagTab[]=array('name'=>$name);
+                                $exist = 0;
+                            }
+                        }
+                        else
+                        {
+                           $grpTagTab[]=array('name'=>$name); 
+                        }
                     }                    
                 }
             }
         }
-        
+
         if(!isset($nameTab)){
             $nameTab=[];
         }
@@ -388,45 +498,15 @@ class SearchController extends Controller
             $grpTagTab=[];
         }
 
-        //CONDITION DE TRI 
-
-        // //si pas de sous catégorie défini.
-        // if (empty($searchSscategories)||($searchSscategories==0)){
-            
-        //     //on recherche alors si la catégorie et défini.
-        //     if ($searchCategorie!=0){
-
-        //         echo 'catégorie a la valeur'.$searchCategorie;
-        //     }
-        //     //Si la catégorie n'est pas défini alors.
-        //     else{
-        //          echo'pas de catégorie & pas de sous catégorie';
-        //     }
-        // }
-
-        // //on obtien donc il de la sous catégorie.
-        // else{
-        //     echo 'ss-catégorie a la valeur'.$searchSscategories;
-        // }
-        var_dump('recherche = '.$searchRecherche);
-        var_dump('-------------------------');
-        var_dump('Mes fichier : nom');
-        var_dump($nameTab);
-        var_dump('-------------------------');
-        var_dump('Mes fichier : tag');
-        var_dump($tagTab);
-        var_dump('-------------------------');
-        var_dump('Mes groupes : nom');
-        var_dump($grpNameTab);
-        var_dump('-------------------------');
-        var_dump('Mes groupes : tag');
-        var_dump($grpTagTab);
-
         return $this->render('GedBundle::search_result.html.twig',array(
-                                                                    'form' => $form->createView(),
-                                                                    'user'=>$user,
-                                                                    'categories' => $categories,
-                                                                    'categoryTab'=> $categoryTab,
-                                                                ));
+                                                                        'form' => $form->createView(),
+                                                                        'user'=>$user,
+                                                                        'categories' => $categories,
+                                                                        'categoryTab'=> $categoryTab,
+                                                                        'nameTab' => $nameTab,
+                                                                        'tagTab' => $tagTab,
+                                                                        'grpNameTab' => $grpNameTab,
+                                                                        'grpTagTab' => $grpTagTab,
+                                                                        ));
     }   
 }
