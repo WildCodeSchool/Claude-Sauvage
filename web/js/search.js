@@ -74,7 +74,7 @@ $("document").ready(function() {
 		var lengthSearch = search.length;
 		var count = 0;
 
-		if(lengthSearch >=1){
+		if(lengthSearch >=2){
 			$.ajax({
 				type: 'POST',
 				url: autocompletion,
