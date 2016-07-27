@@ -54,27 +54,11 @@ $("document").ready(function() {
 			$(this).addClass('glyphicon-star-empty');
 		}
 	});
-
-	var delay = (function(){
-		var timer = 0;
-		return function(callback, ms){
-			clearTimeout (timer);
-			timer = setTimeout(callback, ms);
-		};
-	})();
-	var go=0;
-	$('#search').keyup(function() {
-		delay(function(){
-			go=1;
-			console.log(go);
-		}, 1000 );
-	});
 	$("#search").keyup(function() {
 		var search = $(this).val();
-		var lengthSearch = search.length;
-		var count = 0;
-
-		if(lengthSearch >=2){
+		
+		if((search.length)>=2){
+			var count = 0;
 			$.ajax({
 				type: 'POST',
 				url: autocompletion,
@@ -145,7 +129,7 @@ $("document").ready(function() {
 				error: function() {
 					console.log('Requete fail');
 				},
-			});	
+			});
 		}
 		else{
 			$("#auto p").remove();
@@ -153,4 +137,21 @@ $("document").ready(function() {
 			$("#auto").css("display", "none");
 		}
 	});
+	
+	//fondu au clique en dehors du cadre.
+	var auto = $('#auto');
+	var search = $('#search');
+
+	$(document.body).click(function(e) {
+		// Si ce n'est pas #ma_div ni un de ses enfants
+		if ( $(e.target).is(search) ){
+			auto.fadeIn();
+		}
+		else if( !$(e.target).is(auto)&& !$.contains(auto[0],e.target) ) {
+			// masque #ma_div en fondu
+			auto.fadeOut();
+		
+		}
+		// if($("#search").click(function()){$("#auto").show();}
+	});	
 });
