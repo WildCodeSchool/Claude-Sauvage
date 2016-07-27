@@ -400,6 +400,7 @@ class ListController extends Controller
     		$i=0;
     		$j=0;
     		$counted=0;
+    		$accessible=0;
     		$idfile=$filecom->getIdfile();
     		while($i<count($tab))
     		{
@@ -414,10 +415,12 @@ class ListController extends Controller
     			if( $idfile == $accessfiles[$j]['id'] )
     			{
     				$compteur++;
+    				$accessible=1;
+    				break;
     			}
     			$j++;
     		}
-    		if ($counted == 0 && $compteur<=5)
+    		if ($counted == 0 && $compteur<=5 && $accessible==1)
     		{
     			//on compte le fichier comme compté dans la liste
     			$tab[]=array('id'=>$idfile);

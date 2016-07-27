@@ -5,10 +5,8 @@
 	</div>
 	<div>
 		<form action=" {{ path('ged_parameters_file', {'id': id} ) }}" method="post">
-			<div class="col-md-2">
-				<label for="addcat">Ajouter une catégorie:</label>
-			</div>
-			<div class="col-md-3">
+			<div class="col-md-4 col-md-offset-4 parameters-category">
+				<label for="addcat">Définir la catégorie:</label>
 		    	<div class="styled-select">
 			    	<select class="form-control search-select" id="categories" name="addcat">
 			    		<option value="0" >Toutes les catégories</option>
@@ -27,7 +25,7 @@
 				<input value="catégoriser" type="submit"/>
 			</div>
 		</form>
-		<div class="col-md-3">
+		<div class="col-md-4 col-md-offset-4 parameters-tag">
 			<div>
 				<label>Ajouter des tags</label>
 				<input id="addtagfield"/>
@@ -46,7 +44,7 @@
 			</div>
 		</div>
 	</div>
-	<form action="{{ path('ged_delete',{'id': id} ) }}" method="post">
+	<form action="{{ path('ged_delete',{'id': id} ) }}" method="post" class="col-md-4 col-md-offset-4 parameters-delete">
 		<input type="submit" value="supprimer le fichier"></input>
 	</form>
 </div>

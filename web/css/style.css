@@ -372,3 +372,32 @@ tr:hover td{
 {
 	display:none;
 }
+.parameters-tag
+{
+	margin-top: 50px;
+	margin-bottom: 50px;
+	background-color: #FBA858;
+	padding: 10px;
+	border-radius: 5px;
+}
+
+.parameters-delete
+{
+	background-color: #FBA858;
+	padding: 10px;
+	border-radius: 5px;	
+}
+
+.parameters-category
+{
+	background-color: #FBA858;
+	padding: 10px;
+	border-radius: 5px;
+}
+#taglist
+{
+	background-color: #F1F1F1;
+	margin-right: 150px;
+	padding: 5px;
+	border-radius: 5px;
+}
