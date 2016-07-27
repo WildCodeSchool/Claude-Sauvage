@@ -35,7 +35,7 @@
 											{% else %}
 												Aucun partage
 											{% endif %}
-							comentaires : {{ partaged['comments'] }}"
+							Commentaires : {{ partaged['comments'] }}"
 							href="{{ path('one_file' , {'id': partaged['idfile'] }) }}">{{ partaged['name'] }}</a></td>
 						<td>{{ partaged['date'].date| date("d/m/Y")  }}</td>
 						<td>{{ partaged['category'] }}</td> 

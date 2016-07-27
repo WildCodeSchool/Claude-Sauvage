@@ -37,7 +37,7 @@
 											{% else %}
 												Aucun partage
 											{% endif %}
-							comentaires : {{ myfiles['comments'] }}" 
+							Commentaires : {{ myfiles['comments'] }}" 
 							href="{{ path('one_file' , {'id': myfiles['fileId'] }) }}">{{ myfiles['name'] }}</a>
 						</td>
 						<td>{{ myfiles['date'] | date("d/m/Y") }}</td>
@@ -90,7 +90,7 @@
 											{% else %}
 												Aucun partage
 											{% endif %}
-								comentaires : {{ groupfiles['comments'] }}"
+								Commentaires : {{ groupfiles['comments'] }}"
 								href="{{ path('one_file' , {'id': groupfiles['fileId'] }) }}">{{ groupfiles['name'] }}</a></td>
 							<td>{{ groupfiles['date'] | date("d/m/Y") }}</td>
 							<td>{{ groupfiles['category'] }}</td> 

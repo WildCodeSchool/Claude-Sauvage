@@ -35,7 +35,7 @@
                                             {% else %}
                                                 Aucun partage
                                             {% endif %}
-                            comentaires : {{ upload['comments'] }}"
+                            Commentaires : {{ upload['comments'] }}"
                             href="{{ path('one_file' , {'id': upload['idfile'] }) }}">{{ upload['name'] }}</a></td>
                         <td>{{ upload['date'].date| date("d/m/Y")  }}</td>
                         <td>{{ upload['category'] }}</td> 
