@@ -53,14 +53,16 @@
 {# fin modal #}
 	
 	<div class="col-md-12" id="file-part">
-		<p> ce fichier a l'id {{ idfile }}</p>
-		<p>il s'appelle {{ file.originalname }}</p>
+		<h2 class="file-title">{{ file.originalname }}</h2>
 		{% if file.type == 'jpeg' or file.type == 'jpg' or file.type == 'png' or file.type == 'gif' or file.type == 'ico' %}
-			<img src="{{ asset('/uploads/' ~file.path) }}" alt="image">
-		{% elseif file.type == 'txt' or file.type == 'html' or file.type == 'html.twig' or file.type == 'css' or file.type == 'php' or file.type == 'js' or file.type == 'md' or file.type == 'yml' or file.type == 'htm'  or file.type == 'xml' or file.type == 'xls' %}
-			<pre>{{ textfile }}</pre>
+			<img src="{{ asset('/uploads/' ~file.path) }}" alt="{{file.originalname }}" class="file-img" id="file-img">
+
+		{% elseif file.type == 'txt' or file.type == 'html' or file.type == 'html.twig' or file.type == 'css' or file.type == 'js' or file.type == 'md' or file.type == 'yml' or file.type == 'htm'  or file.type == 'xml' or file.type == 'xls' %}
+			<pre class="file-text">{{ textfile }}</pre>
+		
 		{% elseif file.type == 'pdf' %}
 			<div><a href=" {{ asset('./uploads/'~file.path ) }} " target="blank">Afficher le document</a></div>
+		
 		{% endif %}
 	</div>
 
@@ -104,4 +106,5 @@
 	
 </script>
 <script type="text/javascript" src="{{ asset('js/comments.js') }}"></script>
+<script type="text/javascript" src="{{ asset('js/onefile.js') }}"></script>
 {% endblock body %}

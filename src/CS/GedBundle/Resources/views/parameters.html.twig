@@ -1,12 +1,12 @@
 {% extends "GedBundle::layout.html.twig" %}
 {% block body %}
 	<div class="tab-cel ">
-		<h3 style="text-align:center;">Paramètres du fichier.</h3>
+		<h2 class="file-title">Paramètres du fichier {{ filename }}</h2>
 	</div>
 	<div>
 		<form action=" {{ path('ged_parameters_file', {'id': id} ) }}" method="post">
 			<div class="col-md-2">
-				<label for="addtag">Ajouter une catégorie:</label>
+				<label for="addcat">Ajouter une catégorie:</label>
 			</div>
 			<div class="col-md-3">
 		    	<div class="styled-select">
@@ -14,16 +14,17 @@
 			    		<option value="0" >Toutes les catégories</option>
 			    		{% for categorie in categories %}
 							{% if categorie.name != 'brouillon' and categorie.name != 'Brouillon' and categorie.name != 'corbeille' %}
-							    <option value="{{ categorie.id }}">{{ categorie.name }}</option>
+							    <option value="{{ categorie.id }}" name="addcat">{{ categorie.name }}</option>
 							{% endif %}
 						{% endfor %}
 				    </select>
 				</div>
 		    	<div class="styled-select">
 			    	<select class="form-control" name="addsscat" id="sscategories" disabled>
-					    <option value="0">Toutes les sous-catégories</option>
+					    <option value="0" name="addsscat">Toutes les sous-catégories</option>
 				    </select>
 				</div>
+				<input value="catégoriser" type="submit"/>
 			</div>
 		</form>
 		<div class="col-md-3">
@@ -53,7 +54,8 @@
 	var idfile = "{{ id }}";
 	var tagremove="{{ path('ged_removetag') }}";
 	var tagadd="{{ path('ged_addtag') }}";
+	var path =  "{{ path('ged_ajax_sscat_search') }}";
 </script>
 <script type="text/javascript" src="{{ asset('js/tags.js') }}"></script>
-
+<script type="text/javascript" src="{{ asset('js/search.js') }}"></script>
 {% endblock body %}
