@@ -4,46 +4,78 @@
 {% include "GrcBundle::Default/searchbar.html.twig" %}
 	<div class="container_ticket">
 		<h2>Ticket N°{{ ticket.id }}</h2>
-		<div class="row parametre">
-				<p><b><span id="mystatus">{{ ticket.status }}</span></b>
+		<div class="row parametre_ticket">
+			<div class="col-md-2 col-md-offset-2 param_display">
+				<h3>Infos ticket :</h2>
+				<table>
+					<tr>
+						<td class="param_inti">Status : </td>
+						<td class="param_val"><span id="mystatus">{{ ticket.status }}</span></td>
+					</tr>
+					{% if is_granted('ROLE_COM') %}
+					<tr>
+						<td class="param_inti">Priorité : </td>
+						<td class="param_val"><span id="mypriority">{{ ticket.priority }}</span></td>
+					</tr>
+					{% endif %}
+					<tr>
+						<td class="param_inti">Catégorie : </td>
+						<td class="param_val"><span id="mycategory">{{ mycategory }}</span></td>
+					</tr>
+					<tr>
+						<td class="param_inti">Sous-cat : </td>
+						<td class="param_val"><span id="mysscategory">{{ mysscategory }}</span></td>
+					</tr>
+				</table>
+			</div>
+			{% if is_granted('ROLE_COM') %}
+			<div class="col-md-2 col-md-offset-4 param_setup">
+				<h3>Paramétrage ticket: </h2>
+				<div class="elem_param">
 					<select id="status_update" name="status">
 							<option value="0">--Changer statut--</option>
 							{% for status in liststatus %}
 								<option value="{{ status.id }}">{{ status.name }}</option>
 							{% endfor %}
 					</select>
-				</p>
-				<p><b><span id="mypriority">{{ ticket.priority }}</span></b>
+				</div>
+				<div class="elem_param">
 					<select id="priority_update" name="priority">
 							<option value="0">--Définir priorité--</option>
 							{% for priority in listpriorities %}
 								<option value="{{ priority.id }}">{{ priority.name }}</option>
 							{% endfor %}						
 					</select>
-				</p>
-				<p><b><span id="mycategory">{{ mycategory }}</span></b>
+				</div>
+				<div class="elem_param">
 					<select id="category_update" name="category">
 							<option value="0">--Définir catégorie--</option>
 							{% for category in listcategories %}
 								<option value="{{ category.id }}">{{ category.name }}</option>
 							{% endfor %}						
 					</select>
-				</p>
-				<p><b><span id="mysscategory">{{ mysscategory }}</span></b>
+				</div>
+				<div class="elem_param">
 					<select id="sscategory_update" name="sscategory">
-							<option value="0">--Définir sous-catégorie--</option>						
+							<option value="0">--Définir sous-catégorie--</option>		
 					</select>
-				</p>
-				<button class="btn btn-default" id="maj_para_ticket" type="button">Valider et mettre à jour</button>
+				</div>
+				<div class="elem_param">
+					<button class="btn btn-default" id="maj_para_ticket" type="button">Valider et mettre à jour</button>
+				</div>
+			</div>
+			{% endif %}
 		</div>
 		<p><span class="sous_titre_com">Demande initiale: </span></p>
 		<div class="demande_init">
 			<div class="demande_init_titre">
-				<p>Demandeur: Mr Dupont<span>Date création: {{ ticket.date | date('d-m-Y H:i:s') }}</span></p>
+				<p>Demandeur: {{ senderusername }}<span>Date création: {{ ticket.date | date('d-m-Y')}} à {{ ticket.date | date('H:i:s') }}</span></p>
 			</div>
 			<div class="demande_init_contenu">
-				<p><b>Description: </b>Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.</p>
-				<p><b>Pièce jointe: </b>IMG_123456.jpg</p>
+				<p><b>Description: </b>{{ ticket.content }}</p>
+				{% if (mypath != "0") %}
+    				<p><b>Pièce jointe: </b><a class="btn" href="{{ path('grc_download', { 'name' : mypath }) }}">{{ myoriginalname }}</a></p>
+				{% endif %}	
 			</div>
 		</div>
 		<p><span class="sous_titre_com">Historique des échanges: </span></p>
@@ -51,7 +83,7 @@
 			{% for comment in listcomments %}
 				<div class="commentaire">
 					<div class="commentaire_entete">
-						<p>De: Sender n° {{ comment.idsender }}<span>Date: {{ comment.date | date('d-m-Y H:i:s') }}</span></p>
+						<p>De: Sender n° {{ comment.idsender }}<span>Date: {{ comment.date | date('d-m-Y') }} à {{ comment.date | date('H:i:s') }}</span></p>
 					</div>
 					<p>{{ comment.content }}</p>
 					<p><b>Pièce jointe: </b>IMG_23456.jpg</p>

@@ -1,0 +1,83 @@
+{% extends 'GrcBundle::layout.html.twig' %}
+
+{% block body %}
+
+<div class="row fiche_client">
+<h1>Bienvenue sur votre espace client {{ username }}</h1>
+	<div class="col-md-3 fiche_client_box">
+		<div class="mon_profil">
+			<h3>Mon profil</h3>
+			<table>
+				<tr>
+					<td class="">Prénom : </td>
+					<td class=""><span id="">Claude</span></td>
+				</tr>
+				<tr>
+					<td class="">Nom : </td>
+					<td class=""><span id="">Sauvage</span></td>
+				</tr>
+				<tr>
+					<td class="">Email : </td>
+					<td class=""><span id="">claude@sauvage.fr</span></td>
+				</tr>
+				<tr>
+					<td class="">Tel 1 : </td>
+					<td class=""><span id="">06 06 06 06 06</span></td>
+				</tr>
+				<tr>
+					<td class="">Tel 2 : </td>
+					<td class=""><span id="">02 02 02 02 02</span></td>
+				</tr>
+			</table>
+		</div>
+	</div>
+	<div class="col-md-6 fiche_client_box">
+		<div class="mes_tickets">
+			<h3>Mes tickets</h3>
+			<table id"table_id" class="display liste_tickets_client">
+			<thead> 
+				<tr> 
+					<th>N°Ticket</th> 
+					<th>Catégorie</th>
+					<th>Date création</th> 
+					<th>Statut</th>
+				</tr> 
+			</thead> 
+			<tbody>
+				{% if mytickets is defined %}
+					{% for ticket in mytickets %}
+						<tr> 
+							<td><a href="{{ path('ticket', { 'id': ticket.id }) }}">{{ ticket.id }}</a></td>
+							<td>{{ ticket.idcategory }}</td>
+							<td>{{ ticket.date | date('Y-m-d') }}</td>
+							<td>{{ ticket.status }}</td>
+						</tr>
+					{% endfor %}
+				{% endif %}
+			</tbody>
+		</table>
+		</div>
+	</div>
+	<div class="col-md-3 fiche_client_box">
+		<div class="ma_photo">
+			<h3>Ma photo</h3>
+			<div class="photo_profil">
+
+			</div>
+		</div>
+	</div>
+</div>
+
+<script type="text/javascript"> 
+	$(document).ready(function() { 
+		$('.liste_tickets_client').DataTable( {
+		"paging": true,
+		"ordering": true, 
+		"info": true, 
+		"sDom": '<"H"lr>t<"F"ip>' 
+		}); 
+	});
+</script>
+
+
+{% endblock %}

@@ -77,6 +77,27 @@ class Ticket
      */
     private $date;
 
+    /**
+     * @var string
+     *
+     * @ORM\Column(name="type", type="string", length=255, nullable=true)
+     */
+    private $type;
+
+    /**
+     * @var string
+     *
+     * @ORM\Column(name="path", type="string", length=255)
+     */
+    private $path;
+
+    /**
+     * @var string
+     *
+     * @ORM\Column(name="originalname", type="string", length=255, nullable=true)
+     */
+    private $originalname;
+
 
     /**
      * Get id
@@ -271,4 +292,74 @@ class Ticket
     {
         return $this->date;
     }
+
+    /**
+     * Set type
+     *
+     * @param string $type
+     * @return Gedfiles
+     */
+    public function setType($type)
+    {
+        $this->type = $type;
+
+        return $this;
+    }
+
+    /**
+     * Get type
+     *
+     * @return string 
+     */
+    public function getType()
+    {
+        return $this->type;
+    }
+
+    /**
+     * Set path
+     *
+     * @param string $path
+     * @return Gedfiles
+     */
+    public function setPath($path)
+    {
+        $this->path = $path;
+
+        return $this;
+    }
+
+    /**
+     * Get path
+     *
+     * @return string 
+     */
+    public function getPath()
+    {
+        return $this->path;
+    }
+
+    /**
+     * Set originalname
+     *
+     * @param string $originalname
+     * @return Gedfiles
+     */
+    public function setOriginalname($originalname)
+    {
+        $this->originalname = $originalname;
+
+        return $this;
+    }
+
+    /**
+     * Get originalname
+     *
+     * @return string 
+     */
+    public function getOriginalname()
+    {
+        return $this->originalname;
+    }
 }
+
