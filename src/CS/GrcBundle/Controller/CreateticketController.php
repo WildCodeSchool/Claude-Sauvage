@@ -23,7 +23,8 @@ public function createticketAction(Request $request)
 
 		$em = $this->getDoctrine()->getManager();
 		$user = $this->container->get('security.context')->getToken()->getUser();
-		$iduser = $user->getId();
+		$userid = $user->getId();
+        $username = $user->getUsername();
 
 		$categories = $em->getRepository('GrcBundle:Grccategory')->findAll();
 		$sscategories = $em->getRepository('GrcBundle:Grcsouscategory')->findAll();
@@ -46,7 +47,7 @@ public function createticketAction(Request $request)
 
             $em = $this->getDoctrine()->getManager();
             $ticket->setDate($date);
-            $ticket->setIdsender($iduser);
+            $ticket->setIdsender($userid);
             $ticket->setIdreceiver(1);
             $ticket->setIdcategory($cat);
             $ticket->setIdsouscategory($sscat);
@@ -70,6 +71,8 @@ public function createticketAction(Request $request)
 		'form' => $form->createView(),
 		'categories' => $categories,
 		'sscategories' => $sscategories,
+        'username'=>$username,
+        'userid' => $userid,
         ));
     }
 }

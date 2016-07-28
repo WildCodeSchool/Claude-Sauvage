@@ -21,7 +21,9 @@ public function ticketAction(Request $request, Ticket $ticket, $id)
 
     $user = $this->container->get('security.context')->getToken()->getUser();
     $iduser = $user->getUsername();
+    $username = $user->getUsername();
     $currentuserid = $user->getId();
+    $userid = $user->getId();
     $ticketuserid = $ticket->getIdsender();
     $iscommercial= $this->get('security.context')->isGranted('ROLE_COM');
 
@@ -32,6 +34,7 @@ public function ticketAction(Request $request, Ticket $ticket, $id)
             $idsender = $ticket->getIdsender();
             $senderuser = $em->getRepository('AppBundle:User')->findOneById($idsender);
             $senderusername = $senderuser->getUSername();
+            $senderid = $senderuser->getId();
             
             if ($idcat != 0) {
             $categorie = $em->getRepository('GrcBundle:Grccategory')->findOneById($idcat);
@@ -68,7 +71,9 @@ public function ticketAction(Request $request, Ticket $ticket, $id)
             return $this->render('GrcBundle:Default:ticket.html.twig', array(
                 'ticket'=>$ticket,
                 'iduser'=>$iduser,
+                'userid'=>$userid,
                 'senderusername'=>$senderusername,
+                'senderid'=>$senderid,
                 'mycategory'=>$mycategory,
                 'mysscategory'=>$mysscategory,
                 'mypath' =>$mypath,
@@ -78,6 +83,7 @@ public function ticketAction(Request $request, Ticket $ticket, $id)
                 'listpriorities'=>$listpriorities,
                 'listcategories'=>$listcategories,
                 'listsscategories'=>$listsscategories,
+                'username'=>$username,
                 ));
         } else {
             $url = $this -> generateUrl('grc_fiche_client', array( 'id'=>$currentuserid ));

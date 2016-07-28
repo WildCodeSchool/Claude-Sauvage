@@ -4,9 +4,6 @@
 <div class="grc_dashboard">
 {% include "GrcBundle::Default/searchbar.html.twig" %}
 	<h1>Bienvenue sur votre outil de gestion de ticket
-		{% if is_granted('ROLE_COM') %}
-  			<span> Je suis commercial</span>
-		{% endif %}
 	</h1>
 	<div class="col-md-12 dashboard">
 		<div class="col-md-2 col-md-offset-2 tableau">

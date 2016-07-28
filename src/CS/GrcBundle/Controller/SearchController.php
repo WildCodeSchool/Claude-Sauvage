@@ -21,6 +21,7 @@ class SearchController extends Controller
     $em = $this->getDoctrine()->getManager();
     $user = $this->container->get('security.context')->getToken()->getUser();
     $iduser=$user->getId();
+    $username = $user->getUsername();
     
     $keyword = $request->request->get('keyword');
     $mysearch = $em->getRepository('GrcBundle:Ticket')->recherche($keyword);
@@ -74,6 +75,7 @@ class SearchController extends Controller
         }
 
     return $this->render('GrcBundle:Default:search.html.twig', array(
+        'username'=>$username,
         'searchlist'=>$searchlist,
         'keyword'=>$keyword,
         ));

@@ -17,9 +17,14 @@ public function createcatAction(Request $request)
     {      
 		$em = $this->getDoctrine()->getManager();
         $listcat = $em->getRepository('GrcBundle:Grccategory')->findAll();
-        
+        $user = $this->container->get('security.context')->getToken()->getUser();
+        $username = $user->getUsername();
+        $userid = $user->getId();
+
         return $this->render('GrcBundle:Default:createcat.html.twig', array(
             'listcat' => $listcat,
+            'username'=> $username,
+            'userid'=> $userid,
         ));
     }
 public function submitcatAction(Request $request)

@@ -12,7 +12,7 @@ grc_create_ticket:
     defaults: { _controller: GrcBundle:Createticket:createticket }
 
 grc_create_cat:
-    path:     /createcat
+    path:     /com/createcat
     defaults: { _controller: GrcBundle:Createcat:createcat }
 
 grc_submit_cat:
@@ -33,7 +33,7 @@ ticket:
     methods:  [GET, POST]
 
 liste:
-    path:     /liste
+    path:     /com/liste
     defaults: { _controller: GrcBundle:Alltickets:alltickets}
 
 search:

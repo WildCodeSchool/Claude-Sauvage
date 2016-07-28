@@ -18,6 +18,9 @@ public function ficheclientAction(Request $request, $id)
     $userid = $user->getId();
     $username = $user->getUsername();
     
+    $userclient = $em->getRepository('AppBundle:User')->findOneById($id);
+    $clientusername = $userclient->getUsername();
+    
     $iscommercial= $this->get('security.context')->isGranted('ROLE_COM');
 
     if ($userid == $id OR $iscommercial) 
@@ -26,7 +29,9 @@ public function ficheclientAction(Request $request, $id)
             $mytickets=$em->getRepository('GrcBundle:Ticket')->findByIdsender($id);
 
             return $this->render('GrcBundle:Default:ficheclient.html.twig', array(
+            'userid'=>$userid,
             'username'=>$username,
+            'clientusername'=>$clientusername,
             'mytickets'=>$mytickets,
             ));
         

@@ -1,7 +1,9 @@
 {% extends 'GrcBundle::layout.html.twig' %}
 
 {% block body %}
+{% if is_granted('ROLE_COM') %}
 {% include "GrcBundle::Default/searchbar.html.twig" %}
+{% endif %}
 	<div class="container_ticket">
 		<h2>Ticket N°{{ ticket.id }}</h2>
 		<div class="row parametre_ticket">
@@ -69,7 +71,7 @@
 		<p><span class="sous_titre_com">Demande initiale: </span></p>
 		<div class="demande_init">
 			<div class="demande_init_titre">
-				<p>Demandeur: {{ senderusername }}<span>Date création: {{ ticket.date | date('d-m-Y')}} à {{ ticket.date | date('H:i:s') }}</span></p>
+				<p>Demandeur: <a href="{{ path('grc_fiche_client', { 'id': senderid }) }}">{{ senderusername }}</a><span>Date création: {{ ticket.date | date('d-m-Y')}} à {{ ticket.date | date('H:i:s') }}</span></p>
 			</div>
 			<div class="demande_init_contenu">
 				<p><b>Description: </b>{{ ticket.content }}</p>

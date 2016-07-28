@@ -3,7 +3,12 @@
 {% block body %}
 
 <div class="row fiche_client">
-<h1>Bienvenue sur votre espace client {{ username }}</h1>
+{% if is_granted('ROLE_CLI') %}
+<h1>Bienvenue sur votre espace client {{ clientusername }}</h1>
+{% endif %}
+{% if is_granted('ROLE_COM') %}
+<h1>Espace client de {{ clientusername }}</h1>
+{% endif %}
 	<div class="col-md-3 fiche_client_box">
 		<div class="mon_profil">
 			<h3>Mon profil</h3>

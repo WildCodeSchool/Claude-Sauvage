@@ -3,6 +3,7 @@
 namespace CS\GrcBundle\Controller;
 
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
+use Sensio\Bundle\FrameworkExtraBundle\Configuration\Security;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\RedirectResponse;
@@ -15,12 +16,17 @@ use DateTime;
 
 class AllticketsController extends Controller
 {
+    
+  /**
+   * @Security("has_role('ROLE_COM')")
+   */
     public function allticketsAction(Request $request)
     {
     
     $em = $this->getDoctrine()->getManager();
     $user = $this->container->get('security.context')->getToken()->getUser();
-    $iduser=$user->getId();
+    $userid = $user->getId();
+    $username = $user->getUsername();
     
     $alltickets=$em->getRepository('GrcBundle:Ticket')->findAll();
 
@@ -70,6 +76,8 @@ class AllticketsController extends Controller
 
     return $this->render('GrcBundle:Default:liste.html.twig', array(
         'ticketslist'=>$ticketslist,
+        'username'=>$username,
+        "userid"=>$userid,
         ));
 
     }

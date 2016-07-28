@@ -30,14 +30,38 @@
                     <!-- Collect the nav links, forms, and other content for toggling -->
                     <div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
                       <ul class="nav navbar-nav navbar-left">
-                        <a class="ajout-fichier btn btn-default navbar-btn" >
-                            <span aria-hidden="true"></span> Home
-                        </a>
+                          {% if is_granted('ROLE_COM') %}
+                          <li>
+                          <a href="{{ path('grc_homepage')}}"><button type="button" class="ajout-fichier btn btn-default navbar-btn" data-toggle="" data-target="#addfile"><span class="glyphicon glyphicon-home" aria-hidden="true"></span> Home</button></a>
+                          </li>
+                          {% endif %}
+                          {% if is_granted('ROLE_CLI') %}
+                          <li>
+                          <a href="{{ path('grc_fiche_client', { 'id': userid }) }}"><button type="button" class="ajout-fichier btn btn-default navbar-btn" data-toggle="" data-target="#addfile"><span class="glyphicon glyphicon-home" aria-hidden="true"></span>Home</button></a>
+                          </li>
+                          {% endif %}
+                          {% if is_granted('ROLE_COM') %}
+                          <li>
+                          <a href="{{ path('grc_create_cat') }}"><button type="button" class="ajout-fichier btn btn-default navbar-btn" data-toggle="modal" data-target="#addfile"><span class="glyphicon glyphicon-plus" aria-hidden="true"></span>  Create catégory</button></a>
+                          </li>
+                          {% endif %}
+                          {% if is_granted('ROLE_CLI') %}
+                          <li>
+                          <a href="{{ path('grc_create_ticket') }}"><button type="button" class="btn btn-default navbar-btn" data-toggle="modal" data-target="#addfile"><span class="glyphicon glyphicon-plus" aria-hidden="true"></span>  Create ticket</button>
+                          </li></a>                       
+                          {% endif %}
+                          {% if is_granted('ROLE_COM') %}
+                          <li>
+                          <a href="{{ path('liste') }}"><button type="button" class="ajout-fichier btn btn-default navbar-btn" data-toggle="modal" data-target="#addfile"><span class="glyphicon glyphicon-list-alt" aria-hidden="true"></span> All tickets</button>
+                          </li></a> 
+                          {% endif %}
                       </ul>
                       <ul class="nav navbar-nav navbar-right">
-                        <li><a id = "username" href="#">Claude Sauvage</a></li>
+                        <li><a id="username" href="#">Bienvenue {{username}}</a></li>
                         <li><img id = "profilepic" src="{{ asset('img/profile.png') }}"></li>
-                        <li><span class="glyphicon glyphicon-cog"></span></li>
+                        <li>
+                              <a class"btn btn-default" type="button" id ="logout" href="{{ path('user_logout')}}">LOGOUT</a>
+                        </li>
                       </ul>
                     </div><!-- /.navbar-collapse -->
                 </div><!-- /.container-fluid -->
