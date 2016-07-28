@@ -6,6 +6,7 @@ use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\RedirectResponse;
+use Symfony\Component\HttpFoundation\JsonResponse;
 use CS\GedBundle\Entity\Gedfiles;
 use CS\GedBundle\Form\GedfilesType;
 use AppBundle\Entity\User;
@@ -27,7 +28,20 @@ class FileController extends Controller
 		$user=$this->getUser();
 		$file=$em->getRepository('GedBundle:Gedfiles')->findOneById($id);
         $comments=$em->getRepository('GedBundle:Gedcom')->findByIdfile($id);
-        
+        if(!empty($file->getIdgroup()))
+        {
+            $filegroup=[];
+            $filegroupobj=$em->getRepository('GedBundle:Groupe')->findOneById($file->getIdgroup());
+            $filegroup=array(
+                'name'=>$filegroupobj->getName(),
+                'idcreator'=>$filegroupobj->getIdcreator(),
+                'id'=>$filegroupobj->getId(),
+                );
+        }
+        else
+        {
+            $filegroup=null;
+        }
         $linkgroups=$em->getRepository('GedBundle:Linkgroup')->findByIduser($user->getId());
         foreach ($linkgroups as $linkgroup) {
             $group=$em->getRepository('GedBundle:Groupe')->findOneById($linkgroup->getIdgroup());  
@@ -115,6 +129,7 @@ class FileController extends Controller
     		'textfile'=>$textfile,
             'tabcom'=>$tabcom,
             'tabgroup'=>$tabgroup,
+            'filegroup'=>$filegroup,
 			));
 	}
     public function addCommentAction (Request $request)
@@ -129,6 +144,7 @@ class FileController extends Controller
         
         if (!empty($content))
         {
+            $comtab=[];
             $gedcom= new Gedcom();
             $gedcom->setIdfile($idfile);
             $gedcom->setIduser($user->getId());
@@ -137,10 +153,21 @@ class FileController extends Controller
 
             $em->persist($gedcom);
             $em->flush();
+            
+            $comtab[]=array(
+                'idcom'=>$gedcom->getId(),
+                'owner'=>$em->getRepository('AppBundle:User')->findOneById($gedcom->getIduser())->getUsername(),
+                'date'=>$gedcom->getDate(),
+                'content'=>$gedcom->getContent(),
+                );
         }
-        $url = $this -> generateUrl('one_file', array( 'id'=>$idfile ));
-        $response = new RedirectResponse($url);
-        return $response;
+        else
+        {
+            $comtab = 0;
+        }
+
+        $response = new JsonResponse();
+        return $response->setData(array('comtab' => $comtab));
     }
     public function addToGroupAction (Request $request, $idfile)
     {

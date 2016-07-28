@@ -1,30 +1,62 @@
 {% extends "GedBundle::layout.html.twig" %}
 {% block body %}
-	<div>
-		{% if groupmembers != 1 %}
-			{% for member in groupmembers %}
-				{{ member['username'] }}
-			{% endfor %}
-		{% endif %}
+	{# debut modal #}
+	<div class="modal fade" id="modal-removeuser" tabindex="-1" role="dialog" aria-labelledby="myModalLabel">
+		<div class="modal-dialog" role="document">
+			<div class="modal-content">
+				<div class="modal-header">
+					<button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+					<h4 class="modal-title" id="myModalLabel">Retirer un utilisateur</h4>
+				</div>
+				<form action="{{ path('ged_removeuserfromgroup') }}" method="post">
+					<div class="modal-body">
+						<p id="msgdelete"></p>
+						<input name="username" id="usernameinput" style="display:none"/>
+						<input name="idgroup" id="idgroupinput" style="display:none"/>
+					</div>
+					<div class="modal-footer">
+						<button type="button" class="btn btn-default" data-dismiss="modal">Annuler</button>
+						<input type="submit" class="btn btn-default" id="removelink" value="Valider"/>
+					</div>
+				</form>
+			</div>
+		</div>
 	</div>
-	<div class="col-md-6">
-		<form action="{{ path('ged_editgroup',{ 'id': id } ) }}" method="post">
-			<label for="groupname">Modifier le nom du groupe</label>
-			<input name="groupname"/>
+	{# fin modal #}
+	{% if user.id == group.idcreator %}
+		<h2 class="file-title">Modifier les paramètres du groupe: {{ group.name }}</h2>
+		<div class="col-md-4 col-md-offset-4 parameters-group">
 			<label for="useradd">Ajouter un utilisateur au groupe</label>
-			<input name="useradd"/>
-			<input type="submit" value="valider"/>
-		</form>
-	</div>
-	<div class="col-md-6">
-		<form action="{{ path('ged_editgroup',{ 'id': id } ) }}" method="post">
-			<label for="groupremove">Supprimer le groupe</label>
-			<input type="submit" value="valider" name="groupremove"/>
-		</form>
-		<form action="{{ path('ged_editgroup',{ 'id': id } ) }}" method="post">
-			<label for="userremove">Supprimer un utilisateur du groupe</label>
-			<input name="userremove"/>
-			<input type="submit" value="valider"/>
-		</form>
-	</div>
+			<input name="useradd" id="useraddfield"/>
+			<input type="submit" value="ajouter user" id="useraddbtn" class="btn btn-default"/>
+			<label>Ou supprimer des utilisateurs du groupe:</label>
+			<div id="memberslist">
+				{% if groupmembers != 1 %}
+					{% for member in groupmembers %}
+						<p id="{{ member['id'] }}">{{ member['username'] }}<span data-toggle="modal" data-target="#modal-removeuser" class="glyphicon glyphicon-remove removeuserbtn" id="{{ member['username'] }}"></span></p>
+					{% endfor %}
+				{% endif %}
+			</div>
+		</div>
+		<div class="col-md-4 col-md-offset-4 parameters-group">
+			<form action="{{ path('ged_editgroup',{ 'id': id } ) }}" method="post">
+				<div>
+					<label for="groupname">Modifier le nom du groupe</label>
+					<input name="groupname"/>
+					<input type="submit" value="Modifier" class="btn btn-default"/>
+				</div>
+			</form>
+		</div>
+		<div class="col-md-4 col-md-offset-4 parameters-group">
+			<form action="{{ path('ged_editgroup',{ 'id': id } ) }}" method="post">
+				<label for="groupremove">Supprimer le groupe</label>
+				<input type="submit" value="Supprimer" name="groupremove" class="btn btn-default"/>
+			</form>
+		</div>
+	{% endif %}
+	<script type="text/javascript">
+		var useraddpath = "{{ path('ged_addusertogroup') }}";
+		var idgroup = "{{ id }}";
+	</script>
+	<script type="text/javascript" src="{{ asset('js/group.js') }}"></script>
 {% endblock %}

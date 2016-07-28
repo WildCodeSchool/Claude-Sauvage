@@ -6,6 +6,11 @@ ged_search:
     path:     /search
     defaults: { _controller: GedBundle:Search:search }
 
+ged_search_auto:
+    path:     /autocompletion
+    defaults: { _controller: GedBundle:Search:autocompletion }
+    methods:  [GET, POST]
+
 ged_ajax_sscat_search:
     path:     /search/souscategorie
     defaults: { _controller: GedBundle:Search:ajaxsscat }
@@ -14,6 +19,14 @@ ged_ajax_sscat_search:
 ged_all:
     path:     /all
     defaults: { _controller: GedBundle:List:all }
+
+ged_parameters_list:
+    path:     /define
+    defaults: { _controller: GedBundle:List:parameters }
+
+ged_shared:
+    path:     /shared
+    defaults: { _controller: GedBundle:Share:shared }
 
 ged_parameters_file:
     path:     /parameters/{id}
@@ -24,13 +37,19 @@ ged_removetag:
     defaults: { _controller: GedBundle:Parameters:removeTag }
     methods: [GET, POST]
 
+ged_addtag:
+    path:    /parameters/tag/add
+    defaults: { _controller: GedBundle:Parameters:addTag }
+    methods: [GET, POST]
+
 one_file:
     path:     /file/{id}
     defaults: { _controller: GedBundle:File:show }
 
-new_comment:
+ged_newcomment:
     path:     /newcom
     defaults: { _controller: GedBundle:File:addComment }
+    methods: [GET, POST]
 
 ged_download:
     pattern: /download/{name}
@@ -44,14 +63,38 @@ ged_editgroup:
     path:     /editgroup/{id}
     defaults: { _controller:GedBundle:Group:editGroup }
 
+ged_addusertogroup:
+    path:    /editgroup/member/new
+    defaults: { _controller:GedBundle:Group:addUser }
+    methods: [GET, POST]
+ged_removeuserfromgroup:
+    path:    /editgroup/member/remove
+    defaults: { _controller: GedBundle:Group:removeUser }
+
 ged_addfiletogroup:
     path:    /addfiletogroup/{idfile}
     defaults: { _controller:GedBundle:File:addToGroup }
 
 ged_bookmark:
-    path:     /bookmark
+    path:     /bookmark/edit
     defaults: { _controller: GedBundle:Bookmark:bookmark }
     methods:  [GET, POST]
+
+ged_bookmark_view:
+    path:     /bookmark
+    defaults: { _controller: GedBundle:Bookmark:bookmarkList }
+
+ged_upload_view:
+    path:     /upload
+    defaults: { _controller: GedBundle:Upload:uploadList }
+
+ged_category:
+    path:     /category/{id}
+    defaults: { _controller: GedBundle:Category:category }
+
+ged_sscategory:
+    path:     /sub-category/{ssid}
+    defaults: { _controller: GedBundle:Category:sscategory }
 
 ged_delete:
     path:    /delete/{id}

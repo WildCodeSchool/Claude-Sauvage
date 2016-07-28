@@ -1,51 +1,60 @@
 {% extends "GedBundle::layout.html.twig" %}
 {% block body %}
 	<div class="tab-cel ">
-		<h3 style="text-align:center;">Paramètres du fichier.</h3>
+		<h2 class="file-title">Paramètres du fichier {{ filename }}</h2>
 	</div>
 	<div>
 		<form action=" {{ path('ged_parameters_file', {'id': id} ) }}" method="post">
-			<div class="col-md-2">
-				<label for="addtag">Ajouter une catégorie:</label>
-			</div>
-			<div class="col-md-3">
-		    	<div class="styled-select">
+			<div class="col-md-4 col-md-offset-4 parameters-category" style="text-align:center">
+				<label for="addcat">Définir la catégorie:</label>
+		    	<div class="styled-select category-list">
 			    	<select class="form-control search-select" id="categories" name="addcat">
 			    		<option value="0" >Toutes les catégories</option>
 			    		{% for categorie in categories %}
 							{% if categorie.name != 'brouillon' and categorie.name != 'Brouillon' and categorie.name != 'corbeille' %}
-							    <option value="{{ categorie.id }}">{{ categorie.name }}</option>
+							    <option value="{{ categorie.id }}" name="addcat">{{ categorie.name }}</option>
 							{% endif %}
 						{% endfor %}
 				    </select>
 				</div>
-		    	<div class="styled-select">
+		    	<div class="styled-select category-list">
 			    	<select class="form-control" name="addsscat" id="sscategories" disabled>
-					    <option value="0">Toutes les sous-catégories</option>
+					    <option value="0" name="addsscat">Toutes les sous-catégories</option>
 				    </select>
 				</div>
+				<input value="Catégoriser" type="submit" class="btn btn-default"/>
 			</div>
-			<div class="col-md-3">
-				<label for="addtag">Ajouter un tag:</label>
-				<input name="addtag" id="addtag"/>
+		</form>
+		<div class="col-md-4 col-md-offset-4 parameters-tag">
+			<div>
+				<label>Ajouter des tags:</label>
+				<input id="addtagfield"/>
+				<button id="addtagbtn" class="btn btn-default">Ajouter</button>
 			</div>
-			<div class="col-md-3">
-				Ou éditer des tags existants
+			<label>Ou supprimer des tags existants:</label>
+			<div id="taglist">
+				{% set counttag = 0 %}
 				{% if tabtag != 1 %}
 					{% for tag in tabtag %}
-						<p class="tag" id="{{ tag.idlinktag }}">{{ tag.name }}<span class="glyphicon glyphicon-remove tagicon"></span></p>
+						<p class="tag" id="{{ tag.idlinktag }}">{{ tag.name }}<span class="glyphicon glyphicon-remove tagicon" id="{{ tag.idlinktag }}"></span></p>
+						{% set counttag = counttag + 1 %}
 					{% endfor %}
 				{% endif %}
-			</div>	
-			<input type="submit" value="valider"/>
-		</form>
-		<form action="{{ path('ged_delete',{'id': id} ) }}" method="post">
-			<input type="submit" value="supprimer le fichier"></input>
-		</form>
+				<div class="counttag tagdisplay" id="{{ counttag }}"></div>
+			</div>
+		</div>
 	</div>
+	<form action="{{ path('ged_delete',{'id': id} ) }}" method="post" class="col-md-4 col-md-offset-4 parameters-delete">
+		<input type="submit" value="supprimer le fichier" class="btn btn-default"/>
+	</form>
 </div>
-<script type="text/javascript" src="{{ asset('js/tags.js') }}"></script>
 <script type="text/javascript">
-	var tagremove="{{path('ged_removetag')}}";
+	var idfile = "{{ id }}";
+	var tagremove="{{ path('ged_removetag') }}";
+	var tagadd="{{ path('ged_addtag') }}";
+	var path =  "{{ path('ged_ajax_sscat_search') }}";
+	var isdeleted=0;
 </script>
+<script type="text/javascript" src="{{ asset('js/tags.js') }}"></script>
+<script type="text/javascript" src="{{ asset('js/search.js') }}"></script>
 {% endblock body %}

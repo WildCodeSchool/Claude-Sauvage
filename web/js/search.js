@@ -15,7 +15,7 @@ $("document").ready(function() {
 					$("#sscategories").attr('disabled', 'disabled');
 				},
 				success: function(data) {
-				console.log('Requete ok',data);
+					console.log('Requete ok',data);
 					$("#sscategories option").remove();
 					$("#sscategories").append($('<option>',{ value:0, text: "Toutes les sous-catégories" }));
 					$.each(data.ssCategorieTab, function(index,value) {
@@ -54,4 +54,104 @@ $("document").ready(function() {
 			$(this).addClass('glyphicon-star-empty');
 		}
 	});
+	$("#search").keyup(function() {
+		var search = $(this).val();
+		
+		if((search.length)>=2){
+			var count = 0;
+			$.ajax({
+				type: 'POST',
+				url: autocompletion,
+				data: {recherche: search},
+				dataType : 'json',
+
+				beforeSend: function() {
+					console.log('Requete en cours');
+					$("#auto p").remove();
+					$("#auto h5").remove();
+					$("#auto").css("display", "none");
+				},
+
+				success: function(data) {					
+					console.log('Requete ok',data);
+					$("#auto").css("display", "block");
+					if (data.nameTab.length!=0){
+						count = 0;			
+						$("#auto").append($('<h5>',{ text: 'Mes Fichiers' }).addClass('bold'));
+						$.each(data.nameTab, function(index,value) {
+							if (count<3){
+								$("#auto").append($('<p>',{ text: value.name }));
+								count ++;
+							}
+						});
+					}
+					if (data.tagTab.length!=0){
+						count = 0;
+						$("#auto").append($('<h5>',{ text: 'Mes Tags' }).addClass('bold'));
+						$.each(data.tagTab, function(index,value) {
+							if (count<3){
+								$("#auto").append($('<p>',{ text: value.name }));
+								count ++;
+							}
+						});
+					}
+					if (data.grpNameTab.length!=0){
+						count = 0;
+						$("#auto").append($('<h5>',{ text: 'Fichier de mes groupes' }).addClass('bold'));
+						$.each(data.grpNameTab, function(index,value) {
+							if (count<3){
+								$("#auto").append($('<p>',{ text: value.name }));
+								count ++;
+							}
+						});
+					}
+					if (data.grpTagTab.length!=0){
+						count = 0;
+						$("#auto").append($('<h5>',{ text: 'Tags de mes groupes' }).addClass('bold'));
+						$.each(data.grpTagTab, function(index,value) {
+							if (count<3){
+								$("#auto").append($('<p>',{ text: value.name }));
+								count ++;
+							}
+						});
+					}
+					$("#auto p").click(function(){
+						var remplace = $(this).text();
+						$("#search").val(remplace);
+						$('form').submit();
+					});
+					if(data.nameTab.length==0 && data.tagTab.length==0 && data.grpNameTab.length==0 && data.grpTagTab.length==0){
+						$("#auto h5").remove();
+						$("#auto").append($('<h5>',{ text: 'Aucun résultat' }));
+					}
+				},
+
+				error: function() {
+					console.log('Requete fail');
+				},
+			});
+		}
+		else{
+			$("#auto p").remove();
+			$("#auto h5").remove();
+			$("#auto").css("display", "none");
+		}
+	});
+	
+	//fondu au clique en dehors du cadre.
+	var auto = $('#auto');
+	var search = $('#search');
+
+	$(document.body).click(function(e) {
+		// Si ce n'est pas #ma_div ni un de ses enfants
+		if ( $(e.target).is(search) ){
+			auto.fadeIn();
+		}
+		else if( !$(e.target).is(auto)&& !$.contains(auto[0],e.target) ) {
+			// masque #ma_div en fondu
+			auto.fadeOut();
+		
+		}
+		// if($("#search").click(function()){$("#auto").show();}
+	});	
 });

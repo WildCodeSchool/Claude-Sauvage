@@ -1,0 +1,117 @@
+{% extends "GedBundle::layout.html.twig" %}
+{% block body %}
+{% include "GedBundle::nav.html.twig" %}
+{% include "GedBundle::search.html.twig" %}
+<div class="col-md-10">	
+	<h3>Résultat de la recherches</h3>
+	{% if nameTab is empty %}
+	{% else %}
+	<h4>Mes fichiers :</h4>
+	<table class="table compact stripe" id="table">
+		<thead> 
+			<tr> 
+				<th></th>
+				<th>Nom du fichier</th>
+				<th>Favori</th>
+				<th>Paramètres</th>
+				<th>Telecharger</th>
+			</tr> 
+		</thead> 
+		<tbody>
+			{% for myfiles in nameTab %}
+				<tr> 
+					<td>
+						{% if myfiles['type'] == 'jpeg' or myfiles['type'] == 'jpg' or myfiles['type'] == 'png' or myfiles['type'] == 'gif' %}
+							<span class="glyphicon glyphicon-picture" aria-hidden="true"></span>
+						{% else %}
+							Ico
+						{% endif %}
+					</td>
+					<td>
+						<a href="{{ path('one_file' , {'id': myfiles['id'] }) }}">{{ myfiles['name'] }}</a>
+					</td>
+					<td>
+						{% if myfiles['bookmark'] != 1 %}
+							<span class="fav glyphicon glyphicon-star-empty" aria-hidden="true" value="{{myfiles.id}}"></span>
+						{% else %}
+							<span class="fav glyphicon glyphicon-star" aria-hidden="true" value="{{myfiles.id}}"></span>
+						{% endif %}
+					</td>
+					<td>
+						<a class="btn" href="{{ path('ged_parameters_file', { 'id' : myfiles['id'] }) }}" title="">
+						<span class="glyphicon glyphicon-pencil" aria-hidden="true"></span></a>
+					</td>
+					<td>
+						<a class="btn" href="{{ path('ged_download', { 'name' : myfiles['path'] }) }}">
+							<span class="glyphicon glyphicon-cloud-download" aria-hidden="true"></span>
+						</a>
+					</td>
+				</tr>
+			{% endfor %}
+		</tbody>
+	</table>
+	{% endif %}
+	
+	{% if grpNameTab is empty %}
+	{% else %}
+	<h4>Fichiers appartenant à les groupes :</h4>
+	<table class="table compact stripe" id="table">
+		<thead> 
+			<tr> 
+				<th></th>
+				<th>Nom du fichier</th>
+				<th>Favori</th>
+				<th>Paramètres</th>
+				<th>Telecharger</th>
+			</tr> 
+		</thead> 
+		<tbody>
+			{% for myfiles in grpNameTab %}
+				<tr> 
+					<td>
+						{% if myfiles['type'] == 'jpeg' or myfiles['type'] == 'jpg' or myfiles['type'] == 'png' or myfiles['type'] == 'gif' %}
+							<span class="glyphicon glyphicon-picture" aria-hidden="true"></span>
+						{% else %}
+							Ico
+						{% endif %}
+					</td>
+					<td>
+						<a href="{{ path('one_file' , {'id': myfiles['id'] }) }}">{{ myfiles['name'] }}</a>
+					</td>
+					<td>
+						{% if myfiles['bookmark'] != 1 %}
+							<span class="fav glyphicon glyphicon-star-empty" aria-hidden="true" value="{{myfiles.id}}"></span>
+						{% else %}
+							<span class="fav glyphicon glyphicon-star" aria-hidden="true" value="{{myfiles.id}}"></span>
+						{% endif %}
+					</td>
+					<td>
+						<a class="btn" href="{{ path('ged_parameters_file', { 'id' : myfiles['id'] }) }}" title="">
+						<span class="glyphicon glyphicon-pencil" aria-hidden="true"></span></a>
+					</td>
+					<td>
+						<a class="btn" href="{{ path('ged_download', { 'name' : myfiles['path'] }) }}">
+							<span class="glyphicon glyphicon-cloud-download" aria-hidden="true"></span>
+						</a>
+					</td>
+				</tr>
+			{% endfor %}
+		</tbody>
+	</table>
+	{% endif %}
+</div>
+<script type="text/javascript"> 
+$(document).ready(function() { 
+	$('table').DataTable( { 
+		"paging": false,
+		"info": false,
+		"sDom": '<"H"lr>t<"F"ip>',
+		"columnDefs": [{ "orderable": false, "targets": [3,4] }],
+		"order": [[1, "asc"]]
+	} );
+} );
+$(function () {
+  $('[data-toggle="tooltip"]').tooltip()
+});
+</script>
+{% endblock body %}

@@ -6,6 +6,7 @@ use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\RedirectResponse;
+use Symfony\Component\HttpFoundation\JsonResponse;
 use AppBundle\Entity\User;
 use CS\GedBundle\Entity\Groupe;
 use CS\GedBundle\Entity\Linkgroup;
@@ -97,7 +98,6 @@ class GroupController extends Controller
 		$group = $em->getRepository('GedBundle:Groupe')->findOneById($id);
 		$idgroup=$id;
 		$groupname=$request->request->get('groupname');
-		$useradd=$request->request->get('useradd');
 		$userremove=$request->request->get('userremove');
 		$groupremove=$request->request->get('groupremove');
 
@@ -111,6 +111,7 @@ class GroupController extends Controller
 				$username=$em->getRepository('AppBundle:User')->findOneById($iduser)->getUsername();
 				$groupmembers[]=array(
 					'username'=>$username,
+					'id'=>$iduser,
 					);
 			}
 		}
@@ -163,31 +164,6 @@ class GroupController extends Controller
 			$em->flush();
 		}
 
-		if(!empty($useradd))
-		{
-			$otheruser=$em->getRepository('AppBundle:User')->findOneByUsername($useradd);
-			if (!empty($otheruser))
-			{
-				$linkgroup = new Linkgroup();
-				$linkgroup->setIduser($otheruser->getId());
-				$linkgroup->setIdgroup($idgroup);
-				$em->persist($linkgroup);
-				$em->flush();
-			}
-			else
-			{
-				echo "l'utilisateur n'existe pas";
-			}
-		}
-
-		if(!empty($userremove))
-		{
-			$otheruser=$em->getRepository('AppBundle:User')->findOneByUsername($userremove);
-			$linkgroup=$em->getRepository('GedBundle:Linkgroup')->findOneByIduser($otheruser->getId());
-			$em->remove($linkgroup);
-			$em->flush();
-		}
-
 		if(!empty($groupremove))
 		{
 			$groupe=$em->getRepository('GedBundle:Groupe')->findOneById($idgroup);
@@ -208,6 +184,59 @@ class GroupController extends Controller
 			'user'=>$user,
 			'id'=>$idgroup,
 			'groupmembers'=>$groupmembers,
+			'group'=>$group,
 		));
+	}
+	public function addUserAction(Request $request)
+	{
+		$em=$this->getDoctrine()->getManager();
+		$useradd=$request->request->get('useradd');
+		$idgroup=$request->request->get('idgroup');
+
+		if(!empty($useradd))
+		{
+			$otheruser=$em->getRepository('AppBundle:User')->findOneByUsername($useradd);
+			if (!empty($otheruser) && empty($em->getRepository('GedBundle:Linkgroup')->findOneBy(array('idgroup'=>$idgroup, 'iduser'=>$otheruser->getId()))))
+			{
+				$usertab=[];
+				$linkgroup = new Linkgroup();
+				$linkgroup->setIduser($otheruser->getId());
+				$linkgroup->setIdgroup($idgroup);
+				$em->persist($linkgroup);
+				$em->flush();
+				$usertab=array(
+					'username'=>$useradd,
+					'id'=>$otheruser->getId(),
+				);
+			}
+			else
+			{
+				echo "l'utilisateur n'existe pas";
+				$usertab=0;
+			}
+		}
+
+        $response = new JsonResponse();
+        return $response->setData(array('newuser' => $usertab));
+
+	}
+	public function removeUserAction(Request $request)
+	{
+		$em=$this->getDoctrine()->getManager();
+		$username=$request->request->get('username');
+		$idgroup=$request->request->get('idgroup');
+		var_dump($username);
+		var_dump($idgroup);
+		$user=$em->getRepository('AppBundle:User')->findOneByUsername($username);
+		$linkgroup=$em->getRepository('GedBundle:Linkgroup')->findOneBy(array(
+			'iduser'=>$user->getId(),
+			'idgroup'=>$idgroup,
+			));
+		$em->remove($linkgroup);
+		$em->flush();
+		
+		$url = $this -> generateUrl('ged_editgroup', array( 'id'=>$idgroup ));
+        $response = new RedirectResponse($url);
+        return $response;
 	}
 }

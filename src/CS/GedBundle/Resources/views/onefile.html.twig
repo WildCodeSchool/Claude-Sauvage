@@ -53,14 +53,22 @@
 {# fin modal #}
 	
 	<div class="col-md-12" id="file-part">
-		<p> ce fichier a l'id {{ idfile }}</p>
-		<p>il s'appelle {{ file.originalname }}</p>
+		<h2 class="file-title">{{ file.originalname }}</h2>
+		{% if filegroup is not null and filegroup['idcreator'] != user.id %}
+			<p class="file-title">fichier partagé dans: {{ filegroup['name'] }}</p>
+		{% elseif filegroup is not null and filegroup['idcreator'] == user.id %}
+			<p class="file-title">fichier partagé dans:{{ filegroup['name'] }} <a href="{{ path('ged_editgroup', {'id': filegroup['id'] }) }}" class="btn btn_download"><span class="glyphicon glyphicon-pencil" aria-hidden="true"></span></a></p>
+		{% endif %}
+
 		{% if file.type == 'jpeg' or file.type == 'jpg' or file.type == 'png' or file.type == 'gif' or file.type == 'ico' %}
-			<img src="{{ asset('/uploads/' ~file.path) }}" alt="image">
-		{% elseif file.type == 'txt' or file.type == 'html' or file.type == 'html.twig' or file.type == 'css' or file.type == 'php' or file.type == 'js' or file.type == 'md' or file.type == 'yml' or file.type == 'htm'  or file.type == 'xml' or file.type == 'xls' %}
-			<pre>{{ textfile }}</pre>
+			<img src="{{ asset('/uploads/' ~file.path) }}" alt="{{file.originalname }}" class="file-img" id="file-img">
+
+		{% elseif file.type == 'txt' or file.type == 'html' or file.type == 'html.twig' or file.type == 'css' or file.type == 'js' or file.type == 'md' or file.type == 'yml' or file.type == 'htm'  or file.type == 'xml' or file.type == 'xls' %}
+			<pre class="file-text">{{ textfile }}</pre>
+		
 		{% elseif file.type == 'pdf' %}
 			<div><a href=" {{ asset('./uploads/'~file.path ) }} " target="blank">Afficher le document</a></div>
+		
 		{% endif %}
 	</div>
 
@@ -76,18 +84,18 @@
 			{% endif %}
 		</div>
 		<div class="com-form showform" id="form">
-			<form action="{{ path('new_comment') }}" method="post">
 				<label for="content">laisser un commentaire:</label>
 				<br/>
-				<textarea name="content"></textarea>
+				<textarea name="content" id="comcontent"></textarea>
 				<input name="idfile" value="{{ idfile }}" style="display:none;"/>
 				<br/>
-				<input type="submit" value="valider"/>
-			</form>
+				<input type="submit" value="valider" id="addcomment"/>
 		</div>
 	</div>
 </div>
 <script>
+	var newcomment="{{ path('ged_newcomment') }}";
+	var idfile ="{{ idfile }}";
 	$(document).ready(function(){
 
 		$('#btn-com').click(function(){
@@ -100,8 +108,9 @@
 		$('#modal-partage').on('shown.bs.modal', function () {
   		$('#modal-partage').focus()
 		})
-
 	});
 	
 </script>
+<script type="text/javascript" src="{{ asset('js/comments.js') }}"></script>
+<script type="text/javascript" src="{{ asset('js/onefile.js') }}"></script>
 {% endblock body %}

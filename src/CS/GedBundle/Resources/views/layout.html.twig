@@ -21,6 +21,7 @@
                         <span class="icon-bar"></span>
                         <span class="icon-bar"></span>
                     </button>
+                    <a class="home btn btn-default navbar-btn" href="{{ path('ged_homepage') }}" title="Tous les fichiers"><span class="glyphicon glyphicon-home" aria-hidden="true"></span></a>
                     <button type="button" class="ajout-fichier btn btn-default navbar-btn" data-toggle="modal" data-target="#addfile"><span class="glyphicon glyphicon-plus" aria-hidden="true"></span>  Ajouter un document</button>
                     {% if checkpage is not defined or checkpage != "newgroup" %}
                         <a href="{{ path('ged_newgroup')}}"class="ajout-fichier btn btn-default navbar-btn" >
@@ -52,11 +53,10 @@
                 <div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
                     <ul class="nav navbar-nav navbar-right">
                         <li class="lien-user">
-                            <a class="lien-user" href="{{ path('ged_homepage') }}" title="Tous les fichiers"  >Bienvenue {{ user | capitalize }}
+                            <a class="lien-user" href="#">Bienvenue {{ user | capitalize }}
                             <img class="image-user" alt="Default-User" src='{{ asset('uploads/profileimages/default/de5d596f0373130509ec704c95b7dfba.png') }}'>
                             </a>
                         </li>
-                        <li><button type="button" class="btn btn-default navbar-btn"><span class="glyphicon glyphicon-cog" aria-hidden="true"></span></button>
                     </ul>
                 </div>
             </div>  
@@ -66,6 +66,7 @@
     {% endblock body %}
     <script type="text/javascript"> 
         var bookmark =  "{{ path('ged_bookmark') }}";
+        var autocompletion =  "{{ path('ged_search_auto') }}";
     </script>
     </body>
 </html>

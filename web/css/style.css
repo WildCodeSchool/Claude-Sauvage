@@ -2,7 +2,7 @@
 
 .navbar{
 	margin-bottom:0;
-	background-color:#f1f1f1;
+	background-color:#FBA858;
 	border:0;
 	border-radius:0;
 }
@@ -16,6 +16,7 @@
 	font-size: 20px;
 	padding:8px !important;
 }
+
 .image-user{
 	width:34px;
 	height:34px;
@@ -26,6 +27,10 @@
 .navbar-btn:hover{
 	background-color:#909090;
 	border:#909090 1px solid;
+}
+
+.home{
+	padding:7px 10px!important;
 }
 
 /* --------------------------------- flashbag alert ---------------------------------*/
@@ -52,7 +57,7 @@
 	background-color: #f1f1f1!important;
 }
 .modal .btn-primary{
-	background-color:#b0b0b0;
+	background-color:#FBA858;
 	border-color: #f1f1f1;
 }
 
@@ -62,7 +67,7 @@
 	color:#000;
 }
 
-/* Search bar */
+/* --------------------------------- Search bar ---------------------------------*/
 select option:checked,
 select option:hover {
     box-shadow: 0 0 10px 100px #909090 inset;
@@ -111,20 +116,6 @@ select:focus > option:checked {
 }
 .search-bar .btn-default:hover{
 	background-color: #f1f1f1;
-}
-
-.search-result{
-	max-width: 300px;
-	border: solid #F7CA18 1px;
-	border-radius: 5px;
-	color: #F7CA18;
-	font-family:'Lobster';
-	font-size: 18px;
-	z-index: 2000;
-	max-height: 500px;
-	display: none;
-	background-color: black;
-	position: absolute;
 }
 /*--------------------------------- Navbar left --------------------------------- */
 
@@ -233,6 +224,9 @@ select:focus > option:checked {
 }
 
 /*--------------------------------- Dashboard ---------------------------------*/
+h3{
+	text-align: center;
+}
 
 .tab-cel{
 	padding: 0 5px;
@@ -244,13 +238,39 @@ tr:hover td{
 }
 
 .modal-header{
-	background-color:#909090;
+	background-color:#FBA858;
 }
 
 .modal-title{
 	text-align: center;
 }
+/*--------------------------------- autocomplétion ---------------------------------*/
+#auto{
+	background-color: #fff;
+	border:#d1d1d1 solid 1px;
+	display:none;
+	margin-top: 33px;
+	position: absolute;
+	z-index: 2;
+	padding:0;
+}
 
+#auto h5{
+	margin:5px 0 5px 5px;
+}
+
+#auto p{
+	padding:2px 0 2px 20px;
+	margin:0px;
+}
+
+#auto p:hover{
+	background-color: #FBA858;
+}
+
+.bold{
+	font-weight: bold;
+}
 /*--------------------------------- tout les fichiers ---------------------------------*/
 
 #table .glyphicon-star-empty, #table .glyphicon-star{
@@ -330,7 +350,24 @@ tr:hover td{
 {
 	display: none;
 }
-
+.file-img
+{
+	max-width: 1000px;
+	height: auto;
+	border: solid #000 1px;
+}
+.file-title
+{
+	text-align: center;
+	margin-bottom: 20px;
+}
+.file-text
+{
+	background-color: #F1F1F1;
+	color: #000;
+	margin-left: 3%;
+	width: 94%;
+}
 /*--------------------------------- tout les fichiers ---------------------------------*/
 
 /*----------------------------------paramètres fichiers -------------------------------*/
@@ -338,4 +375,61 @@ tr:hover td{
 .tagdisplay
 {
 	display:none;
+}
+.parameters-tag
+{
+	margin-top: 50px;
+	margin-bottom: 50px;
+	background-color: #FBA858;
+	padding: 10px;
+	border-radius: 5px;
+	text-align: center;
+}
+
+.parameters-delete
+{
+	background-color: #FBA858;
+	padding: 10px;
+	border-radius: 5px;	
+	text-align: center;
+}
+
+.parameters-category
+{
+	background-color: #FBA858;
+	padding: 10px;
+	border-radius: 5px;
+	text-align: center;
+}
+.category-list
+{
+	margin-left: 20%;
+	width: 60%;
+}
+#taglist
+{
+	background-color: #F1F1F1;
+	margin-left: 20%;
+	width: 60%;
+	padding: 5px;
+	border-radius: 5px;
+	text-align: center;
+}
+/*-------------------------paramètres group----------------------------------------*/
+
+.parameters-group
+{
+	background-color: #FBA858;
+	padding: 10px;
+	border-radius: 5px;
+	margin-top: 50px;
+	text-align: center;
+}
+#memberslist
+{
+	background-color: #F1F1F1;
+	margin-left: 10%;
+	width: 80%;
+	padding: 5px;
+	border-radius: 5px;
 }

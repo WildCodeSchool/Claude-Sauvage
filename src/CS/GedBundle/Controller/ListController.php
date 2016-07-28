@@ -40,10 +40,12 @@ class ListController extends Controller
 
         			$categoryName=$categoryInfo->getName();
         			$categoryId=$categoryInfo->getIdcategory();
+    				$ssCategory=$categoryInfo->getId();
     		
     				$categoryTab[] = array(
     					'category' => $categoryName,
     					'id' => $categoryId,
+    					'ssid'=>$ssCategory,
 					);
         		}
         	}
@@ -359,20 +361,20 @@ class ListController extends Controller
     	}
 
     	//DERNIERS COMMENTÉS
-		// requete sur les commentaires (par date la plus récente)
-		// prise d'idfile verification des droits et s'il a deja été compté et prise des infos
-		// notation de l'idfile dans un tableau pour le compter
 
     	$linkgroup = $em->getRepository('GedBundle:Linkgroup')->findByIduser($user->getId());
     	foreach ($linkgroup as $groupedfile) 
     	{
-    		$openfile = $em->getRepository('GedBundle:Gedfiles')->findOneByIdgroup($groupedfile->getIdgroup());
-    		if(!empty($openfile))
-    		{
-    			$accessfiles[]=array(
-	    			'id'=>$openfile->getId(),
-	    			);
-    		}
+    		$openfiles = $em->getRepository('GedBundle:Gedfiles')->findByIdgroup($groupedfile->getIdgroup());
+	    	foreach ($openfiles as $openfile)
+	    	{
+	    		if(!empty($openfile))
+	    		{
+	    			$accessfiles[]=array(
+		    			'id'=>$openfile->getId(),
+		    			);
+	    		}
+	    	}
     	}
     	$files=$em->getRepository('GedBundle:Gedfiles')->findByIdowner($user->getId());
     	foreach ($files as $file)
@@ -398,6 +400,7 @@ class ListController extends Controller
     		$i=0;
     		$j=0;
     		$counted=0;
+    		$accessible=0;
     		$idfile=$filecom->getIdfile();
     		while($i<count($tab))
     		{
@@ -412,10 +415,12 @@ class ListController extends Controller
     			if( $idfile == $accessfiles[$j]['id'] )
     			{
     				$compteur++;
+    				$accessible=1;
+    				break;
     			}
     			$j++;
     		}
-    		if ($counted == 0 && $compteur<4)
+    		if ($counted == 0 && $compteur<=5 && $accessible==1)
     		{
     			//on compte le fichier comme compté dans la liste
     			$tab[]=array('id'=>$idfile);
@@ -490,7 +495,7 @@ class ListController extends Controller
         $form->handleRequest($request);
 
         if ($form->isSubmitted() && $form->isValid()) {
-            var_dump($form);
+
             $originalgetting=$form->getNormData()->getPath('originalName');
             $originalname=$originalgetting->getClientOriginalName();
 
@@ -607,10 +612,12 @@ class ListController extends Controller
 
         			$categoryName=$categoryInfo->getName();
         			$categoryId=$categoryInfo->getIdcategory();
+    				$ssCategory=$categoryInfo->getId();
     		
     				$categoryTab[] = array(
     					'category' => $categoryName,
     					'id' => $categoryId,
+    					'ssid'=>$ssCategory,
 					);
         		}
         	}
@@ -854,6 +861,202 @@ class ListController extends Controller
 																	'user'=> $user,
 																	'tabMyFiles' => $tabMyFiles,
 																	'tabGroupFiles' => $tabGroupFiles,
+																	'categories' => $categories,
+																	'categoryTab'=> $categoryTab,
+																	));
+    }
+
+    public function parametersAction(Request $request)
+    {
+    	//récuperation & atribution de l entitiy manager.
+    	$em=$this->getDoctrine()->getManager();
+
+    	//récuperation de l'utilisateur courant.
+    	$user =$this->getUser();
+
+    	//création d'une nouvelle instance de l'entité Gedfiles.
+    	$gedfiles = new Gedfiles();
+
+    	//créetion du formulaire
+        $form = $this->createForm(GedfilesType::class, $gedfiles);
+        $form->handleRequest($request);
+
+        //Si le formulaire est envoyer et est valide.
+        if ($form->isSubmitted() && $form->isValid()) {
+
+        	$originalgetting=$form->getNormData()->getPath('originalName');
+            $originalname=$originalgetting->getClientOriginalName();
+            
+            $file = $gedfiles->getPath();
+            
+            $type = $file->guessExtension();
+
+            $fileName = md5(uniqid()).'.'.$file->guessExtension();
+
+            $pathDir = $this->container->getParameter('kernel.root_dir').'/../web/uploads';
+            $file->move($pathDir, $fileName);
+
+            $gedfiles->setType($type);
+            $gedfiles->setPath($fileName);
+            $gedfiles->setIdowner($user->getId());
+            $gedfiles->setIdCategory(1);
+            $gedfiles->setDate( new DateTime());
+            $gedfiles->setOriginalname($originalname);
+
+            $em->persist($gedfiles);
+            $em->flush();
+
+            $this->get('session')->getFlashBag()->set('success', 'Fichier envoyé');
+
+            return $this->redirectToRoute('ged_homepage');
+
+        }
+
+        //récupération des Category.
+        $categories = $em->getRepository('GedBundle:Category')->findAll();
+
+        //récuperation des sous-catégories.
+        $categoryTab = [];
+        foreach ($categories as $category) {
+
+        	$categoryInfos = $em->getRepository('GedBundle:Souscategory')->findByIdcategory($category->getId());
+
+        	if (!empty($categoryInfos)){
+
+        		//On place les sous-catégorie dans un tableau si elle sont définie.
+				foreach ($categoryInfos as $categoryInfo) {
+
+        			$categoryName=$categoryInfo->getName();
+        			$categoryId=$categoryInfo->getIdcategory();
+    				$ssCategory=$categoryInfo->getId();
+    		
+    				$categoryTab[] = array(
+    					'category' => $categoryName,
+    					'id' => $categoryId,
+    					'ssid'=>$ssCategory,
+					);
+        		}
+        	}
+    	}		
+
+        //récupération de tout les fichiers de l'utilisateur.
+    	$myfiles = $em->getRepository('GedBundle:Gedfiles')->findBy(
+    																	array( 
+    																			'idowner'=> $user->getId(),
+    																			'idcategory' => 1
+    																			),
+    																	array('date' => 'desc')
+    																);
+    	//on parcours les fichiers.
+    	foreach ($myfiles as $myfile) {
+
+    		//récuperation de l'Id du fichier.
+    		$idFile = $myfile->getId();
+
+    		//récuperation du type de ficher.
+	    	$typeFile = $myfile->getType();
+
+	    	//récuperation du nom du ficher.
+	    	$pathFile = $myfile->getPath();
+
+	    	//récuperation de la date.
+	    	$dateFile = $myfile->getDate();
+
+	    	//récuperation du nom original.
+	    	$nameFile=$myfile->getOriginalName();
+
+	    	//récuperation des favoris.
+	    	$bookmarkfile = $em->getRepository('GedBundle:Linkbookmark')->findOneByIdfile($myfile->getId());
+
+    		if (empty($bookmarkfile)){
+    		$bookmarkfile = 0;
+	    	}
+
+	    	else{
+	    		$bookmarkfile = 1;
+	    	}
+	    	
+    		//récuperation des membres des groupes.
+    		$groupMembers = $em->getRepository('GedBundle:Linkgroup')->findByIdgroup($myfile->getIdgroup());
+    		
+    		$tabInfoGroup=[];
+    		foreach ($groupMembers as $groupMember) {
+    			$groupMemberId = $groupMember->getIduser();
+    			$groupMemberInfo = $em->getRepository('AppBundle:User')->findOneById($groupMemberId);
+    			$groupMemberName = $groupMemberInfo->getUsername();
+
+    			$tabInfoGroup[] = array(
+    					'groupMemberName'=>$groupMemberName,
+    			);    			
+    		}
+
+    		//récupération de la sous-catégory.
+    		if (!empty($myfile->getIdsouscategory)){
+    			$sousCategoryInfo = $em->getRepository('GedBundle:Souscategory')->findOneById($myfile->getIdsouscategory());
+		    	$category = $sousCategoryInfo->getName();
+		    }
+		    //sinon si la sous-catégorie n'éxiste pas on recupere la catégorie.
+	    	else {
+	    		$categoryInfo = $em->getRepository('GedBundle:Category')->findOneById($myfile->getIdcategory());
+	    		$category= $categoryInfo->getName();
+	    	}
+
+	    	//on compte les commentaires liés a un fichier.
+		    $comments =$em->getRepository('GedBundle:Gedcom')->findByIdfile($myfile->getId());
+		    if (empty($comments)){
+		    		$nbCom = 0;
+		    	}
+	    	else {
+	    		$nbCom = count($comments);
+	    	}
+
+		    //on recherche les tags liés a un fichier.
+		    	
+	    	//on recherche les liens de tags par rapport a l'id du fichier.
+	    	$linkTags=$em->getRepository('GedBundle:Linktag')->findByIdfile($myfile->getId());
+
+	    	//puis on fait une boucle pour parcourir notre objet de liens de tag.
+	    	$tabTags = [];
+	    	foreach ($linkTags as $linkTag) {
+	    		$infoTag=$em->getRepository('GedBundle:Gedtag')->findOneById($linkTag->getIdtag());
+	    		$tagName=$infoTag->getName();
+
+	    		//on stocke tout dans un tableau.
+	    		$tabTags[]= array(
+	    			'tagName'=>$tagName,
+	    			);
+	    	}
+	    	if (empty($tabInfoGroup)){
+	    		$tabInfoGroup = 1;
+	    	}
+	    	if (empty($tabTags)){
+	    		$tabTags = 1;
+		    }
+
+			$tabMyFiles[]= array(
+								'fileId'=>$idFile,
+		    					'groupMemberName'=>$tabInfoGroup,
+		    					'type'=>$typeFile,
+		    					'category'=>$category,
+		    					'date'=>$dateFile,
+				    			'name'=>$nameFile,
+				    			'path'=>$pathFile,
+				    			'tagnames'=>$tabTags,
+				    			'comments'=>$nbCom,
+				    			'bookmark'=>$bookmarkfile,
+	    					);
+    	}
+
+		//on verifie que le tableau n'est pas vide, sinon on lui attribue la valeur 1.
+	    if (empty($tabMyFiles)){
+		    		$tabMyFiles = 1;
+		}
+
+    	return $this->render('GedBundle::listParameter.html.twig',array( 
+																	'form' => $form->createView(),
+																	'user'=> $user,
+																	'tabMyFiles' => $tabMyFiles,
+																	// 'tabGroupFiles' => $tabGroupFiles,
 																	'categories' => $categories,
 																	'categoryTab'=> $categoryTab,
 																	));

@@ -39,10 +39,12 @@ class DeleteController extends Controller
 
         			$categoryName=$categoryInfo->getName();
         			$categoryId=$categoryInfo->getIdcategory();
+    				$ssCategory=$categoryInfo->getId();
     		
     				$categoryTab[] = array(
     					'category' => $categoryName,
     					'id' => $categoryId,
+    					'ssid'=>$ssCategory,
 					);
         		}
         	}
