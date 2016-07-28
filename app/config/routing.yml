@@ -31,6 +31,10 @@ user_login_check:
     path:     /login_check
     defaults: { _controller: AppBundle:Security:check }
 
+user_logout:
+    path:     /logout
+    defaults: { _controller: AppBundle:Security:logout }
+
 fos_user:
     resource: "@FOSUserBundle/Resources/config/routing/all.xml"
 

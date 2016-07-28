@@ -2,37 +2,54 @@ grc_homepage:
     path:     /
     defaults: { _controller: GrcBundle:List:showDashboard }
 
-grc_create_ticket:
-    path:     /create
-    defaults: { _controller: GrcBundle:Default:create }
+grc_fiche_client:
+    path:     /client/{id}
+    defaults: { _controller: GrcBundle:Ficheclient:ficheclient }
+    methods:  [GET, POST]
 
-ajax_send:
-    path:     /cat
-    defaults: { _controller: GrcBundle:Default:ajaxcat }
+grc_create_ticket:
+    path:     /createticket
+    defaults: { _controller: GrcBundle:Createticket:createticket }
+
+grc_create_cat:
+    path:     /com/createcat
+    defaults: { _controller: GrcBundle:Createcat:createcat }
+
+grc_submit_cat:
+    path:     /submitcat
+    defaults: { _controller: GrcBundle:Createcat:submitcat }
+
+grc_submit_sscat:
+    path:     /submitsscat
+    defaults: { _controller: GrcBundle:Createcat:submitsscat }
+
+grc_download:
+    pattern: /download/{name}
+    defaults: { _controller: GrcBundle:Download:download}
 
 ticket:
     path:     /ticket/{id}
-    defaults: { _controller: GrcBundle:Default:ticket }
+    defaults: { _controller: GrcBundle:Ticket:ticket }
     methods:  [GET, POST]
 
 liste:
-    path:     /liste
-    defaults: { _controller: GrcBundle:Default:liste}
+    path:     /com/liste
+    defaults: { _controller: GrcBundle:Alltickets:alltickets}
 
 search:
     path:     /search
-    defaults: { _controller: GrcBundle:Default:search}
+    defaults: { _controller: GrcBundle:Search:search}
 
 ajaxsscat:
     path:     /ajaxsscat/
-    defaults: { _controller: GrcBundle:Default:ajaxsscat }
+    defaults: { _controller: GrcBundle:Ajaxsscat:ajaxsscat }
     methods:  [GET, POST]
 
 ajaxparamticket:
     path:     /ajaxparamticket/
-    defaults: { _controller: GrcBundle:Default:ajaxparamticket }
+    defaults: { _controller: GrcBundle:Ajaxparamticket:ajaxparamticket }
     methods:  [GET, POST]
 
 ticket_comment:
     path:     /newcom
-    defaults: { _controller: GrcBundle:Default:addComment }
+    defaults: { _controller: GrcBundle:Addcomment:addcomment }

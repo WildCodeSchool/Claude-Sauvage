@@ -99,7 +99,7 @@ class FileController extends Controller
             $originalname=$originalgetting->getClientOriginalName();
             
             $file = $gedfiles->getPath();
-            
+
             $type = $file->guessExtension();
 
             $fileName = md5(uniqid()).'.'.$file->guessExtension();
