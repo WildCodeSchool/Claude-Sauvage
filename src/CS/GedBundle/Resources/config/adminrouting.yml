@@ -1,0 +1,9 @@
+# admin roads
+
+ged_admin_dashboard:
+    path:    /
+    defaults: { _controller: GedBundle:Admin:showDashboard }
+
+ged_addcategory:
+    path:    /newcategory
+    defaults: { _controller: GedBundle:Admin:addCategory }

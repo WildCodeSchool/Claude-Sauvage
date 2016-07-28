@@ -137,7 +137,7 @@ select:focus > option:checked {
 }
 
 .nav-left li:hover .glyphicon-star{
-	color:yellow;
+	color:#FBA858;
 }
 
 .glyphicon-cloud-upload{
@@ -284,7 +284,7 @@ tr:hover td{
 }
 
 #table .glyphicon-star{
-	color:yellow;
+	color:#FBA858;
 }
 
 #table a{
@@ -295,7 +295,7 @@ tr:hover td{
 }
 
 #tablecom .glyphicon-star{
-	color:yellow;
+	color:#FBA858;
 }
 
 #tablecom a{
