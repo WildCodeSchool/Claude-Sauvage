@@ -3,13 +3,22 @@ Claude-Sauvage
 
 Un projet Symfony 2.8 créé le 14 juin 2016.
 
-Bienvenue sur ce projet réalisé par 3 étudiants de la Wild Code School: Sylvian, Julian et Augustin.
+Bienvenue sur ce projet réalisé par 3 étudiants de la Wild Code School: [Sylvian](https://github.com/PIARDSylvian), [Julian](https://github.com/Julianxiaoyu) et [Augustin](https://github.com/Gugusteh/).
 
 Ce projet comporte deux Bundles construits pour Symfony 2.8:
 
 - un système de GED, conçu pour la gestion d'une petite entreprise.
 
 - un système de GRC (ticketing), conçu pour permettre le dialogue entre des commerciaux et leurs clients
+
+
+# Prérequis
+
+-  [FOS_USER Bundle](https://github.com/FriendsOfSymfony/FOSUserBundle)
+
+-  Symfony 2.8
+
+-  Base de Données mySQL
 
 
 # Installation
