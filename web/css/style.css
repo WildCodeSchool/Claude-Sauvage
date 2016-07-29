@@ -368,7 +368,19 @@ tr:hover td{
 	margin-left: 3%;
 	width: 94%;
 }
-/*--------------------------------- tout les fichiers ---------------------------------*/
+/*--------------------------------- Resultat recherche ---------------------------------*/
+
+.search-tab
+{
+	margin-bottom: 20px;
+}
+
+.glyphicon-alert
+{
+	right: 10px;
+	top:5px;
+	font-size: 20px;
+}
 
 /*----------------------------------paramètres fichiers -------------------------------*/
 

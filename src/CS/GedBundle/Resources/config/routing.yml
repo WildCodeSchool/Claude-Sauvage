@@ -67,6 +67,7 @@ ged_addusertogroup:
     path:    /editgroup/member/new
     defaults: { _controller:GedBundle:Group:addUser }
     methods: [GET, POST]
+
 ged_removeuserfromgroup:
     path:    /editgroup/member/remove
     defaults: { _controller: GedBundle:Group:removeUser }

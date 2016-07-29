@@ -57,7 +57,7 @@ $("document").ready(function() {
 	$("#search").keyup(function() {
 		var search = $(this).val();
 		
-		if((search.length)>=2){
+		if((search.length)>=3){
 			var count = 0;
 			$.ajax({
 				type: 'POST',
@@ -118,7 +118,6 @@ $("document").ready(function() {
 					$("#auto p").click(function(){
 						var remplace = $(this).text();
 						$("#search").val(remplace);
-						$('form').submit();
 					});
 					if(data.nameTab.length==0 && data.tagTab.length==0 && data.grpNameTab.length==0 && data.grpTagTab.length==0){
 						$("#auto h5").remove();
@@ -152,6 +151,5 @@ $("document").ready(function() {
 			auto.fadeOut();
 		
 		}
-		// if($("#search").click(function()){$("#auto").show();}
 	});	
 });

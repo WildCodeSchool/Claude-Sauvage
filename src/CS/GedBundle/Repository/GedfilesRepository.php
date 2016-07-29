@@ -20,8 +20,53 @@ class GedfilesRepository extends EntityRepository
 			->where('f.originalname LIKE :word')
 			->setParameter('word', '%'.$word.'%')
 			->andWhere('f.idowner = :id')
+			->setParameter('id', $id);
+
+		// On récupère la Query à partir du QueryBuilder
+	    $query = $queryBuilder->getQuery();
+
+	    // On récupère les résultats à partir de la Query
+	    $results = $query->getResult();
+
+		// On retourne ces résultats
+	    return $results;
+	}
+
+	public function categorySearch($word, $id, $cat)
+	{
+		$queryBuilder = $this->createQueryBuilder('f');
+
+		$queryBuilder
+			->where('f.originalname LIKE :word')
+			->setParameter('word', '%'.$word.'%')
+			->andWhere('f.idowner = :id')
 			->setParameter('id', $id)
-			->setMaxResults(3);
+			->andWhere('f.idcategory = :cat')
+			->setParameter('cat', $cat);
+
+		// On récupère la Query à partir du QueryBuilder
+	    $query = $queryBuilder->getQuery();
+
+	    // On récupère les résultats à partir de la Query
+	    $results = $query->getResult();
+
+		// On retourne ces résultats
+	    return $results;
+	}
+
+	public function sscategorySearch($word, $id, $cat, $sscat)
+	{
+		$queryBuilder = $this->createQueryBuilder('f');
+
+		$queryBuilder
+			->where('f.originalname LIKE :word')
+			->setParameter('word', '%'.$word.'%')
+			->andWhere('f.idowner = :id')
+			->setParameter('id', $id)
+			->andWhere('f.idcategory = :cat')
+			->setParameter('cat', $cat)
+			->andWhere('f.idsouscategory = :sscat')
+			->setParameter('sscat', $sscat);
 
 		// On récupère la Query à partir du QueryBuilder
 	    $query = $queryBuilder->getQuery();
@@ -42,6 +87,52 @@ class GedfilesRepository extends EntityRepository
 			->setParameter('word', '%'.$word.'%')
 			->andWhere('f.idgroup = :id')
 			->setParameter('id', $idgrp);
+
+		// On récupère la Query à partir du QueryBuilder
+	    $query = $queryBuilder->getQuery();
+
+	    // On récupère les résultats à partir de la Query
+	    $results = $query->getResult();
+
+		// On retourne ces résultats
+	    return $results;
+	}
+
+	public function categoryGrpSearch($word, $idgrp, $cat)
+	{
+		$queryBuilder = $this->createQueryBuilder('f');
+
+		$queryBuilder
+			->where('f.originalname LIKE :word')
+			->setParameter('word', '%'.$word.'%')
+			->andWhere('f.idgroup = :id')
+			->setParameter('id', $idgrp)
+			->andWhere('f.idcategory = :cat')
+			->setParameter('cat', $cat);
+
+		// On récupère la Query à partir du QueryBuilder
+	    $query = $queryBuilder->getQuery();
+
+	    // On récupère les résultats à partir de la Query
+	    $results = $query->getResult();
+
+		// On retourne ces résultats
+	    return $results;
+	}
+
+	public function sscategoryGrpSearch($word, $idgrp, $cat, $sscat)
+	{
+		$queryBuilder = $this->createQueryBuilder('f');
+
+		$queryBuilder
+			->where('f.originalname LIKE :word')
+			->setParameter('word', '%'.$word.'%')
+			->andWhere('f.idgroup = :id')
+			->setParameter('id', $idgrp)
+			->andWhere('f.idcategory = :cat')
+			->setParameter('cat', $sscat)
+			->andWhere('f.idsouscategory = :sscat')
+			->setParameter('sscat', $sscat);
 
 		// On récupère la Query à partir du QueryBuilder
 	    $query = $queryBuilder->getQuery();
