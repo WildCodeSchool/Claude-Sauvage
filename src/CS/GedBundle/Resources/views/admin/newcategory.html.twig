@@ -1,5 +1,6 @@
 {% extends "GedBundle:admin:adminlayout.html.twig" %}
 {% block body %}
+	{# liste des categories #}
 	{% for category in categories %}
 		<ul>
 			<li><ul>{{ category.name }}
@@ -9,6 +10,7 @@
 			</ul></li>
 		</ul>
 	{% endfor %}
+{# 	formulaires de creation de categories et sous categories #}
 	<div>
 		<form action="{{ path('ged_addcategory') }}" method="post" >
 			<label for="newcat">Nouvelle Categorie</label>
@@ -33,4 +35,5 @@
 			<input type="submit" value="ajouter une sous-catégorie" class="btn btn-default"/>
 		</form>
 	</div>
+{# 	fin des formulaires #}
 {% endblock %}

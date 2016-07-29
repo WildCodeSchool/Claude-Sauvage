@@ -14,11 +14,13 @@ use CS\GedBundle\Entity\Linktag;
 use CS\GedBundle\Entity\Gedtag;
 use DateTime;
 
+//controller gérant la liste de fichiers "partagés avec moi"
 class ShareController extends Controller
 {
+    //fonction d'affichage de la liste
     public function sharedAction(Request $request)
     {
-        //récuperation & atribution de l entitiy manager.
+        //récuperation & atribution de l entity manager.
         $em=$this->getDoctrine()->getManager();
 
         //récuperation de l'utilisateur courant.
@@ -139,18 +141,10 @@ class ShareController extends Controller
                                 'groupMemberName'=>$groupMemberName,
                         );
                     }
-
-                    // if (empty($file->getIdsouscategory() ) )
-                    // {
-
+                    // recuperation des categories
                     $categorytab=$em->getRepository('GedBundle:Category')->findOneById($file->getIdcategory());
                     $category=$categorytab->getName();
-                    // }
-                    // else
-                    // {
-                    //  $categorytab=$em->getRepository('GedBundle:Souscategory')->findOneById($file->getIdsouscategory());
-                    //  $category=$categorytab->getName();
-                    // }
+
                     $linktag = $em->getRepository('GedBundle:Linktag')->findByIdfile($idfile);
                     $tagnames=[];
                     foreach ($linktag as $tag) {

@@ -1,113 +1,150 @@
+#ged roads
+
+#vues des listes
+#dashboard
 ged_homepage:
     path:     /
     defaults: { _controller: GedBundle:List:showDashboard }
 
-ged_search:
-    path:     /search
-    defaults: { _controller: GedBundle:Search:search }
-
-ged_search_auto:
-    path:     /autocompletion
-    defaults: { _controller: GedBundle:Search:autocompletion }
-    methods:  [GET, POST]
-
-ged_ajax_sscat_search:
-    path:     /search/souscategorie
-    defaults: { _controller: GedBundle:Search:ajaxsscat }
-    methods:  [GET, POST]
-
+#affichage de la allfiles
 ged_all:
     path:     /all
     defaults: { _controller: GedBundle:List:all }
 
-ged_parameters_list:
-    path:     /define
-    defaults: { _controller: GedBundle:List:parameters }
-
+#liste "partagés avec moi"
 ged_shared:
     path:     /shared
     defaults: { _controller: GedBundle:Share:shared }
 
-ged_parameters_file:
-    path:     /parameters/{id}
-    defaults: { _controller: GedBundle:Parameters:parameters }
+#vue "mes uploads"
+ged_upload_view:
+    path:     /upload
+    defaults: { _controller: GedBundle:Upload:uploadList }
 
-ged_removetag:
-    path:    /parameters/tag/remove
-    defaults: { _controller: GedBundle:Parameters:removeTag }
-    methods: [GET, POST]
+#vues des listes des fichiers par categorie
+ged_category:
+    path:     /category/{id}
+    defaults: { _controller: GedBundle:Category:category }
 
-ged_addtag:
-    path:    /parameters/tag/add
-    defaults: { _controller: GedBundle:Parameters:addTag }
-    methods: [GET, POST]
+# " par sous categorie
+ged_sscategory:
+    path:     /sub-category/{ssid}
+    defaults: { _controller: GedBundle:Category:sscategory }
 
-one_file:
-    path:     /file/{id}
-    defaults: { _controller: GedBundle:File:show }
+#vue de la poubelle
+ged_trashbin:
+    path:    /trashbin
+    defaults: { _controller: GedBundle:Delete:showTrashbin }
 
-ged_newcomment:
-    path:     /newcom
-    defaults: { _controller: GedBundle:File:addComment }
-    methods: [GET, POST]
-
-ged_download:
-    pattern: /download/{name}
-    defaults: { _controller: GedBundle:Download:download}
-
-ged_newgroup:
-    path:     /newgroup
-    defaults: { _controller:GedBundle:Group:createGroup }
-
-ged_editgroup:
-    path:     /editgroup/{id}
-    defaults: { _controller:GedBundle:Group:editGroup }
-
-ged_addusertogroup:
-    path:    /editgroup/member/new
-    defaults: { _controller:GedBundle:Group:addUser }
-    methods: [GET, POST]
-ged_removeuserfromgroup:
-    path:    /editgroup/member/remove
-    defaults: { _controller: GedBundle:Group:removeUser }
-
-ged_addfiletogroup:
-    path:    /addfiletogroup/{idfile}
-    defaults: { _controller:GedBundle:File:addToGroup }
-
+#favoris
+#ajax ajout de favori
 ged_bookmark:
     path:     /bookmark/edit
     defaults: { _controller: GedBundle:Bookmark:bookmark }
     methods:  [GET, POST]
 
+#affichage liste favoris
 ged_bookmark_view:
     path:     /bookmark
     defaults: { _controller: GedBundle:Bookmark:bookmarkList }
 
-ged_upload_view:
-    path:     /upload
-    defaults: { _controller: GedBundle:Upload:uploadList }
+#recherche
+#fonction de recherche
+ged_search:
+    path:     /search
+    defaults: { _controller: GedBundle:Search:search }
 
-ged_category:
-    path:     /category/{id}
-    defaults: { _controller: GedBundle:Category:category }
+#autocompletion
+ged_search_auto:
+    path:     /autocompletion
+    defaults: { _controller: GedBundle:Search:autocompletion }
+    methods:  [GET, POST]
 
-ged_sscategory:
-    path:     /sub-category/{ssid}
-    defaults: { _controller: GedBundle:Category:sscategory }
+#recherche
+ged_ajax_sscat_search:
+    path:     /search/souscategorie
+    defaults: { _controller: GedBundle:Search:ajaxsscat }
+    methods:  [GET, POST]
 
+#parametres
+#renvoi vers les parametres fichiers à l'upload
+ged_parameters_list:
+    path:     /define
+    defaults: { _controller: GedBundle:List:parameters }
+
+#paramètres d'un fichier
+ged_parameters_file:
+    path:     /parameters/{id}
+    defaults: { _controller: GedBundle:Parameters:parameters }
+
+#route ajax suppression de tag
+ged_removetag:
+    path:    /parameters/tag/remove
+    defaults: { _controller: GedBundle:Parameters:removeTag }
+    methods: [GET, POST]
+
+#route ajax creation de tag
+ged_addtag:
+    path:    /parameters/tag/add
+    defaults: { _controller: GedBundle:Parameters:addTag }
+    methods: [GET, POST]
+
+#page d'un fichier
+one_file:
+    path:     /file/{id}
+    defaults: { _controller: GedBundle:File:show }
+
+#route ajax ajout de commentaire
+ged_newcomment:
+    path:     /newcom
+    defaults: { _controller: GedBundle:File:addComment }
+    methods: [GET, POST]
+
+#fonction de download
+ged_download:
+    pattern: /download/{name}
+    defaults: { _controller: GedBundle:Download:download}
+
+#groupes
+#creation de groupe
+ged_newgroup:
+    path:     /newgroup
+    defaults: { _controller:GedBundle:Group:createGroup }
+
+#edition d'un groupe existant
+ged_editgroup:
+    path:     /editgroup/{id}
+    defaults: { _controller:GedBundle:Group:editGroup }
+
+#ajout d'un utilisateur au groupe en ajax
+ged_addusertogroup:
+    path:    /editgroup/member/new
+    defaults: { _controller:GedBundle:Group:addUser }
+    methods: [GET, POST]
+
+#suppression d'un user du groupe
+ged_removeuserfromgroup:
+    path:    /editgroup/member/remove
+    defaults: { _controller: GedBundle:Group:removeUser }
+
+#ajout d'un fichier au groupe
+ged_addfiletogroup:
+    path:    /addfiletogroup/{idfile}
+    defaults: { _controller:GedBundle:File:addToGroup }
+
+#suppression
+#suppression d'un fichier
 ged_delete:
     path:    /delete/{id}
     defaults: { _controller: GedBundle:Delete:deleteFile }
 
+#recuperation d'un fichier
 ged_recover:
     path:    /recover/{id}
     defaults: { _controller: GedBundle:Delete:recoverFile }
 
+#suppression definitive d'un fichier
 ged_deleteofdoom:
     path:    /deleteofdoom/{id}
     defaults: { _controller: GedBundle:Delete:deleteOfDoom }
 
-ged_trashbin:
-    path:    /trashbin
-    defaults: { _controller: GedBundle:Delete:showTrashbin }

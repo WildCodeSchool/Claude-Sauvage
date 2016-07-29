@@ -1,5 +1,6 @@
 {% extends "GedBundle:admin:adminlayout.html.twig" %}
 {% block body %}
+{# liste des fichiers #}
 	{% for file in files %}
 		<p>{{ file.originalname }}</p>
 	{% endfor %}

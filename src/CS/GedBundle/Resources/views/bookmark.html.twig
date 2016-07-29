@@ -4,6 +4,7 @@
 {% include "GedBundle::search.html.twig" %}
 <div class="col-md-10">
 	<h3 style="text-align:center;">Mes favoris</h3>
+{# 	tableau datatables pour les favoris #}
 	<table class="table compact stripe" id="table">
 		<thead> 
 			<tr> 
@@ -65,8 +66,10 @@
 			{% endif %}
 		</tbody>
 	</table>
+{# 	fin du tableau #}
 </div>
 <script type="text/javascript"> 
+// script datatables
 $(document).ready(function() { 
 	$('table').DataTable( { 
 		"paging": false,

@@ -245,7 +245,7 @@ class CategoryController extends Controller
 	    			$bookmarkfile = 1;
 	    		}
 
-	    		//on recupere la sous-catégory.
+	    		//on recupere la sous-catégorie.
 		    	if (!empty($file->getIdsouscategory)){
 
 		    		$sousCategoryInfo = $em->getRepository('GedBundle:Souscategory')->findOneById($file->getIdsouscategory());
@@ -349,7 +349,7 @@ class CategoryController extends Controller
 
     public function sscategoryAction(Request $request,$ssid)
     {
-    	//récuperation & atribution de l entitiy manager.
+    	//récuperation & attribution de l'entity manager.
     	$em=$this->getDoctrine()->getManager();
 
     	//récuperation de l'utilisateur courant.
@@ -362,7 +362,7 @@ class CategoryController extends Controller
         $form = $this->createForm(GedfilesType::class, $gedfiles);
         $form->handleRequest($request);
 
-        //Si le formulaire est envoyer et est valide.
+        //Si le formulaire est envoyé et est valide.
         if ($form->isSubmitted() && $form->isValid()) {
 
         	$originalgetting=$form->getNormData()->getPath('originalName');
@@ -393,7 +393,7 @@ class CategoryController extends Controller
 
         }
 
-        //récupération des Category.
+        //récupération des Categories.
         $categories = $em->getRepository('GedBundle:Category')->findAll();
 
         //récuperation des sous-catégories.
@@ -404,7 +404,7 @@ class CategoryController extends Controller
 
         	if (!empty($categoryInfos)){
 
-        		//On place les sous-catégorie dans un tableau si elle sont définie.
+        		//On place les sous-catégories dans un tableau si elles sont définies.
 				foreach ($categoryInfos as $categoryInfo) {
 
         			$categoryName=$categoryInfo->getName();
@@ -420,10 +420,10 @@ class CategoryController extends Controller
         	}
     	}
 
-    	//on recupere le nom de la ctégorie
+    	//on recupere le nom de la catégorie
     	$title = $em ->getRepository('GedBundle:Souscategory')->findOneById($ssid);
 
-        //récupération de tout les fichiers de l'utilisateur.
+        //récupération de tous les fichiers de l'utilisateur.
     	$myfiles = $em->getRepository('GedBundle:Gedfiles')->findBy(
     																	array( 
     																			'idowner'=> $user->getId(),
