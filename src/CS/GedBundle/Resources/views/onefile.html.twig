@@ -77,8 +77,8 @@
 			{% if tabcom != 1 %}
 				{% for comment in tabcom %}
 					<div class="one-comment">
-						<p>{{ comment['owner'] }} {{ comment['date'].date | date("d/m/Y h:m:s") }}</p>
-						<p>{{ comment['content'] }}</p>
+						<p class="comment-head">{{ comment['owner'] }} {{ comment['date'].date | date("d/m/Y h:m:s") }}</p>
+						<pre class="comment-body">{{ comment['content'] }}</pre>
 					</div>
 				{% endfor %}
 			{% endif %}
@@ -95,21 +95,7 @@
 </div>
 <script>
 	var newcomment="{{ path('ged_newcomment') }}";
-	var idfile ="{{ idfile }}";
-	$(document).ready(function(){
-
-		$('#btn-com').click(function(){
-			$('#com-part').toggleClass('col-md-3');
-			$('#com-part').toggleClass('showform');
-			$('#form').toggleClass('showform');
-			$('#file-part').toggleClass('col-md-9');
-			$('#file-part').toggleClass('col-md-12');
-		});
-		$('#modal-partage').on('shown.bs.modal', function () {
-  		$('#modal-partage').focus()
-		})
-	});
-	
+	var idfile ="{{ idfile }}";	
 </script>
 <script type="text/javascript" src="{{ asset('js/comments.js') }}"></script>
 <script type="text/javascript" src="{{ asset('js/onefile.js') }}"></script>

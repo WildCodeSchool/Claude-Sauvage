@@ -28,8 +28,8 @@ $(document).ready(function(){
 				var showDate = date.getDate()+"/"+(month)+ "/" +20+year+' '+date.getHours()+':'+minutes+':'+date.getSeconds(); 
 				$('.existing-com').append($('<div>',{ 'id': data.comtab['0'].idcom }));
 				$('#'+data.comtab['0'].idcom ).addClass('one-comment')
-				$('#'+data.comtab['0'].idcom ).append($('<p>',{'text': data.comtab['0'].owner+' '+showDate }))
-				$('#'+data.comtab['0'].idcom ).append($('<p>',{'text': data.comtab['0'].content }))
+				$('#'+data.comtab['0'].idcom ).append($('<p>',{'text': data.comtab['0'].owner+' '+showDate, 'class':'comment-head' }))
+				$('#'+data.comtab['0'].idcom ).append($('<pre>',{'text': data.comtab['0'].content, 'class':'comment-body' }))
 			},
 		});
 

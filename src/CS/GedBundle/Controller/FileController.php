@@ -28,6 +28,7 @@ class FileController extends Controller
 		$user=$this->getUser();
 		$file=$em->getRepository('GedBundle:Gedfiles')->findOneById($id);
         $comments=$em->getRepository('GedBundle:Gedcom')->findByIdfile($id);
+        $groupmember=0;
         if(!empty($file->getIdgroup()))
         {
             $filegroup=[];
@@ -44,11 +45,15 @@ class FileController extends Controller
         }
         $linkgroups=$em->getRepository('GedBundle:Linkgroup')->findByIduser($user->getId());
         foreach ($linkgroups as $linkgroup) {
-            $group=$em->getRepository('GedBundle:Groupe')->findOneById($linkgroup->getIdgroup());  
+            $group=$em->getRepository('GedBundle:Groupe')->findOneById($linkgroup->getIdgroup()); 
+            if( $filegroup!=null && $linkgroup->getIdgroup() == $filegroup['id'])
+            {
+                $groupmember=1;
+            }
             $tabgroup[]=array(
                 'idgroup'=>$group->getId(),
                 'groupname'=>$group->getName(),
-                ); 
+                );
         }
         if(empty($tabgroup))
         {
@@ -121,16 +126,25 @@ class FileController extends Controller
             return $this->redirectToRoute('ged_homepage');
         }
 
-		return $this->render('GedBundle::onefile.html.twig', array(
-			'form' => $form->createView(),
-    		'user'=>$user,
-    		'idfile'=>$id,
-    		'file'=>$file,
-    		'textfile'=>$textfile,
-            'tabcom'=>$tabcom,
-            'tabgroup'=>$tabgroup,
-            'filegroup'=>$filegroup,
-			));
+        if($user->getId()==$file->getIdowner() || $user->getId()==$filegroup['idcreator'] || $groupmember==1 )
+        {    
+        	return $this->render('GedBundle::onefile.html.twig', array(
+        		'form' => $form->createView(),
+        		'user'=>$user,
+        		'idfile'=>$id,
+        		'file'=>$file,
+        		'textfile'=>$textfile,
+                'tabcom'=>$tabcom,
+                'tabgroup'=>$tabgroup,
+                'filegroup'=>$filegroup,
+        		));
+        }
+        else
+        {
+            $url = $this -> generateUrl('ged_homepage');
+            $response = new RedirectResponse($url);
+            return $response;
+        }
 	}
     public function addCommentAction (Request $request)
     {

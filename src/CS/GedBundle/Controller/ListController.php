@@ -210,73 +210,7 @@ class ListController extends Controller
 
 		
     	//DEBUT DE LA PARTIE "PARTAGÉS AVEC MOI"
-    	$listowner=$em->getRepository('GedBundle:Gedfiles')->findByIdowner($iduser);
-    	foreach ($listowner as $file) {
-    		
-    		$type=$file->getType();
-			$path=$file->getPath();
-			$idfile=$file->getId();
-			$date=$file->getDate();
-			$name=$file->getOriginalName();
 
-			// if (empty($file->getIdsouscategory() ) )
-			// {
-
-			$categorytab=$em->getRepository('GedBundle:Category')->findOneById($file->getIdcategory());
-			$category=$categorytab->getName();
-			// }
-			// else
-			// {
-			// 	$categorytab=$em->getRepository('GedBundle:Souscategory')->findOneById($file->getIdsouscategory());
-			// 	$category=$categorytab->getName();
-			// }
-			$linktag = $em->getRepository('GedBundle:Linktag')->findByIdfile($idfile);
-			$tagnames=[];
-			foreach ($linktag as $tag) {
-	    		//on recupere l'id du premier tag
-	    		$idtag=$tag->getIdtag();
-	    		//on recupere la ligne de la table Gedtag correspondante à l'id d'au dessus
-	    		$infostag=$em->getRepository('GedBundle:Gedtag')->findOneById($idtag);
-	    		//on recupere le nom du tag et on met tout ca dans un tableau
-	    		$tagname=$infostag->getName();
-	    		$tagnames[]=array(
-	    			'id'=>$idtag,
-	    			'name'=>$tagname,
-	    			);
-	    		//on fout tout dans un tableau et on a des favoris tout neufs
-	    	}
-	    	if(empty($tagnames))
-	    	{
-	    		$tagnames=1;
-	    	}
-	    	if (!empty($tabpart))
-	    	{
-		    	if (count($tabpart)<5)
-		    	{
-			    	$tabpart[]=array(
-			    		"idfile"=>$idfile,
-		    			"tagnames"=>$tagnames,
-		    			"path"=>$path,
-		    			"type"=>$type,
-		    			"category"=>$category,
-		    			"date"=>$date,
-		    			"name"=>$name
-		    			);
-	    		}
-	    	}
-	    	else
-	    	{
-	    		$tabpart[]=array(
-	    			"idfile"=>$idfile,
-		    		"tagnames"=>$tagnames,
-		    		"path"=>$path,
-		    		"type"=>$type,
-		    		"category"=>$category,
-		    		"date"=>$date,
-		    		"name"=>$name
-		    		);
-	    	}
-    	}
     	// recup des groupes de l'utilisateur courant
     	$listgroups=$em->getRepository('GedBundle:Linkgroup')->findByIduser($iduser);
     	foreach ($listgroups as $groupfiles) {
@@ -647,9 +581,8 @@ class ListController extends Controller
 	    	$nameFile=$myfile->getOriginalName();
 
 	    	//récuperation des favoris.
-	    	$bookmarkfile = $em->getRepository('GedBundle:Linkbookmark')->findOneByIdfile($myfile->getId());
-
-    		if (empty($bookmarkfile)){
+	    	$bookmarkfile = $em->getRepository('GedBundle:Linkbookmark')->findOneBy(array('idfile'=>$myfile->getId(),'iduser'=>$user->getId()));
+    		if ($bookmarkfile==null){
     		$bookmarkfile = 0;
 	    	}
 
@@ -736,7 +669,6 @@ class ListController extends Controller
     		$groupFiles = $em->getRepository('GedBundle:Gedfiles')->findByIdgroup($group->getIdgroup());
 
 	    	foreach ($groupFiles as $file) {
-
 	    		//récuperation de l'Id du fichier.
     			$idFile = $file->getId();
 
@@ -756,7 +688,7 @@ class ListController extends Controller
 	    		$nameFile=$file->getOriginalName();
 
 	    		//récuperation des favoris.
-	    		$bookmarkfile = $em->getRepository('GedBundle:Linkbookmark')->findOneByIdfile($file->getId());
+	    		$bookmarkfile = $em->getRepository('GedBundle:Linkbookmark')->findBy(array('idfile'=>$file->getId(),'iduser'=>$user->getId()));
 
 	    		if (empty($bookmarkfile)){
 	    			$bookmarkfile = 0;
@@ -855,7 +787,6 @@ class ListController extends Controller
 	    if (empty($tabMyFiles)){
 		    		$tabMyFiles = 1;
 		}
-
     	return $this->render('GedBundle::allfiles.html.twig',array( 
 																	'form' => $form->createView(),
 																	'user'=> $user,
@@ -966,9 +897,8 @@ class ListController extends Controller
 	    	$nameFile=$myfile->getOriginalName();
 
 	    	//récuperation des favoris.
-	    	$bookmarkfile = $em->getRepository('GedBundle:Linkbookmark')->findOneByIdfile($myfile->getId());
-
-    		if (empty($bookmarkfile)){
+	    	$bookmarkfile = $em->getRepository('GedBundle:Linkbookmark')->findOneBy(array('idfile'=>$myfile->getId(),'iduser'=>$user->getId()));
+    		if ($bookmarkfile==null){
     		$bookmarkfile = 0;
 	    	}
 

@@ -121,7 +121,7 @@ class CategoryController extends Controller
 	    	$nameFile=$myfile->getOriginalName();
 
 	    	//récuperation des favoris.
-	    	$bookmarkfile = $em->getRepository('GedBundle:Linkbookmark')->findOneByIdfile($myfile->getId());
+	    	$bookmarkfile = $em->getRepository('GedBundle:Linkbookmark')->findBy(array('idfile'=>$myfile->getId(), 'iduser'=>$user->getId()));
 
     		if (empty($bookmarkfile)){
     		$bookmarkfile = 0;
@@ -235,7 +235,7 @@ class CategoryController extends Controller
 	    		$nameFile=$file->getOriginalName();
 
 	    		//récuperation des favoris.
-	    		$bookmarkfile = $em->getRepository('GedBundle:Linkbookmark')->findOneByIdfile($file->getId());
+	    		$bookmarkfile = $em->getRepository('GedBundle:Linkbookmark')->findBy(array('idfile'=>$file->getId(), 'iduser'=>$user->getId()));
 
 	    		if (empty($bookmarkfile)){
 	    			$bookmarkfile = 0;
@@ -450,7 +450,7 @@ class CategoryController extends Controller
 	    	$nameFile=$myfile->getOriginalName();
 
 	    	//récuperation des favoris.
-	    	$bookmarkfile = $em->getRepository('GedBundle:Linkbookmark')->findOneByIdfile($myfile->getId());
+	    	$bookmarkfile = $em->getRepository('GedBundle:Linkbookmark')->findBy(array('idfile'=>$myfile->getId(), 'iduser'=>$user->getId()));
 
     		if (empty($bookmarkfile)){
     		$bookmarkfile = 0;
@@ -564,7 +564,7 @@ class CategoryController extends Controller
 	    		$nameFile=$file->getOriginalName();
 
 	    		//récuperation des favoris.
-	    		$bookmarkfile = $em->getRepository('GedBundle:Linkbookmark')->findOneByIdfile($file->getId());
+	    		$bookmarkfile = $em->getRepository('GedBundle:Linkbookmark')->findBy(array('idfile'=>$file->getId(), 'iduser'=>$user->getId()));
 
 	    		if (empty($bookmarkfile)){
 	    			$bookmarkfile = 0;
