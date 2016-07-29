@@ -1,0 +1,39 @@
+{% extends "GedBundle:admin:adminlayout.html.twig" %}
+{% block body %}
+	{# liste des categories #}
+	{% for category in categories %}
+		<ul>
+			<li><ul>{{ category.name }}
+			{% for sscategory in category.sscategories %}
+				<li>{{ sscategory.name }}</li>
+			{% endfor %}
+			</ul></li>
+		</ul>
+	{% endfor %}
+{# 	formulaires de creation de categories et sous categories #}
+	<div>
+		<form action="{{ path('ged_addcategory') }}" method="post" >
+			<label for="newcat">Nouvelle Categorie</label>
+			<input id="newcat" name="newcategory"/>
+			<input type="submit" value="Ajouter" class="btn btn-default"/>
+		</form>
+	</div>
+	<div>
+		<form action="{{ path('ged_addcategory') }}" method="post" >
+			<label for="catlist">Choisir une catégorie</label>
+			<select id="catlist" name="categoryselected" >
+				{% for category in categories %}
+					{% if category.id != 1 %}
+						<option>
+							{{ category.name }}
+						</option>
+					{% endif %}
+				{% endfor %}
+			</select>
+			<br/>
+			<input name="newsscategory"/>
+			<input type="submit" value="ajouter une sous-catégorie" class="btn btn-default"/>
+		</form>
+	</div>
+{# 	fin des formulaires #}
+{% endblock %}

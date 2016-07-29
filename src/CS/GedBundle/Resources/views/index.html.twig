@@ -3,6 +3,8 @@
 {% include "GedBundle::nav.html.twig" %}
 {% include "GedBundle::search.html.twig" %}
 <div class="col-md-10">
+{# 	page d'affichage du dashboard #}
+	{# flashbags  #}
 	{% if nbBrouillon != 0 %}
 		<div class="alert alert-success alert-dismissible navbar-header pagination-centered col-md-10 col-md-offset-1" role="alert">
 			<button type="button" class="close" data-dismiss="alert" aria-label="Close"><span aria-hidden="true">&times;</span></button>
@@ -30,6 +32,9 @@
 			</div>
 		{% endfor %}	
 	{% endif %}
+
+{# 	debut des 4 tables de fichiers #}
+	{# tableau des favoris #}
 	<div class="col-md-6 tab-cel ">
 		<h3 style="text-align:center;">Mes favoris</h3>
 		<table class="table compact stripe" id="table">
@@ -70,6 +75,7 @@
 			</tbody>
 		</table>
 	</div>
+	{# tableau des uploads #}
 	<div class="col-md-6 tab-cel">
 		<h3 style="text-align:center;">Mes uploads</h3>
 		<table class="table compact stripe  tab-cel" id="table">
@@ -112,6 +118,7 @@
 	</div>
 </div>
 <div class="col-md-10">
+	{# tableau des derniers commentés #}
 	<div class="col-md-6 tab-cel">
 		<h3 style="text-align:center;">Derniers commentés</h3>
 		<table class="table compact stripe" id="tablecom">
@@ -152,6 +159,7 @@
 			</tbody>
 		</table>
 	</div>
+	{# tableau des fichiers partagés avec moi #}
 	<div class="col-md-6 tab-cel">
 		<h3 style="text-align:center;">Partagés avec moi</h3>
 		<table class="table compact stripe" id="table">
@@ -194,6 +202,7 @@
 	</div>
 </div>
 <script type="text/javascript"> 
+// script datatables pour le tri par date et champ date caché
 $(document).ready(function() { 
 	$('table').DataTable( { 
 		"paging": false,

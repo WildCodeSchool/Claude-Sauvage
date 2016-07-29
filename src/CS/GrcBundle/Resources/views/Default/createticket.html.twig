@@ -1,0 +1,81 @@
+{% extends 'GrcBundle::layout.html.twig' %}
+
+{% block body %}
+
+<div class="create_ticket">
+	<div class="formulaire_ticket col-md-4 col-md-offset-4">
+		<h3>Créer votre ticket en remplissant le formulaire ci-dessous</h3>
+		{{ form_start(form) }}
+			<div class="form-group">
+				<label for="categories">Selectionnez la catégorie:</label>
+				<select id="categories" name="cat" class="form-control">
+					<option value="0">-- Categorie --</option>
+					{% for categorie in categories %}
+						<option value= {{ categorie.id }} > {{ categorie.name }} </option>
+					{% endfor %}
+				</select>
+			</div>
+			<div class="form-group">
+				<label for="sscategories">Selectionnez la sous-catégorie:</label>
+				<select id="sscategories" name="sscat" class="form-control">
+					<option value="0">-- Sous-catégorie--</option>
+				</select>
+			</div>
+			<div class="form-group">
+				{{ form_label(form.content) }}<span class="red_star"> *</span></br>
+				{{ form_widget(form.content) }}
+			</div>
+			<div class="form-group">
+				{{ form_label(form.path) }}
+				{{ form_widget(form.path) }}
+			</div>
+			<div class="submit_ticket">
+				<input type="submit" value="Soumettre ma demande" class="btn btn-default"/>
+			</div>
+				<p><span class="red_star"> * </span>Champs obligatoires</p>
+		{{ form_end(form) }}
+	</div>
+</div>
+
+
+<script type="text/javascript">
+$("document").ready(function() { 
+
+    $("#categories").change(function() {
+
+		var categorie = $(this).val();
+            
+			if ( categorie != 0 ) {
+
+				$.ajax({
+				type: 'POST',
+				url: "{{ path('ajaxsscat') }}",
+				data: {categorie: categorie},
+				dataType : 'json',
+				beforeSend: function() {
+					console.log('On charge');
+					$("#sscategories option").remove();
+					$("#sscategories").append($('<option>',{ value : 0 , text: "-- Sous-catégorie--" }));
+					$("#sscategories").attr('disabled', 'disabled');
+				},
+				success: function(data) {
+				console.log('Requete ok',data);
+					$.each(data.sscatlist, function(index,value) {
+						$("#sscategories").append($('<option>',{ value : value.id , text: value.name }));
+						$("#sscategories").removeAttr('disabled');
+					});
+
+				},
+				error: function() {
+				alert('La requête n\'a pas abouti'); }
+				});
+			} else {
+				$("#sscategories option").remove();
+				$("#sscategories").append($('<option>',{ value : 0 , text: "-- Sous-catégorie--" }));
+				$("#sscategories").attr('disabled', 'disabled');
+			}
+    });
+});
+</script>
+
+{% endblock %}

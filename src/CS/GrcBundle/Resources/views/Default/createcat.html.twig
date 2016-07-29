@@ -1,0 +1,43 @@
+{% extends 'GrcBundle::layout.html.twig' %}
+
+{% block body %}
+
+<div class="create_cat">
+	<div class="row creation_forms">
+		<div class="col-md-3 col-md-offset-2 cat_sscat_block">
+			<h3>Créer catégorie</h3>
+			<div class="formulaire_cat">
+				<form method="post" action="{{ path('grc_submit_cat') }}">
+					<div class="form-group">
+						<label for="addcat">Intitulé de la catégorie:</label>
+						<input type="text" class="form-control" id="addcat" name="addcat">
+					</div>
+					<button type="submit" class="btn btn-default">Créer la catégorie</button>
+				</form>
+			</div>
+		</div>
+		<div class="col-md-3 col-md-offset-2 cat_sscat_block">
+			<h3>Créer sous-catégorie</h3>
+			<div class="formulaire_sscat">
+				<form method="post" action="{{ path('grc_submit_sscat') }}">
+					<div class="form-group">
+						<label for="select_cat">Selectionner la catégorie:</label>
+						<select id="select_cat" name="cat_selected" class="form-control">
+							  {% for categorie in listcat %}
+								  <option value= {{ categorie.id }} > {{ categorie.name }} </option>
+							  {% endfor %}
+						</select>
+					</div>
+					<div class="form-group">
+						<label for="addsscat">Intitulé de la sous-catégorie::</label>
+						<input type="text" class="form-control" name="addsscat" id="addsscat"/>
+					</div>
+					<button type="submit" class="btn btn-default">Créer la sous-catégorie</button>
+				</form>
+			</div>
+		</div>
+	</div>
+</div>
+
+{% endblock %}
+

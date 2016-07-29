@@ -14,15 +14,19 @@ use CS\GedBundle\Entity\Category;
 use CS\GedBundle\Entity\Souscategory;
 use DateTime;
 
+//controller gérant les paramètres d'un fichier (tags/catégories/sous-catégories)
 class ParametersController extends Controller
 {
     /**
      * @Route("/parameters/{id_file}", name="ged_parameters_file")
      */
+    // fonction d'affichage de la page de paramètres
     public function ParametersAction(Request $request, $id)
     {
+        //récupération de l'entity manager et de l'utilisateur courant
 		$em = $this->getDoctrine()->getManager();
         $user = $this->getUser();
+        //recupération des categories et sous categories 
         $category= $em->getRepository('GedBundle:Category')->findAll();
         $souscategory=$em->getRepository('GedBundle:Souscategory')->findAll();
         
@@ -48,15 +52,16 @@ class ParametersController extends Controller
         {
             $souscategory=0;
         }
-
+        //recupération du fichier et des tags
         $file = $em->getRepository('GedBundle:Gedfiles')->findOneById($id);
         $filename=$file->getOriginalname();
         $linktags = $em->getRepository('GedBundle:Linktag')->findByIdfile($id);
         //compte des tags du fichier
-        //ajout de categories
+        //ajout de categories (recupération des champs contenant les noms)
         $addcat= $request->request->get('addcat');
         $addsscat= $request->request->get('addsscat');
         
+        //ajout de categorie
         if(!empty($addcat) && $addcat != 0)
         {
             $newcategory=$em->getRepository('GedBundle:Gedfiles')->findOneById($id);
@@ -64,6 +69,7 @@ class ParametersController extends Controller
             $em->persist($newcategory);
             $em->flush();
         }
+        //ajout de sous categorie
         if(!empty($addsscat) && $addsscat != 0)
         {
             $newsscategory=$em->getRepository('GedBundle:Gedfiles')->findOneById($id);
@@ -113,23 +119,26 @@ class ParametersController extends Controller
             'filename'=>$filename,
         ));
     }
-
+    //fonction de suppression de tags (ajax)
     public function removeTagAction (Request $request)
     {
-        var_dump($request);
+        //récupération de l'entity manager et de l'utilisateur courant
         $em=$this->getDoctrine()->getManager();
-
+        //recuperation de l'id tag
         $idtag=$request->request->get('idtag');
-        
+        //suppression du lien tag/fichier
         $linktag=$em->getRepository('GedBundle:Linktag')->findOneById($idtag);
         
         $em->remove($linktag);
         $em->flush();
     }
+    //fonction d'ajout de tag (ajax)
     public function addTagAction (Request $request)
     {
+        //récupération de l'entity manager et de l'utilisateur courant
         $em=$this->getDoctrine()->getManager();
         $user=$this->getUser();
+        //recuperation de l'id file et du nom du tag
         $id = $request->request->get('idfile');
         $addtag=$request->request->get('content');
         $created= 0;
@@ -151,11 +160,14 @@ class ParametersController extends Controller
         {
             $tabtag=0;
         }
+        //s'il existe moins de 3 tags et que l'entrée et correcte
         if(count($tabtag)<3 && !empty($addtag))
         {
+            //on recupère les tags du fichier
             $existingtags=$em->getRepository('GedBundle:Gedtag')->findAll();
             foreach ($existingtags as $existingtag)
             {
+                //si le tag existe déja sur ce fichier
                 if($addtag == $existingtag->getName())
                 {
                     $link=$em->getRepository('GedBundle:Linktag')->findOneByIdtag($existingtag->getId());
@@ -166,6 +178,7 @@ class ParametersController extends Controller
                     }
                     else
                     {
+                        //sinon on crée le tag
                         $newlinktag = new Linktag();
                         $newlinktag ->setIdfile($id);
                         $newlinktag->setIdtag($existingtag->getId());
@@ -176,6 +189,7 @@ class ParametersController extends Controller
                     }
                 }
             }
+            //si le tag n'existe pas du tout on le crée et on fait aussi le lien tag/fichier
             if( $created == 0 )
             {
                 $newtag = new Gedtag;
@@ -192,9 +206,12 @@ class ParametersController extends Controller
         }
         elseif(count($tabtag) >= 3 && !empty($addtag))
         {
+            //si le nombre de tags est supérieur ou egal a 3 et que l'entrée est correcte
+            //on recupere les tags existants 
             $existingtags=$em->getRepository('GedBundle:Gedtag')->findAll();
             foreach ($existingtags as $existingtag)
             {
+                //on remplace le premier tag du fichier par le nouveau tag si le tag existe déjà en bdd on recrée juste le lien tag/file
                 if($done == 0)
                 {
                     if($addtag == $existingtag->getName())
@@ -212,6 +229,7 @@ class ParametersController extends Controller
                     }
                 }
             }
+            // si le tag n'existait pas on le crée totalement (tag et lien)
             if($done == 0)
             {
                 $newtag = new Gedtag;
@@ -231,7 +249,7 @@ class ParametersController extends Controller
             }
         }
 
-        
+        //si l'entrée n'est pas correcte        
         if(!empty($addtag))
         {
             $tabtag = [];
@@ -246,7 +264,7 @@ class ParametersController extends Controller
         {
             $tabtag=1;
         }
-
+        //envoi de reponse pour l'ajax
         $response = new JsonResponse();
         return $response->setData(array('tabtag' => $tabtag));
 

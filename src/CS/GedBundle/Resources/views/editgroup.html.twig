@@ -1,6 +1,6 @@
 {% extends "GedBundle::layout.html.twig" %}
 {% block body %}
-	{# debut modal #}
+	{# debut modal userremove #}
 	<div class="modal fade" id="modal-removeuser" tabindex="-1" role="dialog" aria-labelledby="myModalLabel">
 		<div class="modal-dialog" role="document">
 			<div class="modal-content">
@@ -23,8 +23,10 @@
 		</div>
 	</div>
 	{# fin modal #}
-	{% if user.id == group.idcreator %}
+{# 	contenu accessible que pour le createur du groupe #}
+	{% if group.idcreator is defined and user.id is defined and user.id == group.idcreator %}
 		<h2 class="file-title">Modifier les paramètres du groupe: {{ group.name }}</h2>
+{# 		formulaires d'ajout d'user / de suppression d'user / de modif du nom du groupe / de suppression du groupe #}
 		<div class="col-md-4 col-md-offset-4 parameters-group">
 			<label for="useradd">Ajouter un utilisateur au groupe</label>
 			<input name="useradd" id="useraddfield"/>
@@ -55,6 +57,7 @@
 		</div>
 	{% endif %}
 	<script type="text/javascript">
+	 	// variables js pour l'ajax
 		var useraddpath = "{{ path('ged_addusertogroup') }}";
 		var idgroup = "{{ id }}";
 	</script>

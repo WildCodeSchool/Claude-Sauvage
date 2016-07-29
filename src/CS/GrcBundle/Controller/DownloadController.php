@@ -1,14 +1,20 @@
 <?php
 
-namespace CS\GedBundle\Controller;
+namespace CS\GrcBundle\Controller;
 
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
+use Symfony\Component\HttpFoundation\Request;
+use Symfony\Component\HttpFoundation\JsonResponse;
+use Symfony\Component\HttpFoundation\RedirectResponse;
 use Symfony\Component\HttpFoundation\Response;
-use CS\GedBundle\Entity\Gedfiles;
+use CS\GrcBundle\Entity\Ticket;
+use CS\GrcBundle\Form\TicketType;
+use CS\GrcBundle\Entity\Comment;
+use CS\GrcBundle\Form\CommentType;
+use DateTime;
 
 class DownloadController extends Controller
 {
-    //fonction de téléchargement d'un fichier
     public function downloadAction($name)
     {
         $request = $this->get('request');
@@ -19,7 +25,7 @@ class DownloadController extends Controller
         $em=$this->getDoctrine()->getManager();
 
         //récupération de l'instance d'entité corespondante.
-        $fileSource = $em->getRepository('GedBundle:Gedfiles')->findOneByPath($name);
+        $fileSource = $em->getRepository('GrcBundle:Ticket')->findOneByPath($name);
 
         //récupération du nom original.
         $fileOriginalName = $fileSource->getOriginalname();

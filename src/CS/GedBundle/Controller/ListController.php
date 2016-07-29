@@ -15,16 +15,18 @@ use CS\GedBundle\Entity\Linktag;
 use CS\GedBundle\Entity\Gedtag;
 use DateTime;
 
+//controller du dashboard et de la liste allfiles
 class ListController extends Controller
 {
+	// fonction d'affichage du dashboard
     public function showDashboardAction(Request $request)
     {
+    	//récuperation de l'entity manager et de l'utilisateur courant
     	$em=$this->getDoctrine()->getManager();
-    	
-    	$user = $this->container->get('security.context')->getToken()->getUser();
+    	$user = $this->getUser();
     	$iduser=$user->getId();
 
-    	//récupération des Category.
+    	//récupération des Categories.
         $categories = $em->getRepository('GedBundle:Category')->findAll();
 
         //récuperation des sous-catégories.
@@ -51,6 +53,8 @@ class ListController extends Controller
         	}
     	}
 
+    	// AFFICHAGE DES 5 DERNIERS FAVORIS
+
     	//on recupere tous les fichiers mis en fav par l'user
     	$listfavs=$em->getRepository('GedBundle:Linkbookmark')->findBy(  
     		array('iduser' => $iduser), // Critere
@@ -70,14 +74,7 @@ class ListController extends Controller
 	    	$date=$fav->getDate();
 	    	$name=$fav->getOriginalName();
 	    	//trouver la categorie ou souscategorie du fichier
-	    	// if (!empty($fav->getIdsouscategory()))
-	    	// {
-	    	// 	$category=$em->getRepository('GedBundle:Souscategory')->findOneById($fav->getIdsouscategory());
-	    	// }
-	    	// else
-	    	// {
     		$category=$em->getRepository('GedBundle:Category')->findOneById($fav->getIdcategory())->getName();
-	    	// }
 	    	//on recupere tous les tags correspondants au fichier
 	    	$linktag = $em->getRepository('GedBundle:Linktag')->findByIdfile($idfav);
 	    	$tagnames = [];
@@ -119,7 +116,7 @@ class ListController extends Controller
 
     	$change = 0;
     	$compte = 0;
-
+    	//recuperation des fichiers de l'user courant avec en premier les fichiers non catégorisés puis tous les fichiers
     	while ($change < 2 && $compte < 5)
     	{
     		if ($change == 0)
@@ -139,10 +136,10 @@ class ListController extends Controller
 				);
 				
     		}
-
+    		//pour chaque fichier uploadé
 	    	foreach ($listupls as $oneupl ) 
 	    	{		
-	    		
+	    	
 	    		if ($change == 1 && $oneupl->getIdcategory() != 1 && $compte< 5 || $change == 0 && $oneupl->getIdcategory() == 1 && $compte< 5 )
 	    		{
 	    		
@@ -154,17 +151,10 @@ class ListController extends Controller
 			    	$type=$oneupl->getType();
 			    	$date=$oneupl->getDate();
 			    	$name=$oneupl->getOriginalName();
-			    	//trouver la categorie ou souscategorie du fichier
-			    	// if (!empty($oneupl->getIdsouscategory()))
-			    	// {
-			    	// 	$categorytab=$em->getRepository('GedBundle:Souscategory')->findOneById($oneupl->getIdsouscategory());
-			    	// 	$category=$categorytab->getName();
-			    	// }
-			    	// else
-			    	// {
+			    	//trouver la categorie du fichier
+			   
 		    		$categorytab=$em->getRepository('GedBundle:Category')->findOneById($oneupl->getIdcategory());
 		    		$category=$categorytab->getName();
-			    	// }
 			    	//on recupere tous les tags correspondants au fichier
 			    	$linktag = $em->getRepository('GedBundle:Linktag')->findByIdfile($idupl);
 			    	$tagnames = [];
@@ -209,74 +199,8 @@ class ListController extends Controller
     	}
 
 		
-    	//DEBUT DE LA PARTIE "PARTAGÉS AVEC MOI"
-    	$listowner=$em->getRepository('GedBundle:Gedfiles')->findByIdowner($iduser);
-    	foreach ($listowner as $file) {
-    		
-    		$type=$file->getType();
-			$path=$file->getPath();
-			$idfile=$file->getId();
-			$date=$file->getDate();
-			$name=$file->getOriginalName();
+    	//LISTE DES "PARTAGÉS AVEC MOI"
 
-			// if (empty($file->getIdsouscategory() ) )
-			// {
-
-			$categorytab=$em->getRepository('GedBundle:Category')->findOneById($file->getIdcategory());
-			$category=$categorytab->getName();
-			// }
-			// else
-			// {
-			// 	$categorytab=$em->getRepository('GedBundle:Souscategory')->findOneById($file->getIdsouscategory());
-			// 	$category=$categorytab->getName();
-			// }
-			$linktag = $em->getRepository('GedBundle:Linktag')->findByIdfile($idfile);
-			$tagnames=[];
-			foreach ($linktag as $tag) {
-	    		//on recupere l'id du premier tag
-	    		$idtag=$tag->getIdtag();
-	    		//on recupere la ligne de la table Gedtag correspondante à l'id d'au dessus
-	    		$infostag=$em->getRepository('GedBundle:Gedtag')->findOneById($idtag);
-	    		//on recupere le nom du tag et on met tout ca dans un tableau
-	    		$tagname=$infostag->getName();
-	    		$tagnames[]=array(
-	    			'id'=>$idtag,
-	    			'name'=>$tagname,
-	    			);
-	    		//on fout tout dans un tableau et on a des favoris tout neufs
-	    	}
-	    	if(empty($tagnames))
-	    	{
-	    		$tagnames=1;
-	    	}
-	    	if (!empty($tabpart))
-	    	{
-		    	if (count($tabpart)<5)
-		    	{
-			    	$tabpart[]=array(
-			    		"idfile"=>$idfile,
-		    			"tagnames"=>$tagnames,
-		    			"path"=>$path,
-		    			"type"=>$type,
-		    			"category"=>$category,
-		    			"date"=>$date,
-		    			"name"=>$name
-		    			);
-	    		}
-	    	}
-	    	else
-	    	{
-	    		$tabpart[]=array(
-	    			"idfile"=>$idfile,
-		    		"tagnames"=>$tagnames,
-		    		"path"=>$path,
-		    		"type"=>$type,
-		    		"category"=>$category,
-		    		"date"=>$date,
-		    		"name"=>$name
-		    		);
-	    	}
-    	}
     	// recup des groupes de l'utilisateur courant
     	$listgroups=$em->getRepository('GedBundle:Linkgroup')->findByIduser($iduser);
     	foreach ($listgroups as $groupfiles) {
@@ -294,17 +218,10 @@ class ListController extends Controller
 	    			$date=$file->getDate();
 	    			$name=$file->getOriginalName();
 
-	    			// if (empty($file->getIdsouscategory() ) )
-	    			// {
+	    			//recuperation de la categorie
 
 					$categorytab=$em->getRepository('GedBundle:Category')->findOneById($file->getIdcategory());
 					$category=$categorytab->getName();
-	    			// }
-	    			// else
-	    			// {
-	    			// 	$categorytab=$em->getRepository('GedBundle:Souscategory')->findOneById($file->getIdsouscategory());
-	    			// 	$category=$categorytab->getName();
-	    			// }
 	    			$linktag = $em->getRepository('GedBundle:Linktag')->findByIdfile($idfile);
 	    			$tagnames=[];
 	    			foreach ($linktag as $tag) {
@@ -318,7 +235,7 @@ class ListController extends Controller
 			    			'id'=>$idtag,
 			    			'name'=>$tagname,
 			    			);
-			    		//on fout tout dans un tableau et on a des favoris tout neufs
+			    		//on met tout dans un tableau et on a des favoris tout neufs
 			    	}
 			    	//s'il n'existe pas de tag, on assigne 1 au tableau des tags
 			    	if(empty($tagnames))
@@ -360,8 +277,9 @@ class ListController extends Controller
     		$tabpart=1;
     	}
 
-    	//DERNIERS COMMENTÉS
+    	// LISTE DES 5 DERNIERS COMMENTÉS
 
+    	//on recupere les fichiers des groupes de l'utilisateur
     	$linkgroup = $em->getRepository('GedBundle:Linkgroup')->findByIduser($user->getId());
     	foreach ($linkgroup as $groupedfile) 
     	{
@@ -376,6 +294,7 @@ class ListController extends Controller
 	    		}
 	    	}
     	}
+    	//on recupere les fichiers de l'utilisateur courant
     	$files=$em->getRepository('GedBundle:Gedfiles')->findByIdowner($user->getId());
     	foreach ($files as $file)
     	{
@@ -390,6 +309,7 @@ class ListController extends Controller
 		{
 			$accessfiles = 0 ;
 		}
+		//on recupere tous les fichiers commentés
     	$filescom=$em->getRepository('GedBundle:Gedcom')->findBy(
     		array(),
     		array('id'=>'desc')
@@ -402,6 +322,7 @@ class ListController extends Controller
     		$counted=0;
     		$accessible=0;
     		$idfile=$filecom->getIdfile();
+    		//on verifie que chaque fichier est bien compté une seule fois
     		while($i<count($tab))
     		{
     			if( $idfile == $tab[$i]['id'] )
@@ -431,17 +352,12 @@ class ListController extends Controller
 	    			$path = $file->getPath();
 	    			$date = $filecom->getDate();
 	    			$name = $file->getOriginalName();
-	    			// if (empty($file->getIdsouscategory() ) )
-	    			// {
+	    			//recuperation de la categorie
 
 					$categorytab=$em->getRepository('GedBundle:Category')->findOneById($file->getIdcategory());
 					$category=$categorytab->getName();
-	    			// }
-	    			// else
-	    			// {
-	    			// 	$categorytab=$em->getRepository('GedBundle:Souscategory')->findOneById($file->getIdsouscategory());
-	    			// 	$category=$categorytab->getName();
-	    			// }
+	    			
+	    			//recuperation des tags
 	    			$linktag = $em->getRepository('GedBundle:Linktag')->findByIdfile($idfile);
 	    			$tagnames = [];
 	    			foreach ($linktag as $tag) {
@@ -549,19 +465,20 @@ class ListController extends Controller
 			'nbBrouillon' => $nbBrouillon,
     	));
     }
-
+    //fonction d'affichage de la page allfiles
     public function allAction(Request $request)
     {
-    	//récuperation & atribution de l entitiy manager.
+    	//récuperation & atribution de l entity manager.
     	$em=$this->getDoctrine()->getManager();
 
     	//récuperation de l'utilisateur courant.
     	$user =$this->getUser();
 
+    	//fonction d'upload
     	//création d'une nouvelle instance de l'entité Gedfiles.
     	$gedfiles = new Gedfiles();
 
-    	//créetion du formulaire
+    	//création du formulaire
         $form = $this->createForm(GedfilesType::class, $gedfiles);
         $form->handleRequest($request);
 
@@ -596,7 +513,7 @@ class ListController extends Controller
 
         }
 
-        //récupération des Category.
+        //récupération des Categories.
         $categories = $em->getRepository('GedBundle:Category')->findAll();
 
         //récuperation des sous-catégories.
@@ -607,7 +524,7 @@ class ListController extends Controller
 
         	if (!empty($categoryInfos)){
 
-        		//On place les sous-catégorie dans un tableau si elle sont définie.
+        		//On place les sous-catégories dans un tableau si elles sont définies.
 				foreach ($categoryInfos as $categoryInfo) {
 
         			$categoryName=$categoryInfo->getName();
@@ -647,9 +564,8 @@ class ListController extends Controller
 	    	$nameFile=$myfile->getOriginalName();
 
 	    	//récuperation des favoris.
-	    	$bookmarkfile = $em->getRepository('GedBundle:Linkbookmark')->findOneByIdfile($myfile->getId());
-
-    		if (empty($bookmarkfile)){
+	    	$bookmarkfile = $em->getRepository('GedBundle:Linkbookmark')->findOneBy(array('idfile'=>$myfile->getId(),'iduser'=>$user->getId()));
+    		if ($bookmarkfile==null){
     		$bookmarkfile = 0;
 	    	}
 
@@ -736,7 +652,6 @@ class ListController extends Controller
     		$groupFiles = $em->getRepository('GedBundle:Gedfiles')->findByIdgroup($group->getIdgroup());
 
 	    	foreach ($groupFiles as $file) {
-
 	    		//récuperation de l'Id du fichier.
     			$idFile = $file->getId();
 
@@ -756,7 +671,7 @@ class ListController extends Controller
 	    		$nameFile=$file->getOriginalName();
 
 	    		//récuperation des favoris.
-	    		$bookmarkfile = $em->getRepository('GedBundle:Linkbookmark')->findOneByIdfile($file->getId());
+	    		$bookmarkfile = $em->getRepository('GedBundle:Linkbookmark')->findBy(array('idfile'=>$file->getId(),'iduser'=>$user->getId()));
 
 	    		if (empty($bookmarkfile)){
 	    			$bookmarkfile = 0;
@@ -855,7 +770,6 @@ class ListController extends Controller
 	    if (empty($tabMyFiles)){
 		    		$tabMyFiles = 1;
 		}
-
     	return $this->render('GedBundle::allfiles.html.twig',array( 
 																	'form' => $form->createView(),
 																	'user'=> $user,
@@ -866,6 +780,7 @@ class ListController extends Controller
 																	));
     }
 
+    //fonction upload et recupération des catégories
     public function parametersAction(Request $request)
     {
     	//récuperation & atribution de l entitiy manager.
@@ -966,9 +881,8 @@ class ListController extends Controller
 	    	$nameFile=$myfile->getOriginalName();
 
 	    	//récuperation des favoris.
-	    	$bookmarkfile = $em->getRepository('GedBundle:Linkbookmark')->findOneByIdfile($myfile->getId());
-
-    		if (empty($bookmarkfile)){
+	    	$bookmarkfile = $em->getRepository('GedBundle:Linkbookmark')->findOneBy(array('idfile'=>$myfile->getId(),'iduser'=>$user->getId()));
+    		if ($bookmarkfile==null){
     		$bookmarkfile = 0;
 	    	}
 

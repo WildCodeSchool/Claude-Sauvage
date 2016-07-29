@@ -9,6 +9,9 @@ grc:
 ged:
     resource: "@GedBundle/Resources/config/routing.yml"
     prefix:   /ged
+gedadmin:
+    resource: "@GedBundle/Resources/config/adminrouting.yml"
+    prefix:   /gedadmin
 
 app:
     resource: "@AppBundle/Controller/"
@@ -16,7 +19,7 @@ app:
 
 # Import des route fos_user register
 register:
-    path:     /register
+    path:     /gedamin/register
     defaults: { _controller: AppBundle:Registration:register }
 
 # Import des route fos_user login
@@ -27,6 +30,10 @@ user_login:
 user_login_check:
     path:     /login_check
     defaults: { _controller: AppBundle:Security:check }
+
+user_logout:
+    path:     /logout
+    defaults: { _controller: AppBundle:Security:logout }
 
 fos_user:
     resource: "@FOSUserBundle/Resources/config/routing/all.xml"
