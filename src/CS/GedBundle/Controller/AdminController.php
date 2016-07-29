@@ -15,13 +15,18 @@ use CS\GedBundle\Entity\Linktag;
 use CS\GedBundle\Entity\Gedtag;
 use DateTime;
 
+// ce controller gère toutes les fonctions relatives aux actions 'administrateur'
+
 class AdminController extends Controller
 {
+	// fonction d'affichage du dashboard admin ( /gedadmin/ )
 	public function showDashboardAction ()
 	{
+		// recuperation de l'entity manager et de l'utilisateur courant
 		$em=$this->getDoctrine()->getManager();
 		$user=$this->getUser();
 
+		//liste de tous les fichiers
 		$gedfiles= $em->getRepository('GedBundle:Gedfiles')->findAll();
 
 		return $this->render('GedBundle:admin:admindashboard.html.twig', array(
@@ -29,10 +34,15 @@ class AdminController extends Controller
 			'files'=>$gedfiles,
 			));
 	}
+
+	// fonction d'ajout de catégories et sous-catégories ( gedadmin/newcategory/ )
 	public function addCategoryAction (Request $request)
 	{
+		// recuperation de l'entity manager et de l'utilisateur courant
 		$em=$this->getDoctrine()->getManager();
 		$user=$this->getUser();
+
+		//recupération des formulaires et de la table des catégories
 		$categories=$em->getRepository('GedBundle:Category')->findAll();
 		$newcategory=$request->request->get('newcategory');
 		$categoryselected=$request->request->get('categoryselected');
@@ -40,6 +50,7 @@ class AdminController extends Controller
 
 		foreach ($categories as $category )
 		{
+			//récuperation des sous catégories relatives à chaque catégorie
 			$sscategories=$em->getRepository('GedBundle:Souscategory')->findByIdcategory($category->getId());
 			foreach ($sscategories as $sscategory)
 			{
@@ -61,6 +72,8 @@ class AdminController extends Controller
 				);
 			$sscategoriestab=[];
 		}
+
+		//verification de formulaire et ajout de catégorie
 		if(!empty($newcategory) && empty($em->getRepository('GedBundle:Category')->findOneByName($newcategory)) )
 		{
 			$addcategory = new Category();
@@ -70,6 +83,7 @@ class AdminController extends Controller
 			$em->flush();
 		}
 		
+		//verification des formulaires et ajout de sous-catégorie
 		if(!empty($newsscategory) && !empty($categoryselected) && ($em->getRepository('GedBundle:Souscategory')->findOneBy(array('name'=>$newsscategory, 'idcategory'=>$em->getRepository('GedBundle:Category')->findOneByName($categoryselected)->getId()) ) == null))
 		{
 			$addsscategory = new Souscategory();

@@ -7,7 +7,7 @@ Bienvenue sur ce projet réalisé par 3 étudiants de la Wild Code School: [Sylv
 
 Ce projet comporte deux Bundles construits pour Symfony 2.8:
 
-- un système de GED, conçu pour la gestion d'une petite entreprise.
+- un système de GED, conçu pour la gestion des documents d'une petite entreprise.
 
 - un système de GRC (ticketing), conçu pour permettre le dialogue entre des commerciaux et leurs clients
 
@@ -58,14 +58,3 @@ $ php app/console doctrine:schema:update --force
 ```
 sudo chmod 777 web/uploads/
 ```
-
--->vider le cache et les logs
-
-```
-$ sudo chmod -R 777 app/cache/ app/logs/
-$ sudo rm -rf app/cache/* app/logs/*
-$ sudo chmod -R 777 app/cache/ app/logs/
-```
-
-
-
