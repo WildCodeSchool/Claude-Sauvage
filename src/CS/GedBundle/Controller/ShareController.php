@@ -75,6 +75,10 @@ class ShareController extends Controller
             $pathDir = $this->container->getParameter('kernel.root_dir').'/../web/uploads';
             $file->move($pathDir, $fileName);
 
+            if($type==null){
+                $type = 'txt';
+            }
+
             $gedfiles->setType($type);
             $gedfiles->setPath($fileName);
             $gedfiles->setIdowner($user->getId());

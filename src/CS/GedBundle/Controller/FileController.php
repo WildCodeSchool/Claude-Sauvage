@@ -122,6 +122,11 @@ class FileController extends Controller
             $fileName = md5(uniqid()).'.'.$file->guessExtension();
 
             $pathDir = $this->container->getParameter('kernel.root_dir').'/../web/uploads';
+
+            if($type==null){
+                $type = 'txt';
+            }
+            
             $file->move($pathDir, $fileName);
             $gedfiles->setType($type);
             $gedfiles->setPath($fileName);
