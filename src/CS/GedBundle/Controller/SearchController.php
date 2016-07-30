@@ -14,6 +14,7 @@ use CS\GedBundle\Entity\Category;
 use CS\GedBundle\Entity\Gedfiles;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use CS\GedBundle\Form\GedfilesType;
+use DateTime;
 
 class SearchController extends Controller
 {
@@ -320,7 +321,32 @@ class SearchController extends Controller
         $searchRecherche=$request->request->get('recherche');
         $searchCategorie=$request->request->get('categorie');
         $searchSscategorie=$request->request->get('sscategories');
-        $searchtype=$request->request->get('type');
+        $searchtype=$request->request->get('type');        
+        
+        //Videos
+        if(4==$searchtype){
+            $fileType = array('mp4','avi', );
+        }
+
+        //Audio
+        if(3==$searchtype){
+            $fileType = array('mp3','wave', );
+        }
+
+        //Image
+        if(2==$searchtype){
+            $fileType = array('jpeg','png', );
+        }
+
+        //Texte
+        if(1==$searchtype){
+            $fileType = array('doc','txt',);
+        }
+
+        //Aucune selection
+        if(0==$searchtype){
+            $fileType = 0;
+        }
 
         //création d'une nouvelle instance de l'entité Gedfiles.
         $gedfiles = new Gedfiles();
@@ -343,6 +369,10 @@ class SearchController extends Controller
 
             $pathDir = $this->container->getParameter('kernel.root_dir').'/../web/uploads';
             $file->move($pathDir, $fileName);
+
+            if($type==null){
+                $type = 'txt';
+            }
 
             $gedfiles->setType($type);
             $gedfiles->setPath($fileName);
@@ -387,17 +417,20 @@ class SearchController extends Controller
             }
         }
         
-        if(strlen($searchRecherche)!=0){
+        if(strlen($searchRecherche)>=0){
             //si sous-catégory est remseingné
             if (($searchSscategorie != null) && ($searchSscategorie != 0)){
-                var_dump('sous catégory est remseingné');
-                var_dump($searchCategorie);
-                var_dump($searchSscategorie);
                 //RECHERCHE POUR L' UTILISATEUR - Fichiers
 
                 //recherche le nom du fichier
-                $myfiles = $em->getRepository('GedBundle:Gedfiles')->sscategorySearch($searchRecherche, $idUser, $searchCategorie, $searchSscategorie);
-                
+                //si le type et defini
+                if($fileType!=0){
+                    $myfiles = $em->getRepository('GedBundle:Gedfiles')->sscategoryTypeSearch($searchRecherche, $idUser, $searchCategorie, $searchSscategorie, $fileType);
+                }
+                //sinon
+                else{
+                    $myfiles = $em->getRepository('GedBundle:Gedfiles')->sscategorySearch($searchRecherche, $idUser, $searchCategorie, $searchSscategorie);
+                }
                 $nameTab =[];
 
                 foreach ($myfiles as $myfile) {
@@ -476,32 +509,114 @@ class SearchController extends Controller
                 //pour chaque lien d'id de fichier et de l'id utilisateur aller les chercher et remplir un tableau
                 $tagTab = [];
                 foreach ($linkTagTab as $tagId) {
-                    $tagFile = $em->getRepository('GedBundle:Gedfiles')->findOneBy(
-                        array(
-                            'id'=>$tagId['idFile'],
-                            'idowner'=>$idUser,
-                            'idcategory'=>$searchCategorie,
-                            'idsouscategory'=>$searchSscategorie,
-                        )                        
-                    );
+                    
+                    //si le type est defini
+                    if ($fileType!=0){
+                        foreach ($fileType as $defType){
+                            $tagFile = $em->getRepository('GedBundle:Gedfiles')->findOneBy(array(
+                                                                                            'id'=>$tagId['idFile'],
+                                                                                            'idowner'=>$idUser,
+                                                                                            'idcategory'=>$searchCategorie,
+                                                                                            'idsouscategory'=>$searchSscategorie,
+                                                                                            'type'=>$defType,
+                                                                                        ));
+                            if($tagFile!=null){
+                                // on recupere son id
+                                $id = $tagFile->getId();
+                                $count=0;
+                                if($nameTab!=null){                                    
+                                    //pourchaque entre dans le tableau myFileTab
+                                    foreach ($nameTab as $myFile) {
+                                        //on recupere id pour chaque entré du tableau
+                                        $myFileId = $myFile['id'];
 
-                    if($tagFile!=null){
-                        // on recupere son id
-                        $id = $tagFile->getId();
+                                        //et on la compare a chaque fois avec id de tagFile.
+                                        if($myFileId==$id){
+                                            $count++;
+                                        }
+                                    }
+                                }
+                                if($tagTab!=null){
+                                    //pourchaque entre dans le tableau myFileTab
+                                    foreach ($tagTab as $myFile) {
+                                        //on recupere id pour chaque entré du tableau
+                                        $myFileId = $myFile['id'];
+                                        //et on la compare a chaque fois avec id de tagFile.
+                                        if($myFileId==$id){
+                                            $count++;
+                                        }
+                                    }
+                                }
+                                if($count==0){
+                                    //nom du fichier
+                                    $name = $tagFile->getOriginalName();
+                                    //son id
+                                    $id = $tagFile->getId();
+                                    //son type
+                                    $type = $tagFile->getType();
+                                    //son chemin
+                                    $path = $tagFile->getPath();
 
-                        if($nameTab!=null){
+                                    //récuperation des favoris.
+                                    $bookmark = $em->getRepository('GedBundle:Linkbookmark')->findOneBy( array( 'idfile'=>$id,
+                                                                                                                'iduser'=>$idUser,
+                                                                                                                )
+                                    );
+                                    if ($bookmark!=null){
+                                        $bookmark = 1;
+                                    }
+
+                                    else{
+                                        $bookmark = 0;
+                                    }
+
+                                    //on met tout dans un tableau
+                                    $tagTab[] = array(
+                                        'name' => $name,
+                                        'id' => $id,
+                                        'type' => $type,
+                                        'path' => $path,
+                                        'bookmark' => $bookmark,
+                                    );
+                                }
+                            }                                                      
+                        }
+                    }
+                    //sinon
+                    if ($fileType==0) {
+                        $tagFile = $em->getRepository('GedBundle:Gedfiles')->findOneBy(array(
+                                                                                                'id'=>$tagId['idFile'],
+                                                                                                'idowner'=>$idUser,
+                                                                                                'idcategory'=>$searchCategorie,
+                                                                                                'idsouscategory'=>$searchSscategorie,
+                                                                                            ));
+                        if($tagFile!=null){
+                            // on recupere son id
+                            $id = $tagFile->getId();
                             $count=0;
-                            //pourchaque entre dans le tableau myFileTab
-                            foreach ($nameTab as $myFile) {
-                                //on recupere id pour chaque entré du tableau
-                                $myFileId = $myFile['id'];
+                            if($nameTab!=null){
+                                //pourchaque entre dans le tableau myFileTab
+                                foreach ($nameTab as $myFile) {
+                                    //on recupere id pour chaque entré du tableau
+                                    $myFileId = $myFile['id'];
 
-                                //et on la compare a chaque fois avec id de tagFile.
-                                if($myFileId==$id){
-                                    $count++;
+                                    //et on la compare a chaque fois avec id de tagFile.
+                                    if($myFileId==$id){
+                                        $count++;
+                                    }
                                 }
                             }
-                            //si le compteur est a 0 c est que le l id n'est pas dans mes fichiers 
+                            if($tagTab!=null){
+                                //pourchaque entre dans le tableau myFileTab
+                                foreach ($tagTab as $myFile) {
+                                    //on recupere id pour chaque entré du tableau
+                                    $myFileId = $myFile['id'];
+                                    //et on la compare a chaque fois avec id de tagFile.
+                                    if($myFileId==$id){
+                                        $count++;
+                                    }
+                                }
+                            }
                             if($count==0){
                                 //nom du fichier
                                 $name = $tagFile->getOriginalName();
@@ -534,38 +649,7 @@ class SearchController extends Controller
                                     'bookmark' => $bookmark,
                                 );
                             }
-                        }
-                        else{
-                            //nom du fichier
-                            $name = $tagFile->getOriginalName();
-                            //son id
-                            $id = $tagFile->getId();
-                            //son type
-                            $type = $tagFile->getType();
-                            //son chemin
-                            $path = $tagFile->getPath();
-
-                            //récuperation des favoris.
-                            $bookmark = $em->getRepository('GedBundle:Linkbookmark')->findOneBy( array( 'idfile'=>$id,
-                                                                                                        'iduser'=>$idUser,
-                                                                                                        )
-                            );
-                            if ($bookmark!=null){
-                                $bookmark = 1;
-                            }
-
-                            else{
-                                $bookmark = 0;
-                            }
-                            //on met tout dans un tableau
-                            $tagTab[] = array(
-                                'name' => $name,
-                                'id' => $id,
-                                'type' => $type,
-                                'path' => $path,
-                                'bookmark' => $bookmark,
-                            );
-                        }
+                        }                        
                     }
                 }
 
@@ -585,84 +669,40 @@ class SearchController extends Controller
 
                     //pour chaque group contenu dans mon tableau
                     foreach ($groupTab as $group) {
-                        $groupFiles = $em->getRepository('GedBundle:Gedfiles')->sscategoryGrpSearch($searchRecherche,$group,$searchCategorie,$searchSscategorie);
-
-                        if($groupFiles!=null){
-                            foreach ($groupFiles as $files) {
-                                $idGrpFile = $files->getId();
-                                $count = 0;
-                                
-                                //si mes ficher ne son pas vide
-                                if ($nameTab!=null) {
-                                    //pour chaque ficher dans mes ficher 
-                                    foreach ($nameTab as $fileTab) {
-                                        //si id de mon ficher est egale a id de ficher de mon groupe
-                                        if( ($fileTab['id'] == $idGrpFile) ){
-                                            $count ++;                                            
-                                        }
-                                    }                                    
-                                }
-                                // si aucun Id n'a été trouver dans $nameTab ou si $nameTab nexista pas 
-                                if($count==0){
-                                    //verification pour les tag 
-                                    //si tagTab existe
-                                    if (isset($tagTab)) {
-                                    //pour chaque ficher dans mes ficher 
-                                        foreach ($tagTab as $fileTab) {
+                        if($fileType!=0){
+                            $groupFiles = $em->getRepository('GedBundle:Gedfiles')->sscategoryGrpTypeSearch($searchRecherche, $group, $searchCategorie, $searchSscategorie, $fileType);
+                            if($groupFiles!=null){
+                                foreach ($groupFiles as $files) {
+                                    $idGrpFile = $files->getId();
+                                    $count = 0;
+                                    
+                                    //si mes ficher ne son pas vide
+                                    if ($nameTab!=null) {
+                                        //pour chaque ficher dans mes ficher 
+                                        foreach ($nameTab as $fileTab) {
                                             //si id de mon ficher est egale a id de ficher de mon groupe
                                             if( ($fileTab['id'] == $idGrpFile) ){
                                                 $count ++;                                            
                                             }
-                                        }                                                                        
+                                        }                                    
                                     }
-                                }
-                                if($count==0){
-
-                                    // verification si le grpNameTab n'est pas defini
-                                    if($grpNameTab==null){
-
-                                        // nom du fichier
-                                        $name = $files->getOriginalName();
-                                        //son type
-                                        $type = $files->getType();
-                                        //son chemin
-                                        $path = $files->getPath();
-
-                                        //récuperation des favoris.
-
-                                        $bookmark = $em->getRepository('GedBundle:Linkbookmark')->findOneBy( array( 'idfile'=>$idGrpFile,
-                                                                                                                    'iduser'=>$idUser,
-                                                                                                                    )
-                                        );
-
-                                        if ($bookmark!=null){
-                                            $bookmark = 1;
+                                    // si aucun Id n'a été trouver dans $nameTab ou si $nameTab nexista pas 
+                                    if($count==0){
+                                        //verification pour les tag 
+                                        //si tagTab existe
+                                        if (isset($tagTab)) {
+                                            //pour chaque ficher dans mes ficher 
+                                            foreach ($tagTab as $fileTab) {
+                                                //si id de mon ficher est egale a id de ficher de mon groupe
+                                                if( ($fileTab['id'] == $idGrpFile) ){
+                                                    $count ++;                                            
+                                                }
+                                            }                                                                        
                                         }
-
-                                        else{
-                                            $bookmark = 0;
-                                        }
-
-                                        //on met tout dans un tableau
-                                        $grpNameTab[] = array(
-                                            'name' => $name,
-                                            'id' => $idGrpFile,
-                                            'type' => $type,
-                                            'path' => $path,
-                                            'bookmark' => $bookmark,
-                                        );
                                     }
-                                    //si le tableau est deja défini alors le parcourir et verifier
-                                    if($grpNameTab!=null){
-                                        
-                                        foreach ($grpNameTab as $fileTab) {
-                                            //si id contenu dans mon tableau n est
-                                            if( ($fileTab['id'] == $idGrpFile) ){
-                                                $count ++;                                            
-                                            }
-                                        }
-                                        //si l id na pas ete trouver alors le rajouté
-                                        if($count==0){
+                                    if($count==0){
+                                        // verification si le grpNameTab n'est pas defini
+                                        if($grpNameTab==null){
 
                                             // nom du fichier
                                             $name = $files->getOriginalName();
@@ -672,10 +712,12 @@ class SearchController extends Controller
                                             $path = $files->getPath();
 
                                             //récuperation des favoris.
+
                                             $bookmark = $em->getRepository('GedBundle:Linkbookmark')->findOneBy( array( 'idfile'=>$idGrpFile,
                                                                                                                         'iduser'=>$idUser,
                                                                                                                         )
                                             );
+
                                             if ($bookmark!=null){
                                                 $bookmark = 1;
                                             }
@@ -691,7 +733,163 @@ class SearchController extends Controller
                                                 'type' => $type,
                                                 'path' => $path,
                                                 'bookmark' => $bookmark,
-                                            );                                            
+                                            );
+                                        }
+                                        //si le tableau est deja défini alors le parcourir et verifier
+                                        if($grpNameTab!=null){
+                                            
+                                            foreach ($grpNameTab as $fileTab) {
+                                                //si id contenu dans mon tableau n est
+                                                if( ($fileTab['id'] == $idGrpFile) ){
+                                                    $count ++;                                            
+                                                }
+                                            }
+                                            //si l id na pas ete trouver alors le rajouté
+                                            if($count==0){
+
+                                                // nom du fichier
+                                                $name = $files->getOriginalName();
+                                                //son type
+                                                $type = $files->getType();
+                                                //son chemin
+                                                $path = $files->getPath();
+
+                                                //récuperation des favoris.
+                                                $bookmark = $em->getRepository('GedBundle:Linkbookmark')->findOneBy( array( 'idfile'=>$idGrpFile,
+                                                                                                                            'iduser'=>$idUser,
+                                                                                                                            )
+                                                );
+                                                if ($bookmark!=null){
+                                                    $bookmark = 1;
+                                                }
+
+                                                else{
+                                                    $bookmark = 0;
+                                                }
+
+                                                //on met tout dans un tableau
+                                                $grpNameTab[] = array(
+                                                    'name' => $name,
+                                                    'id' => $idGrpFile,
+                                                    'type' => $type,
+                                                    'path' => $path,
+                                                    'bookmark' => $bookmark,
+                                                );                                            
+                                            }
+                                        }
+                                    }
+                                }
+                            }
+                        }
+                        else{
+                            $groupFiles = $em->getRepository('GedBundle:Gedfiles')->sscategoryGrpSearch($searchRecherche,$group,$searchCategorie,$searchSscategorie);
+
+                            if($groupFiles!=null){
+                                foreach ($groupFiles as $files) {
+                                    $idGrpFile = $files->getId();
+                                    $count = 0;
+                                    
+                                    //si mes ficher ne son pas vide
+                                    if ($nameTab!=null) {
+                                        //pour chaque ficher dans mes ficher 
+                                        foreach ($nameTab as $fileTab) {
+                                            //si id de mon ficher est egale a id de ficher de mon groupe
+                                            if( ($fileTab['id'] == $idGrpFile) ){
+                                                $count ++;                                            
+                                            }
+                                        }                                    
+                                    }
+                                    // si aucun Id n'a été trouver dans $nameTab ou si $nameTab nexista pas 
+                                    if($count==0){
+                                        //verification pour les tag 
+                                        //si tagTab existe
+                                        if (isset($tagTab)) {
+                                        //pour chaque ficher dans mes ficher 
+                                            foreach ($tagTab as $fileTab) {
+                                                //si id de mon ficher est egale a id de ficher de mon groupe
+                                                if( ($fileTab['id'] == $idGrpFile) ){
+                                                    $count ++;                                            
+                                                }
+                                            }                                                                        
+                                        }
+                                    }
+                                    if($count==0){
+
+                                        // verification si le grpNameTab n'est pas defini
+                                        if($grpNameTab==null){
+
+                                            // nom du fichier
+                                            $name = $files->getOriginalName();
+                                            //son type
+                                            $type = $files->getType();
+                                            //son chemin
+                                            $path = $files->getPath();
+
+                                            //récuperation des favoris.
+
+                                            $bookmark = $em->getRepository('GedBundle:Linkbookmark')->findOneBy( array( 'idfile'=>$idGrpFile,
+                                                                                                                        'iduser'=>$idUser,
+                                                                                                                        )
+                                            );
+
+                                            if ($bookmark!=null){
+                                                $bookmark = 1;
+                                            }
+
+                                            else{
+                                                $bookmark = 0;
+                                            }
+
+                                            //on met tout dans un tableau
+                                            $grpNameTab[] = array(
+                                                'name' => $name,
+                                                'id' => $idGrpFile,
+                                                'type' => $type,
+                                                'path' => $path,
+                                                'bookmark' => $bookmark,
+                                            );
+                                        }
+                                        //si le tableau est deja défini alors le parcourir et verifier
+                                        if($grpNameTab!=null){
+                                            
+                                            foreach ($grpNameTab as $fileTab) {
+                                                //si id contenu dans mon tableau n est
+                                                if( ($fileTab['id'] == $idGrpFile) ){
+                                                    $count ++;                                            
+                                                }
+                                            }
+                                            //si l id na pas ete trouver alors le rajouté
+                                            if($count==0){
+
+                                                // nom du fichier
+                                                $name = $files->getOriginalName();
+                                                //son type
+                                                $type = $files->getType();
+                                                //son chemin
+                                                $path = $files->getPath();
+
+                                                //récuperation des favoris.
+                                                $bookmark = $em->getRepository('GedBundle:Linkbookmark')->findOneBy( array( 'idfile'=>$idGrpFile,
+                                                                                                                            'iduser'=>$idUser,
+                                                                                                                            )
+                                                );
+                                                if ($bookmark!=null){
+                                                    $bookmark = 1;
+                                                }
+
+                                                else{
+                                                    $bookmark = 0;
+                                                }
+
+                                                //on met tout dans un tableau
+                                                $grpNameTab[] = array(
+                                                    'name' => $name,
+                                                    'id' => $idGrpFile,
+                                                    'type' => $type,
+                                                    'path' => $path,
+                                                    'bookmark' => $bookmark,
+                                                );                                            
+                                            }
                                         }
                                     }
                                 }
@@ -740,16 +938,36 @@ class SearchController extends Controller
                                 // puis on recherche le fichier.
                                 //pour chaqu' un  de mes groupes
                                 foreach ($groupsTab as $group) {
-                                    
-                                    //recherche du fichier correspondant Id du fichier et Id du groupe
-                                    $grpFileId = $em->getRepository('GedBundle:Gedfiles')->findOneBy( array(
-                                        'idgroup' => $group,
-                                        'id' =>$id,
-                                        'idcategory' =>$searchCategorie,
-                                        'idsouscategory'=>$searchSscategorie,
-                                        )
-                                    );
-
+                                    if ($fileType!=0){
+                                        foreach ($fileType as $defType){
+                                            //recherche du fichier correspondant Id du fichier et Id du groupe
+                                            $grpFileIdSearch = $em->getRepository('GedBundle:Gedfiles')->findOneBy( array(
+                                                'idgroup' => $group,
+                                                'id' =>$id,
+                                                'idcategory' =>$searchCategorie,
+                                                'idsouscategory'=>$searchSscategorie,
+                                                'type'=>$defType,
+                                                )
+                                            );
+                                            //si il trouve un resultat alors asigne lui la valeur.
+                                            if($grpFileIdSearch!=null){
+                                                $grpFileId=$grpFileIdSearch;
+                                            }
+                                        }
+                                    }
+                                    else{
+                                        //recherche du fichier correspondant Id du fichier et Id du groupe
+                                        $grpFileId = $em->getRepository('GedBundle:Gedfiles')->findOneBy( array(
+                                            'idgroup' => $group,
+                                            'id' =>$id,
+                                            'idcategory' =>$searchCategorie,
+                                            'idsouscategory'=>$searchSscategorie,
+                                            )
+                                        );
+                                    }
+                                    if(!isset($grpFileId)){
+                                        $grpFileId=null;
+                                    }
                                     //le resultat n'est pas null
                                     if($grpFileId!=null){
 
@@ -844,8 +1062,14 @@ class SearchController extends Controller
                 //RECHERCHE POUR L' UTILISATEUR - Fichiers
 
                 //recherche le nom du fichier
-                $myfiles = $em->getRepository('GedBundle:Gedfiles')->categorySearch($searchRecherche, $idUser, $searchCategorie);
-                
+                //si le type et defini
+                if($fileType!=0){
+                    $myfiles = $em->getRepository('GedBundle:Gedfiles')->categoryTypeSearch($searchRecherche, $idUser, $searchCategorie, $fileType);
+                }
+                //sinon
+                else{
+                    $myfiles = $em->getRepository('GedBundle:Gedfiles')->categorySearch($searchRecherche, $idUser, $searchCategorie);
+                }
                 $nameTab =[];
 
                 foreach ($myfiles as $myfile) {
@@ -924,32 +1148,111 @@ class SearchController extends Controller
                 //pour chaque lien d'id de fichier et de l'id utilisateur aller les chercher et remplir un tableau
                 $tagTab = [];
                 foreach ($linkTagTab as $tagId) {
-                    // $tagFile = $em->getRepository('GedBundle:Gedfiles')->findOneById($tagId['idFile']);
-                    $tagFile = $em->getRepository('GedBundle:Gedfiles')->findOneBy(
-                        array(
-                            'id'=>$tagId['idFile'],
-                            'idowner'=>$idUser,
-                            'idcategory'=>$searchCategorie,
-                        )                        
-                    );
+                    //si le type est defini
+                    if ($fileType!=0){
+                        foreach ($fileType as $defType){
+                            $tagFile = $em->getRepository('GedBundle:Gedfiles')->findOneBy(array(
+                                                                                            'id'=>$tagId['idFile'],
+                                                                                            'idowner'=>$idUser,
+                                                                                            'idcategory'=>$searchCategorie,
+                                                                                            'type'=>$defType,
+                                                                                        ));
+                            if($tagFile!=null){
+                                // on recupere son id
+                                $id = $tagFile->getId();
+                                $count=0;
+                                if($nameTab!=null){                                    
+                                    //pourchaque entre dans le tableau myFileTab
+                                    foreach ($nameTab as $myFile) {
+                                        //on recupere id pour chaque entré du tableau
+                                        $myFileId = $myFile['id'];
 
-                    if($tagFile!=null){
-                        // on recupere son id
-                        $id = $tagFile->getId();
+                                        //et on la compare a chaque fois avec id de tagFile.
+                                        if($myFileId==$id){
+                                            $count++;
+                                        }
+                                    }
+                                }
+                                if($tagTab!=null){
+                                    //pourchaque entre dans le tableau myFileTab
+                                    foreach ($tagTab as $myFile) {
+                                        //on recupere id pour chaque entré du tableau
+                                        $myFileId = $myFile['id'];
+                                        //et on la compare a chaque fois avec id de tagFile.
+                                        if($myFileId==$id){
+                                            $count++;
+                                        }
+                                    }
+                                }
+                                if($count==0){
+                                    //nom du fichier
+                                    $name = $tagFile->getOriginalName();
+                                    //son id
+                                    $id = $tagFile->getId();
+                                    //son type
+                                    $type = $tagFile->getType();
+                                    //son chemin
+                                    $path = $tagFile->getPath();
 
-                        if($nameTab!=null){
+                                    //récuperation des favoris.
+                                    $bookmark = $em->getRepository('GedBundle:Linkbookmark')->findOneBy( array( 'idfile'=>$id,
+                                                                                                                'iduser'=>$idUser,
+                                                                                                                )
+                                    );
+                                    if ($bookmark!=null){
+                                        $bookmark = 1;
+                                    }
+
+                                    else{
+                                        $bookmark = 0;
+                                    }
+
+                                    //on met tout dans un tableau
+                                    $tagTab[] = array(
+                                        'name' => $name,
+                                        'id' => $id,
+                                        'type' => $type,
+                                        'path' => $path,
+                                        'bookmark' => $bookmark,
+                                    );
+                                }
+                            }                                                      
+                        }
+                    }
+                    //sinon
+                    if ($fileType==0) {
+                        $tagFile = $em->getRepository('GedBundle:Gedfiles')->findOneBy(array(
+                                                                                                'id'=>$tagId['idFile'],
+                                                                                                'idowner'=>$idUser,
+                                                                                                'idcategory'=>$searchCategorie,
+                                                                                            ));
+                        if($tagFile!=null){
+                            // on recupere son id
+                            $id = $tagFile->getId();
                             $count=0;
-                            //pourchaque entre dans le tableau myFileTab
-                            foreach ($nameTab as $myFile) {
-                                //on recupere id pour chaque entré du tableau
-                                $myFileId = $myFile['id'];
+                            if($nameTab!=null){
+                                //pourchaque entre dans le tableau myFileTab
+                                foreach ($nameTab as $myFile) {
+                                    //on recupere id pour chaque entré du tableau
+                                    $myFileId = $myFile['id'];
 
-                                //et on la compare a chaque fois avec id de tagFile.
-                                if($myFileId==$id){
-                                    $count++;
+                                    //et on la compare a chaque fois avec id de tagFile.
+                                    if($myFileId==$id){
+                                        $count++;
+                                    }
                                 }
                             }
-                            //si le compteur est a 0 c est que le l id n'est pas dans mes fichiers 
+                            if($tagTab!=null){
+                                //pourchaque entre dans le tableau myFileTab
+                                foreach ($tagTab as $myFile) {
+                                    //on recupere id pour chaque entré du tableau
+                                    $myFileId = $myFile['id'];
+                                    //et on la compare a chaque fois avec id de tagFile.
+                                    if($myFileId==$id){
+                                        $count++;
+                                    }
+                                }
+                            }
                             if($count==0){
                                 //nom du fichier
                                 $name = $tagFile->getOriginalName();
@@ -982,39 +1285,8 @@ class SearchController extends Controller
                                     'bookmark' => $bookmark,
                                 );
                             }
-                        }
-                        else{
-                            //nom du fichier
-                            $name = $tagFile->getOriginalName();
-                            //son id
-                            $id = $tagFile->getId();
-                            //son type
-                            $type = $tagFile->getType();
-                            //son chemin
-                            $path = $tagFile->getPath();
-
-                            //récuperation des favoris.
-                            $bookmark = $em->getRepository('GedBundle:Linkbookmark')->findOneBy( array( 'idfile'=>$id,
-                                                                                                        'iduser'=>$idUser,
-                                                                                                        )
-                            );
-                            if ($bookmark!=null){
-                                $bookmark = 1;
-                            }
-
-                            else{
-                                $bookmark = 0;
-                            }
-                            //on met tout dans un tableau
-                            $tagTab[] = array(
-                                'name' => $name,
-                                'id' => $id,
-                                'type' => $type,
-                                'path' => $path,
-                                'bookmark' => $bookmark,
-                            );
-                        }
-                    }
+                        }                        
+                    }                    
                 }
 
                 //RECHERCHE POUR LES GROUPES - Fichiers
@@ -1033,84 +1305,40 @@ class SearchController extends Controller
 
                     //pour chaque group contenu dans mon tableau
                     foreach ($groupTab as $group) {
-                        $groupFiles = $em->getRepository('GedBundle:Gedfiles')->categoryGrpSearch($searchRecherche,$group,$searchCategorie);
-
-                        if($groupFiles!=null){
-                            foreach ($groupFiles as $files) {
-                                $idGrpFile = $files->getId();
-                                $count = 0;
-                                
-                                //si mes ficher ne son pas vide
-                                if ($nameTab!=null) {
-                                    //pour chaque ficher dans mes ficher 
-                                    foreach ($nameTab as $fileTab) {
-                                        //si id de mon ficher est egale a id de ficher de mon groupe
-                                        if( ($fileTab['id'] == $idGrpFile) ){
-                                            $count ++;                                            
-                                        }
-                                    }                                    
-                                }
-                                // si aucun Id n'a été trouver dans $nameTab ou si $nameTab nexista pas 
-                                if($count==0){
-                                    //verification pour les tag 
-                                    //si tagTab existe
-                                    if (isset($tagTab)) {
-                                    //pour chaque ficher dans mes ficher 
-                                        foreach ($tagTab as $fileTab) {
+                        if($fileType!=0){
+                            $groupFiles = $em->getRepository('GedBundle:Gedfiles')->categoryGrpTypeSearch($searchRecherche, $group, $searchCategorie, $fileType);
+                            if($groupFiles!=null){
+                                foreach ($groupFiles as $files) {
+                                    $idGrpFile = $files->getId();
+                                    $count = 0;
+                                    
+                                    //si mes ficher ne son pas vide
+                                    if ($nameTab!=null) {
+                                        //pour chaque ficher dans mes ficher 
+                                        foreach ($nameTab as $fileTab) {
                                             //si id de mon ficher est egale a id de ficher de mon groupe
                                             if( ($fileTab['id'] == $idGrpFile) ){
                                                 $count ++;                                            
                                             }
-                                        }                                                                        
+                                        }                                    
                                     }
-                                }
-                                if($count==0){
-
-                                    // verification si le grpNameTab n'est pas defini
-                                    if($grpNameTab==null){
-
-                                        // nom du fichier
-                                        $name = $files->getOriginalName();
-                                        //son type
-                                        $type = $files->getType();
-                                        //son chemin
-                                        $path = $files->getPath();
-
-                                        //récuperation des favoris.
-
-                                        $bookmark = $em->getRepository('GedBundle:Linkbookmark')->findOneBy( array( 'idfile'=>$idGrpFile,
-                                                                                                                    'iduser'=>$idUser,
-                                                                                                                    )
-                                        );
-
-                                        if ($bookmark!=null){
-                                            $bookmark = 1;
+                                    // si aucun Id n'a été trouver dans $nameTab ou si $nameTab nexista pas 
+                                    if($count==0){
+                                        //verification pour les tag 
+                                        //si tagTab existe
+                                        if (isset($tagTab)) {
+                                            //pour chaque ficher dans mes ficher 
+                                            foreach ($tagTab as $fileTab) {
+                                                //si id de mon ficher est egale a id de ficher de mon groupe
+                                                if( ($fileTab['id'] == $idGrpFile) ){
+                                                    $count ++;                                            
+                                                }
+                                            }                                                                        
                                         }
-
-                                        else{
-                                            $bookmark = 0;
-                                        }
-
-                                        //on met tout dans un tableau
-                                        $grpNameTab[] = array(
-                                            'name' => $name,
-                                            'id' => $idGrpFile,
-                                            'type' => $type,
-                                            'path' => $path,
-                                            'bookmark' => $bookmark,
-                                        );
                                     }
-                                    //si le tableau est deja défini alors le parcourir et verifier
-                                    if($grpNameTab!=null){
-                                        
-                                        foreach ($grpNameTab as $fileTab) {
-                                            //si id contenu dans mon tableau n est
-                                            if( ($fileTab['id'] == $idGrpFile) ){
-                                                $count ++;                                            
-                                            }
-                                        }
-                                        //si l id na pas ete trouver alors le rajouté
-                                        if($count==0){
+                                    if($count==0){
+                                        // verification si le grpNameTab n'est pas defini
+                                        if($grpNameTab==null){
 
                                             // nom du fichier
                                             $name = $files->getOriginalName();
@@ -1120,10 +1348,12 @@ class SearchController extends Controller
                                             $path = $files->getPath();
 
                                             //récuperation des favoris.
+
                                             $bookmark = $em->getRepository('GedBundle:Linkbookmark')->findOneBy( array( 'idfile'=>$idGrpFile,
                                                                                                                         'iduser'=>$idUser,
                                                                                                                         )
                                             );
+
                                             if ($bookmark!=null){
                                                 $bookmark = 1;
                                             }
@@ -1139,7 +1369,163 @@ class SearchController extends Controller
                                                 'type' => $type,
                                                 'path' => $path,
                                                 'bookmark' => $bookmark,
-                                            );                                            
+                                            );
+                                        }
+                                        //si le tableau est deja défini alors le parcourir et verifier
+                                        if($grpNameTab!=null){
+                                            
+                                            foreach ($grpNameTab as $fileTab) {
+                                                //si id contenu dans mon tableau n est
+                                                if( ($fileTab['id'] == $idGrpFile) ){
+                                                    $count ++;                                            
+                                                }
+                                            }
+                                            //si l id na pas ete trouver alors le rajouté
+                                            if($count==0){
+
+                                                // nom du fichier
+                                                $name = $files->getOriginalName();
+                                                //son type
+                                                $type = $files->getType();
+                                                //son chemin
+                                                $path = $files->getPath();
+
+                                                //récuperation des favoris.
+                                                $bookmark = $em->getRepository('GedBundle:Linkbookmark')->findOneBy( array( 'idfile'=>$idGrpFile,
+                                                                                                                            'iduser'=>$idUser,
+                                                                                                                            )
+                                                );
+                                                if ($bookmark!=null){
+                                                    $bookmark = 1;
+                                                }
+
+                                                else{
+                                                    $bookmark = 0;
+                                                }
+
+                                                //on met tout dans un tableau
+                                                $grpNameTab[] = array(
+                                                    'name' => $name,
+                                                    'id' => $idGrpFile,
+                                                    'type' => $type,
+                                                    'path' => $path,
+                                                    'bookmark' => $bookmark,
+                                                );                                            
+                                            }
+                                        }
+                                    }
+                                }
+                            }
+                        }
+                        else{
+                            $groupFiles = $em->getRepository('GedBundle:Gedfiles')->categoryGrpSearch($searchRecherche,$group,$searchCategorie);
+
+                            if($groupFiles!=null){
+                                foreach ($groupFiles as $files) {
+                                    $idGrpFile = $files->getId();
+                                    $count = 0;
+                                    
+                                    //si mes ficher ne son pas vide
+                                    if ($nameTab!=null) {
+                                        //pour chaque ficher dans mes ficher 
+                                        foreach ($nameTab as $fileTab) {
+                                            //si id de mon ficher est egale a id de ficher de mon groupe
+                                            if( ($fileTab['id'] == $idGrpFile) ){
+                                                $count ++;                                            
+                                            }
+                                        }                                    
+                                    }
+                                    // si aucun Id n'a été trouver dans $nameTab ou si $nameTab nexista pas 
+                                    if($count==0){
+                                        //verification pour les tag 
+                                        //si tagTab existe
+                                        if (isset($tagTab)) {
+                                        //pour chaque ficher dans mes ficher 
+                                            foreach ($tagTab as $fileTab) {
+                                                //si id de mon ficher est egale a id de ficher de mon groupe
+                                                if( ($fileTab['id'] == $idGrpFile) ){
+                                                    $count ++;                                            
+                                                }
+                                            }                                                                        
+                                        }
+                                    }
+                                    if($count==0){
+
+                                        // verification si le grpNameTab n'est pas defini
+                                        if($grpNameTab==null){
+
+                                            // nom du fichier
+                                            $name = $files->getOriginalName();
+                                            //son type
+                                            $type = $files->getType();
+                                            //son chemin
+                                            $path = $files->getPath();
+
+                                            //récuperation des favoris.
+
+                                            $bookmark = $em->getRepository('GedBundle:Linkbookmark')->findOneBy( array( 'idfile'=>$idGrpFile,
+                                                                                                                        'iduser'=>$idUser,
+                                                                                                                        )
+                                            );
+
+                                            if ($bookmark!=null){
+                                                $bookmark = 1;
+                                            }
+
+                                            else{
+                                                $bookmark = 0;
+                                            }
+
+                                            //on met tout dans un tableau
+                                            $grpNameTab[] = array(
+                                                'name' => $name,
+                                                'id' => $idGrpFile,
+                                                'type' => $type,
+                                                'path' => $path,
+                                                'bookmark' => $bookmark,
+                                            );
+                                        }
+                                        //si le tableau est deja défini alors le parcourir et verifier
+                                        if($grpNameTab!=null){
+                                            
+                                            foreach ($grpNameTab as $fileTab) {
+                                                //si id contenu dans mon tableau n est
+                                                if( ($fileTab['id'] == $idGrpFile) ){
+                                                    $count ++;                                            
+                                                }
+                                            }
+                                            //si l id na pas ete trouver alors le rajouté
+                                            if($count==0){
+
+                                                // nom du fichier
+                                                $name = $files->getOriginalName();
+                                                //son type
+                                                $type = $files->getType();
+                                                //son chemin
+                                                $path = $files->getPath();
+
+                                                //récuperation des favoris.
+                                                $bookmark = $em->getRepository('GedBundle:Linkbookmark')->findOneBy( array( 'idfile'=>$idGrpFile,
+                                                                                                                            'iduser'=>$idUser,
+                                                                                                                            )
+                                                );
+                                                if ($bookmark!=null){
+                                                    $bookmark = 1;
+                                                }
+
+                                                else{
+                                                    $bookmark = 0;
+                                                }
+
+                                                //on met tout dans un tableau
+                                                $grpNameTab[] = array(
+                                                    'name' => $name,
+                                                    'id' => $idGrpFile,
+                                                    'type' => $type,
+                                                    'path' => $path,
+                                                    'bookmark' => $bookmark,
+                                                );                                            
+                                            }
                                         }
                                     }
                                 }
@@ -1175,8 +1561,6 @@ class SearchController extends Controller
                         //on recherche ses differents lien avec les fichers
                         $linksTag = $em->getRepository('GedBundle:Linktag')->findByIdtag($idTag);
 
-                        // var_dump($linksTag);
-
                         //si il y a bien des lien pour le tag
                         if($linksTag!=null){
 
@@ -1188,23 +1572,40 @@ class SearchController extends Controller
                                 // puis on recherche le fichier.
                                 //pour chaqu' un  de mes groupes
                                 foreach ($groupsTab as $group) {
-                                    
-                                    //recherche du fichier correspondant Id du fichier et Id du groupe
-                                    $grpFileId = $em->getRepository('GedBundle:Gedfiles')->findOneBy( array(
-                                        'idgroup' => $group,
-                                        'id' =>$id,
-                                        'idcategory' =>$searchCategorie,
-                                        )
-                                    );
-
+                                    if ($fileType!=0){
+                                        foreach ($fileType as $defType){
+                                            //recherche du fichier correspondant Id du fichier et Id du groupe
+                                            $grpFileIdSearch = $em->getRepository('GedBundle:Gedfiles')->findOneBy( array(
+                                                'idgroup' => $group,
+                                                'id' =>$id,
+                                                'idcategory' =>$searchCategorie,
+                                                'type'=>$defType,
+                                                )
+                                            );
+                                            //si il trouve un resultat alors asigne lui la valeur.
+                                            if($grpFileIdSearch!=null){
+                                                $grpFileId=$grpFileIdSearch;
+                                            }
+                                        }
+                                    }
+                                    else{
+                                        //recherche du fichier correspondant Id du fichier et Id du groupe
+                                        $grpFileId = $em->getRepository('GedBundle:Gedfiles')->findOneBy( array(
+                                            'idgroup' => $group,
+                                            'id' =>$id,
+                                            'idcategory' =>$searchCategorie,
+                                            )
+                                        );
+                                    }
+                                    if(!isset($grpFileId)){
+                                        $grpFileId=null;
+                                    }
                                     //le resultat n'est pas null
                                     if($grpFileId!=null){
-
                                         //on initialise un compeur
                                         $count = 0;
                                         //on recupere id du fichier trouvé
                                         $idFile = $grpFileId->getId();
-
                                         //on a maintennant le fichier correspondant il manque plus a le trier.
                                         
                                         //si nameTab est defini
@@ -1286,14 +1687,19 @@ class SearchController extends Controller
                     }
                 }
             }
-
             //Si rien n' est défini
             else{
                 //RECHERCHE POUR L' UTILISATEUR - Fichiers
-
-                //recherche le nom du fichier
-                $myfiles = $em->getRepository('GedBundle:Gedfiles')->nameSearch($searchRecherche, $idUser);
                 
+                //recherche le nom du fichier
+                //si le type et defini
+                if($fileType!=0){
+                    $myfiles = $em->getRepository('GedBundle:Gedfiles')->nameTypeSearch($searchRecherche, $idUser, $fileType);
+                }
+                //sinon
+                else{
+                    $myfiles = $em->getRepository('GedBundle:Gedfiles')->nameSearch($searchRecherche, $idUser);
+                }
                 $nameTab =[];
 
                 foreach ($myfiles as $myfile) {
@@ -1334,12 +1740,12 @@ class SearchController extends Controller
 
                 //on recherche tout les tag ayant la valeur
                 $allTag = $em->getRepository('GedBundle:Gedtag')->tagSearch($searchRecherche);
+
                 $linkTagTab=[];
                 foreach ($allTag as $tag) {
                     $idTags = $tag->getId();
 
                     $links = $em->getRepository('GedBundle:Linktag')->findByIdtag($idTags);
-
                     //si il a bien trouver un lien
                     if($links != null){
 
@@ -1369,34 +1775,114 @@ class SearchController extends Controller
                         }
                     }
                 }
+
                 //pour chaque lien d'id de fichier et de l'id utilisateur aller les chercher et remplir un tableau
                 $tagTab = [];
                 foreach ($linkTagTab as $tagId) {
-                    // $tagFile = $em->getRepository('GedBundle:Gedfiles')->findOneById($tagId['idFile']);
-                    $tagFile = $em->getRepository('GedBundle:Gedfiles')->findOneBy(
-                        array(
-                            'id'=>$tagId['idFile'],
-                            'idowner'=>$idUser,
-                        )                        
-                    );
+                    //si le type est defini
+                    if ($fileType!=0){
 
-                    if($tagFile!=null){
-                        // on recupere son id
-                        $id = $tagFile->getId();
+                        foreach ($fileType as $defType){
+                            $tagFile = $em->getRepository('GedBundle:Gedfiles')->findOneBy(array(
+                                                                                            'id'=>$tagId['idFile'],
+                                                                                            'idowner'=>$idUser,
+                                                                                            'type'=>$defType,
+                                                                                        ));
+                            if($tagFile!=null){
+                                // on recupere son id
+                                $id = $tagFile->getId();
+                                $count=0;
+                                if($nameTab!=null){
+                                    //pourchaque entre dans le tableau myFileTab
+                                    foreach ($nameTab as $myFile) {
+                                        //on recupere id pour chaque entré du tableau
+                                        $myFileId = $myFile['id'];
 
-                        if($nameTab!=null){
+                                        //et on la compare a chaque fois avec id de tagFile.
+                                        if($myFileId==$id){
+                                            $count++;
+                                        }
+                                    }
+                                }
+                                if($tagTab!=null){
+                                    //pourchaque entre dans le tableau myFileTab
+                                    foreach ($tagTab as $myFile) {
+                                        //on recupere id pour chaque entré du tableau
+                                        $myFileId = $myFile['id'];
+                                        //et on la compare a chaque fois avec id de tagFile.
+                                        if($myFileId==$id){
+                                            $count++;
+                                        }
+                                    }
+                                }
+                                if($count==0){
+                                    //nom du fichier
+                                    $name = $tagFile->getOriginalName();
+                                    //son id
+                                    $id = $tagFile->getId();
+                                    //son type
+                                    $type = $tagFile->getType();
+                                    //son chemin
+                                    $path = $tagFile->getPath();
+
+                                    //récuperation des favoris.
+                                    $bookmark = $em->getRepository('GedBundle:Linkbookmark')->findOneBy( array( 'idfile'=>$id,
+                                                                                                                'iduser'=>$idUser,
+                                                                                                                )
+                                    );
+                                    if ($bookmark!=null){
+                                        $bookmark = 1;
+                                    }
+
+                                    else{
+                                        $bookmark = 0;
+                                    }
+
+                                    //on met tout dans un tableau
+                                    $tagTab[] = array(
+                                        'name' => $name,
+                                        'id' => $id,
+                                        'type' => $type,
+                                        'path' => $path,
+                                        'bookmark' => $bookmark,
+                                    );
+                                }
+                            }                                                      
+                        }
+                    }
+                    //sinon
+                    if ($fileType==0) {
+                        $tagFile = $em->getRepository('GedBundle:Gedfiles')->findOneBy(array(
+                                                                                                'id'=>$tagId['idFile'],
+                                                                                                'idowner'=>$idUser,
+                                                                                            ));
+                        if($tagFile!=null){
+                            // on recupere son id
+                            $id = $tagFile->getId();
                             $count=0;
-                            //pourchaque entre dans le tableau myFileTab
-                            foreach ($nameTab as $myFile) {
-                                //on recupere id pour chaque entré du tableau
-                                $myFileId = $myFile['id'];
+                            if($nameTab!=null){
+                                //pourchaque entre dans le tableau myFileTab
+                                foreach ($nameTab as $myFile) {
+                                    //on recupere id pour chaque entré du tableau
+                                    $myFileId = $myFile['id'];
 
-                                //et on la compare a chaque fois avec id de tagFile.
-                                if($myFileId==$id){
-                                    $count++;
+                                    //et on la compare a chaque fois avec id de tagFile.
+                                    if($myFileId==$id){
+                                        $count++;
+                                    }
                                 }
                             }
-                            //si le compteur est a 0 c est que le l id n'est pas dans mes fichiers 
+                            if($tagTab!=null){
+                                //pourchaque entre dans le tableau myFileTab
+                                foreach ($tagTab as $myFile) {
+                                    //on recupere id pour chaque entré du tableau
+                                    $myFileId = $myFile['id'];
+                                    //et on la compare a chaque fois avec id de tagFile.
+                                    if($myFileId==$id){
+                                        $count++;
+                                    }
+                                }
+                            }
                             if($count==0){
                                 //nom du fichier
                                 $name = $tagFile->getOriginalName();
@@ -1429,44 +1915,14 @@ class SearchController extends Controller
                                     'bookmark' => $bookmark,
                                 );
                             }
-                        }
-                        else{
-                            //nom du fichier
-                            $name = $tagFile->getOriginalName();
-                            //son id
-                            $id = $tagFile->getId();
-                            //son type
-                            $type = $tagFile->getType();
-                            //son chemin
-                            $path = $tagFile->getPath();
-
-                            //récuperation des favoris.
-                            $bookmark = $em->getRepository('GedBundle:Linkbookmark')->findOneBy( array( 'idfile'=>$id,
-                                                                                                        'iduser'=>$idUser,
-                                                                                                        )
-                            );
-                            if ($bookmark!=null){
-                                $bookmark = 1;
-                            }
-
-                            else{
-                                $bookmark = 0;
-                            }
-                            //on met tout dans un tableau
-                            $tagTab[] = array(
-                                'name' => $name,
-                                'id' => $id,
-                                'type' => $type,
-                                'path' => $path,
-                                'bookmark' => $bookmark,
-                            );
-                        }
-                    }
+                        }                        
+                    }                    
                 }
 
                 //RECHERCHE POUR LES GROUPES - Fichiers
 
                 //on recherche dans quels groupe l'utilisateur est
+                
                 $linkGroups = $em->getRepository('GedBundle:Linkgroup')->findByIduser($idUser);
                 $grpNameTab = [];
                 //si on un resultat
@@ -1480,84 +1936,41 @@ class SearchController extends Controller
 
                     //pour chaque group contenu dans mon tableau
                     foreach ($groupTab as $group) {
-                        $groupFiles = $em->getRepository('GedBundle:Gedfiles')->grpNameSearch($searchRecherche,$group);
-
-                        if($groupFiles!=null){
-                            foreach ($groupFiles as $files) {
-                                $idGrpFile = $files->getId();
-                                $count = 0;
-                                
-                                //si mes ficher ne son pas vide
-                                if ($nameTab!=null) {
-                                    //pour chaque ficher dans mes ficher 
-                                    foreach ($nameTab as $fileTab) {
-                                        //si id de mon ficher est egale a id de ficher de mon groupe
-                                        if( ($fileTab['id'] == $idGrpFile) ){
-                                            $count ++;                                            
-                                        }
-                                    }                                    
-                                }
-                                // si aucun Id n'a été trouver dans $nameTab ou si $nameTab nexista pas 
-                                if($count==0){
-                                    //verification pour les tag 
-                                    //si tagTab existe
-                                    if (isset($tagTab)) {
-                                    //pour chaque ficher dans mes ficher 
-                                        foreach ($tagTab as $fileTab) {
+                        if($fileType!=0){
+                            $groupFiles = $em->getRepository('GedBundle:Gedfiles')->grpNameTypeSearch($searchRecherche, $group,$fileType);
+                            if($groupFiles!=null){
+                                foreach ($groupFiles as $files) {
+                                    $idGrpFile = $files->getId();
+                                    $count = 0;
+                                    
+                                    //si mes ficher ne son pas vide
+                                    if ($nameTab!=null) {
+                                        //pour chaque ficher dans mes ficher 
+                                        foreach ($nameTab as $fileTab) {
                                             //si id de mon ficher est egale a id de ficher de mon groupe
                                             if( ($fileTab['id'] == $idGrpFile) ){
                                                 $count ++;                                            
                                             }
-                                        }                                                                        
+                                        }                                    
                                     }
-                                }
-                                if($count==0){
-
-                                    // verification si le grpNameTab n'est pas defini
-                                    if($grpNameTab==null){
-
-                                        // nom du fichier
-                                        $name = $files->getOriginalName();
-                                        //son type
-                                        $type = $files->getType();
-                                        //son chemin
-                                        $path = $files->getPath();
-
-                                        //récuperation des favoris.
-
-                                        $bookmark = $em->getRepository('GedBundle:Linkbookmark')->findOneBy( array( 'idfile'=>$idGrpFile,
-                                                                                                                    'iduser'=>$idUser,
-                                                                                                                    )
-                                        );
-
-                                        if ($bookmark!=null){
-                                            $bookmark = 1;
+                                    // si aucun Id n'a été trouver dans $nameTab ou si $nameTab nexista pas 
+                                    if($count==0){
+                                        //verification pour les tag 
+                                        //si tagTab existe
+                                        if (isset($tagTab)) {
+                                        //pour chaque ficher dans mes ficher 
+                                            foreach ($tagTab as $fileTab) {
+                                                //si id de mon ficher est egale a id de ficher de mon groupe
+                                                if( ($fileTab['id'] == $idGrpFile) ){
+                                                    $count ++;                                            
+                                                }
+                                            }                                                                        
                                         }
-
-                                        else{
-                                            $bookmark = 0;
-                                        }
-
-                                        //on met tout dans un tableau
-                                        $grpNameTab[] = array(
-                                            'name' => $name,
-                                            'id' => $idGrpFile,
-                                            'type' => $type,
-                                            'path' => $path,
-                                            'bookmark' => $bookmark,
-                                        );
                                     }
-                                    //si le tableau est deja défini alors le parcourir et verifier
-                                    if($grpNameTab!=null){
-                                        
-                                        foreach ($grpNameTab as $fileTab) {
-                                            //si id contenu dans mon tableau n est
-                                            if( ($fileTab['id'] == $idGrpFile) ){
-                                                $count ++;                                            
-                                            }
-                                        }
-                                        //si l id na pas ete trouver alors le rajouté
-                                        if($count==0){
+                                    if($count==0){
+
+                                        // verification si le grpNameTab n'est pas defini
+                                        if($grpNameTab==null){
 
                                             // nom du fichier
                                             $name = $files->getOriginalName();
@@ -1567,10 +1980,12 @@ class SearchController extends Controller
                                             $path = $files->getPath();
 
                                             //récuperation des favoris.
+
                                             $bookmark = $em->getRepository('GedBundle:Linkbookmark')->findOneBy( array( 'idfile'=>$idGrpFile,
                                                                                                                         'iduser'=>$idUser,
                                                                                                                         )
                                             );
+
                                             if ($bookmark!=null){
                                                 $bookmark = 1;
                                             }
@@ -1586,7 +2001,164 @@ class SearchController extends Controller
                                                 'type' => $type,
                                                 'path' => $path,
                                                 'bookmark' => $bookmark,
-                                            );                                            
+                                            );
+                                        }
+                                        //si le tableau est deja défini alors le parcourir et verifier
+                                        if($grpNameTab!=null){
+                                            
+                                            foreach ($grpNameTab as $fileTab) {
+                                                //si id contenu dans mon tableau n est
+                                                if( ($fileTab['id'] == $idGrpFile) ){
+                                                    $count ++;                                            
+                                                }
+                                            }
+                                            //si l id na pas ete trouver alors le rajouté
+                                            if($count==0){
+
+                                                // nom du fichier
+                                                $name = $files->getOriginalName();
+                                                //son type
+                                                $type = $files->getType();
+                                                //son chemin
+                                                $path = $files->getPath();
+
+                                                //récuperation des favoris.
+                                                $bookmark = $em->getRepository('GedBundle:Linkbookmark')->findOneBy( array( 'idfile'=>$idGrpFile,
+                                                                                                                            'iduser'=>$idUser,
+                                                                                                                            )
+                                                );
+                                                if ($bookmark!=null){
+                                                    $bookmark = 1;
+                                                }
+
+                                                else{
+                                                    $bookmark = 0;
+                                                }
+
+                                                //on met tout dans un tableau
+                                                $grpNameTab[] = array(
+                                                    'name' => $name,
+                                                    'id' => $idGrpFile,
+                                                    'type' => $type,
+                                                    'path' => $path,
+                                                    'bookmark' => $bookmark,
+                                                );                                            
+                                            }
+                                        }
+                                    }
+                                }
+                            }
+
+                        }
+                        else{
+                            $groupFiles = $em->getRepository('GedBundle:Gedfiles')->grpNameSearch($searchRecherche, $group);
+
+                            if($groupFiles!=null){
+                                foreach ($groupFiles as $files) {
+                                    $idGrpFile = $files->getId();
+                                    $count = 0;
+                                    
+                                    //si mes ficher ne son pas vide
+                                    if ($nameTab!=null) {
+                                        //pour chaque ficher dans mes ficher 
+                                        foreach ($nameTab as $fileTab) {
+                                            //si id de mon ficher est egale a id de ficher de mon groupe
+                                            if( ($fileTab['id'] == $idGrpFile) ){
+                                                $count ++;                                            
+                                            }
+                                        }                                    
+                                    }
+                                    // si aucun Id n'a été trouver dans $nameTab ou si $nameTab nexista pas 
+                                    if($count==0){
+                                        //verification pour les tag 
+                                        //si tagTab existe
+                                        if (isset($tagTab)) {
+                                        //pour chaque ficher dans mes ficher 
+                                            foreach ($tagTab as $fileTab) {
+                                                //si id de mon ficher est egale a id de ficher de mon groupe
+                                                if( ($fileTab['id'] == $idGrpFile) ){
+                                                    $count ++;                                            
+                                                }
+                                            }                                                                        
+                                        }
+                                    }
+                                    if($count==0){
+
+                                        // verification si le grpNameTab n'est pas defini
+                                        if($grpNameTab==null){
+
+                                            // nom du fichier
+                                            $name = $files->getOriginalName();
+                                            //son type
+                                            $type = $files->getType();
+                                            //son chemin
+                                            $path = $files->getPath();
+
+                                            //récuperation des favoris.
+
+                                            $bookmark = $em->getRepository('GedBundle:Linkbookmark')->findOneBy( array( 'idfile'=>$idGrpFile,
+                                                                                                                        'iduser'=>$idUser,
+                                                                                                                        )
+                                            );
+
+                                            if ($bookmark!=null){
+                                                $bookmark = 1;
+                                            }
+
+                                            else{
+                                                $bookmark = 0;
+                                            }
+
+                                            //on met tout dans un tableau
+                                            $grpNameTab[] = array(
+                                                'name' => $name,
+                                                'id' => $idGrpFile,
+                                                'type' => $type,
+                                                'path' => $path,
+                                                'bookmark' => $bookmark,
+                                            );
+                                        }
+                                        //si le tableau est deja défini alors le parcourir et verifier
+                                        if($grpNameTab!=null){
+                                            
+                                            foreach ($grpNameTab as $fileTab) {
+                                                //si id contenu dans mon tableau n est
+                                                if( ($fileTab['id'] == $idGrpFile) ){
+                                                    $count ++;                                            
+                                                }
+                                            }
+                                            //si l id na pas ete trouver alors le rajouté
+                                            if($count==0){
+
+                                                // nom du fichier
+                                                $name = $files->getOriginalName();
+                                                //son type
+                                                $type = $files->getType();
+                                                //son chemin
+                                                $path = $files->getPath();
+
+                                                //récuperation des favoris.
+                                                $bookmark = $em->getRepository('GedBundle:Linkbookmark')->findOneBy( array( 'idfile'=>$idGrpFile,
+                                                                                                                            'iduser'=>$idUser,
+                                                                                                                            )
+                                                );
+                                                if ($bookmark!=null){
+                                                    $bookmark = 1;
+                                                }
+
+                                                else{
+                                                    $bookmark = 0;
+                                                }
+
+                                                //on met tout dans un tableau
+                                                $grpNameTab[] = array(
+                                                    'name' => $name,
+                                                    'id' => $idGrpFile,
+                                                    'type' => $type,
+                                                    'path' => $path,
+                                                    'bookmark' => $bookmark,
+                                                );                                            
+                                            }
                                         }
                                     }
                                 }
@@ -1635,17 +2207,35 @@ class SearchController extends Controller
                                 // puis on recherche le fichier.
                                 //pour chaqu' un  de mes groupes
                                 foreach ($groupsTab as $group) {
-                                    
-                                    //recherche du fichier correspondant Id du fichier et Id du groupe
-                                    $grpFileId = $em->getRepository('GedBundle:Gedfiles')->findOneBy( array(
-                                        'idgroup' => $group,
-                                        'id' =>$id,
-                                        )
-                                    );
-
+                                    if ($fileType!=0){
+                                        foreach ($fileType as $defType){
+                                            //recherche du fichier correspondant Id du fichier et Id du groupe
+                                            $grpFileIdSearch = $em->getRepository('GedBundle:Gedfiles')->findOneBy( array(
+                                                'idgroup' => $group,
+                                                'id' =>$id,
+                                                'type'=>$defType,
+                                                )
+                                            );
+                                            //si il trouve un resultat alors asigne lui la valeur.
+                                            if($grpFileIdSearch!=null){
+                                                $grpFileId=$grpFileIdSearch;
+                                            }
+                                        }
+                                    }
+                                    else{
+                                        //recherche du fichier correspondant Id du fichier et Id du groupe
+                                        $grpFileId = $em->getRepository('GedBundle:Gedfiles')->findOneBy( array(
+                                            'idgroup' => $group,
+                                            'id' =>$id,
+                                            )
+                                        );
+                                    }
+                                    //si la verible nest pas defini.
+                                    if(!isset($grpFileId)){
+                                        $grpFileId=null;
+                                    }
                                     //le resultat n'est pas null
                                     if($grpFileId!=null){
-
                                         //on initialise un compeur
                                         $count = 0;
                                         //on recupere id du fichier trouvé
@@ -1725,7 +2315,7 @@ class SearchController extends Controller
                                                 'bookmark' => $bookmark,
                                             );                                                                                        
                                         }
-                                    }                                   
+                                    }                                                                     
                                 }
                             }
                         }
@@ -1749,11 +2339,9 @@ class SearchController extends Controller
         if( ($nameTab==null) && ($tagTab==null) && ($grpNameTab==null) && ($grpTagTab==null) ){
             $this->get('session')->getFlashBag()->set('error', 'Aucun résultat');
         }
-        if(strlen($searchRecherche)==0){
-            $this->get('session')->getFlashBag()->set('error', 'Merci de définir votre recherche');
-        }
-            
-        
+        // if(strlen($searchRecherche)==0){
+        //     $this->get('session')->getFlashBag()->set('error', 'Merci de définir votre recherche');
+        // }       
 
         return $this->render('GedBundle::search_result.html.twig',array(
                                                                         'form' => $form->createView(),
