@@ -21,4 +21,42 @@ class TicketRepository extends EntityRepository
 
     return $qb->getQuery()->getResult();
 	}
+
+	public function newtickets()
+	{
+    	$qb = $this->createQueryBuilder('u');
+    	$qb->select('u')
+			->orderBy('u.date', 'DESC')
+			->setFirstResult(0)
+   			->setMaxResults(5);
+
+    return $qb->getQuery()->getResult();
+	}
+
+	public function highlyurgent()
+	{
+    	$qb = $this->createQueryBuilder('u');
+    	$qb->select('u')
+    		->where('u.priority = ?1')
+			->orderBy('u.date', 'DESC')
+			->setFirstResult(0)
+   			->setMaxResults(5)
+   			->setParameter(1, "Très urgent");
+
+    return $qb->getQuery()->getResult();
+	}
+
+	public function urgent()
+	{
+    	$qb = $this->createQueryBuilder('u');
+    	$qb->select('u')
+    		->where('u.priority = ?2')
+			->orderBy('u.date', 'DESC')
+			->setFirstResult(0)
+   			->setMaxResults(5)
+   			->setParameter(2, "Urgent");
+
+    return $qb->getQuery()->getResult();
+	}
+
 }

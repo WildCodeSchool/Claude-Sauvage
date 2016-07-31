@@ -64,6 +64,10 @@ src: url('../fonts/glyphicons-halflings-regular.eot?#iefix') format('embedded-op
 /** GRC Dashboard 
  */
 
+.grc_dashboard{
+	margin-bottom: 50px;
+}
+
 .grc_dashboard h1{
 	font-size: 35px;
 	text-align: center;
@@ -78,15 +82,21 @@ src: url('../fonts/glyphicons-halflings-regular.eot?#iefix') format('embedded-op
 	margin-top: 0px;
 }
 
-.dashboard{
-}
-
 .tableau{
-	height: 200px;
+	height: 230px;
 	border: black 1px solid;
 	margin-bottom: 10px;
 	padding-right: 0px;
 	padding-left: 0px; 
+
+}
+
+.tableau1{
+	margin-right:5px;
+}
+
+#categorychart{
+	height: 250px;
 
 }
 
@@ -115,9 +125,23 @@ src: url('../fonts/glyphicons-halflings-regular.eot?#iefix') format('embedded-op
 }
 
 .tableau p{
-	font-size: 17px;
+	font-size: 20px;
 	margin-bottom: 5px;
 	font-weight: bold;
+}
+
+.tableau p a{
+	font-size: 20px;
+	margin-bottom: 5px;
+	font-weight: bold;
+	color: #303030;
+}
+
+.tableau p a:hover{
+	font-size: 20px;
+	margin-bottom: 5px;
+	font-weight: bold;
+	color: #0000cc;
 }
 
 .rouge{
@@ -301,10 +325,25 @@ tr:hover td{
 
 }
 
+.flashbagticket{
+	margin-top:10px;
+	margin-bottom: 0px;
+}
+
+.flashbagticket p{
+	text-align: center;
+}
+.flashbagticket .flashbagfirst{
+	font-size: 20px;
+}
+.flashbagticket .flashbagsecond{
+	font-size: 15px;
+}
+
 .formulaire_ticket {
 	padding-right:0px;
 	padding-left:0px;
-	margin-top: 30px;
+	margin-top: 20px;
 	margin-bottom: 50px;
 	border: solid 1px black;
 	background-color: #F1F1F1;
@@ -358,6 +397,12 @@ form #categories, form #sscategories {
  /** GRC Création catégorie sous-catégorie
  */
 
+.flashbagcat{
+	margin-top: 10px;
+	font-size: 15px;
+}
+
+
 .creation_forms{
  	margin-top: 40px;
  	margin-left: 10px;
@@ -391,11 +436,25 @@ form #categories, form #sscategories {
  	padding:20px;
  }
 
-  /** GRC fiche client
+ /** GRC fiche client
  */
+
 .fiche_client{
 	padding:0px;
+	padding-left:5px;
+	padding-right:5px;
 	margin:0px;
+}
+
+.fiche_client_top{
+	margin: 0px;
+	margin-bottom: 20px;
+	padding: 0px;
+}
+
+.fiche_client_bottom{
+	margin: 0px;
+	padding: 0px;
 }
 
 .fiche_client h1{
@@ -404,19 +463,22 @@ form #categories, form #sscategories {
 	margin-bottom: 40px;
 }
 
-.fiche_client-box{
-	padding:10px;
+.fiche_client_box{
+	padding:0px;
+	border: solid 1px black;
+}
+
+.fiche_client_box h3{
+	background-color: #1FA597;
+	margin:0px;
+	padding: 5px;
+	color: white;
+	border-bottom: solid 1px black;
 }
 
 .mon_profil, .mes_tickets, .ma_photo{
-	padding: 5px;
-	padding-bottom: 20px;
-	border: solid 1px black;
-	margin-bottom: 5px;
-}
-
-.mon_profil h3, .mes_tickets h3, .ma_photo h3{
-	margin-top: 10px;
+	padding: 15px;
+	background-color: #F1F1F1;
 }
 
 .photo_profil{
@@ -425,3 +487,53 @@ form #categories, form #sscategories {
 	height: 150px;
 	margin: auto;
 }
+
+.photo_profil img{
+	width: 150px;
+	height: 150px;
+}
+
+.profil_label{
+	font-size: 20px;
+	padding-right: 10px;
+	text-align: right;
+	font-weight: bold;
+}
+
+.profil_filled{
+	font-size: 20px;
+	margin-left: 10px;
+	color: #12635a;
+}
+
+ /** GRC liste client
+ */
+
+.container_liste_client h1{
+	text-align: center;
+	margin-top: 30px;
+	margin-bottom: 30px;
+}
+
+
+.liste_client{
+border: solid 1px black;
+padding: 0px;
+background-color: #F1F1F1;
+}
+
+.liste_client h3{
+	background-color: #1FA597;
+	margin:0px;
+	padding: 5px;
+	padding-top:10px;
+	padding-bottom:10px;
+	color: white;
+	border-bottom: solid 1px black;
+}
+
+.ma_liste_client{
+	padding: 5px;
+}
+
+

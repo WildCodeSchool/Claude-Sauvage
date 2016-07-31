@@ -25,49 +25,49 @@ class ListController extends Controller
             //comptes du haut de dashboard
         	//status
         	$toclasstickets=$em->getRepository('GrcBundle:Ticket')->findBy(
-        		array('idreceiver'=>$user->getId(), 'status'=>'A traiter')
+        		array('status'=>'Initial')
         		);
         	$nbtoclass = count($toclasstickets);
         	
            	$inprogresstickets=$em->getRepository('GrcBundle:Ticket')->findBy(
-        		array('idreceiver'=>$user->getId(), 'status'=>'En cours')
+        		array('status'=>'En cours')
         		);
         	$nbinprogress = count($inprogresstickets);
 
     		$closedtickets=$em->getRepository('GrcBundle:Ticket')->findBy(
-        		array('idreceiver'=>$user->getId(), 'status'=>'Cloturés')
+        		array('status'=>'Cloturés')
         		);
         	$nbclosed = count($closedtickets);
 
     		$archivedtickets=$em->getRepository('GrcBundle:Ticket')->findBy(
-        		array('idreceiver'=>$user->getId(), 'status'=>'Archivés')
+        		array('status'=>'Archivés')
         		);
         	$nbarchived = count($archivedtickets);
 
         	//priorités
 
     		$hutickets=$em->getRepository('GrcBundle:Ticket')->findBy(
-        		array('idreceiver'=>$user->getId(), 'priority'=>'Très urgent')
+        		array('priority'=>'Très urgent')
         		);
         	$nbhu = count($hutickets);
 
     		$urgenttickets=$em->getRepository('GrcBundle:Ticket')->findBy(
-        		array('idreceiver'=>$user->getId(), 'priority'=>'Urgent')
+        		array('priority'=>'Urgent')
         		);
         	$nburgent = count($urgenttickets);
 
     		$blockingtickets=$em->getRepository('GrcBundle:Ticket')->findBy(
-        		array('idreceiver'=>$user->getId(), 'priority'=>'Bloquant')
+        		array('priority'=>'Bloquant')
         		);
         	$nbblocking = count($blockingtickets);
 
     		$simpletickets=$em->getRepository('GrcBundle:Ticket')->findBy(
-        		array('idreceiver'=>$user->getId(), 'priority'=>'Simple')
+        		array('priority'=>'Simple')
         		);
         	$nbsimple = count($simpletickets);
 
     		$lowtickets=$em->getRepository('GrcBundle:Ticket')->findBy(
-        		array('idreceiver'=>$user->getId(), 'priority'=>'Basse')
+        		array('priority'=>'Basse')
         		);
         	$nblow = count($lowtickets);
 
@@ -83,15 +83,9 @@ class ListController extends Controller
         		'nblow'=>$nblow,
         		);
 
-
-
-        	$newtickets=$em->getRepository('GrcBundle:Ticket')->findBy(
-        		array('idreceiver' => $user->getId()), // Critere
-      			array('date' => 'desc'),        // Tri
-      			5,                              // Limite
-      			0                               // Offset
-        	);
-        	foreach ($newtickets as $ticket)
+        	$newtickets=$em->getRepository('GrcBundle:Ticket')->newtickets();
+        	
+            foreach ($newtickets as $ticket)
         	{
         		$ticketid = $ticket->getId();
         		$date=$ticket->getDate();
@@ -101,7 +95,12 @@ class ListController extends Controller
         		$ticketsender=$sender->getUsername();
 
         		$category=$em->getRepository('GrcBundle:Grccategory')->findOneById($ticket->getIdcategory());
-        		$categoryname=$category->getName();
+        		
+                    if (!empty($category)){
+                    $categoryname=$category->getName();
+                    } else {
+                    $categoryname="Not defined";
+                    }
 
         		$newticketstab[]=array(
         			'id'=>$ticketid,
@@ -116,23 +115,25 @@ class ListController extends Controller
         		$newticketstab=1;
         	}
 
-        	$highlyurgenttickets=$em->getRepository('GrcBundle:Ticket')->findBy(
-        		array('idreceiver'=>$user->getId(), 'priority'=>'Très urgent'),
-        		array('date'=>'desc'),
-        		5,
-        		0
-        		);
-        	foreach ($highlyurgenttickets as $huticket) {
-        		
-        		$ticketid = $ticket->getId();
-        		$date=$ticket->getDate();
-        		$priority=$ticket->getPriority();
+        	$highlyurgenttickets=$em->getRepository('GrcBundle:Ticket')->highlyurgent();
+        	
 
-        		$sender= $em->getRepository('AppBundle:User')->findOneById($ticket->getIdsender());
+            foreach ($highlyurgenttickets as $huticket) {
+        		
+        		$ticketid = $huticket->getId();
+        		$date= $huticket->getDate();
+        		$priority= $huticket->getPriority();
+
+        		$sender= $em->getRepository('AppBundle:User')->findOneById($huticket->getIdsender());
         		$ticketsender=$sender->getUsername();
 
-        		$category=$em->getRepository('GrcBundle:Grccategory')->findOneById($ticket->getIdcategory());
-        		$categoryname=$category->getName();
+        		$category=$em->getRepository('GrcBundle:Grccategory')->findOneById($huticket->getIdcategory());
+                    
+                    if (!empty($category)){
+                    $categoryname=$category->getName();
+                    } else {
+                    $categoryname="Not defined";
+                    }
 
         		$huticketstab[]=array(
         			'id'=>$ticketid,
@@ -147,23 +148,25 @@ class ListController extends Controller
         		$huticketstab=1;
         	}
 
-        	$urgenttickets=$em->getRepository('GrcBundle:Ticket')->findBy(
-        		array('idreceiver'=>$user->getId(), 'priority'=>'Urgent'),
-        		array('date'=>'desc'),
-        		5,
-        		0
-        		);
+        	$urgenttickets=$em->getRepository('GrcBundle:Ticket')->urgent();
+
+
         	foreach ($urgenttickets as $urgentticket) {
         		
-        		$ticketid = $ticket->getId();
-        		$date=$ticket->getDate();
-        		$priority=$ticket->getPriority();
+        		$ticketid = $urgentticket->getId();
+        		$date=$urgentticket->getDate();
+        		$priority=$urgentticket->getPriority();
 
-        		$sender= $em->getRepository('AppBundle:User')->findOneById($ticket->getIdsender());
+        		$sender= $em->getRepository('AppBundle:User')->findOneById($urgentticket->getIdsender());
         		$ticketsender=$sender->getUsername();
 
-        		$category=$em->getRepository('GrcBundle:Grccategory')->findOneById($ticket->getIdcategory());
-        		$categoryname=$category->getName();
+        		$category=$em->getRepository('GrcBundle:Grccategory')->findOneById($urgentticket->getIdcategory());
+                    
+                    if (!empty($category)){
+                    $categoryname=$category->getName();
+                    } else {
+                    $categoryname="Not defined";
+                    }
 
         		$urgentticketstab[]=array(
         			'id'=>$ticketid,
@@ -173,32 +176,21 @@ class ListController extends Controller
         			'category'=>$categoryname,
         			);
         	}
+            
         	if(empty($urgentticketstab))
         	{
         		$urgentticketstab=1;
         	}
 
-        	$comments=$em->getRepository('GrcBundle:Comment')->findAll(
-        		array('date'=>'desc')
-        		);
-        	$compteur=0;
-        	$tab[]=array('id'=>0);
-        	foreach ($comments as $comment ) {
-        		$counted=0;
-        		$i=0;
-        		$idticket=$comment->getIdticket();
-        		while($i<count($tab))
-        		{
-        			if( $idticket == $tab[$i]['id'] )
-        			{
-        				$counted=1;
-        			}
-        			$i++;
-        		}
-/*        		if($counted == 0 && $compteur < 5 )
-        		{
-        			$ticket= $em->getRepository('GrcBundle:Ticket')->findOneById($idticket);
+            // Derniers commentés
+        	
+            $comments=$em->getRepository('GrcBundle:Comment')->newcomments();
 
+
+
+        	foreach ($comments as $comment ) {
+        		
+                    $ticket= $em->getRepository('GrcBundle:Ticket')->findOneById($comment->getIdticket());
         			$ticketid = $ticket->getId();
         			$date=$ticket->getDate();
         			$priority=$ticket->getPriority();
@@ -207,7 +199,12 @@ class ListController extends Controller
         			$ticketsender=$sender->getUsername();
 
         			$category=$em->getRepository('GrcBundle:Grccategory')->findOneById($ticket->getIdcategory());
-        			$categoryname=$category->getName();
+                        
+                        if (!empty($category)){
+                        $categoryname=$category->getName();
+                        } else {
+                        $categoryname="Not defined";
+                        }
 
         			$commentedticketstab[]=array(
         				'id'=>$ticketid,
@@ -216,10 +213,9 @@ class ListController extends Controller
         				'sender'=>$ticketsender,
         				'category'=>$categoryname,
         			);
-        		}
-*/
         	}
-        	if(empty($commentedticketstab))
+        	
+            if(empty($commentedticketstab))
         	{
         		$commentedticketstab=1;
         	}
@@ -232,7 +228,9 @@ class ListController extends Controller
         		'commentedtickets'=>$commentedticketstab,
         		'statstab'=>$statstab,
         		));
+
         } else {
+
             $url = $this -> generateUrl('grc_fiche_client', array( 'id'=>$userid ));
             $response = new RedirectResponse($url);
             return $response;

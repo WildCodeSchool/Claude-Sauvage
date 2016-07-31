@@ -1,0 +1,53 @@
+{% extends 'GrcBundle::layout.html.twig' %}
+
+{% block body %}
+
+
+	
+<div class="container_liste_client">
+	<h1>Liste de mes clients</h1>
+	<div class="row container_fluid_client">	
+		<div class="col-md-8 col-md-offset-2 liste_client">
+			<h3>Mes clients</h3>
+			<div class="ma_liste_client">
+				<table id"table_id" class="display client_table">
+					<thead> 
+						<tr>
+							<th>Id</th>  
+							<th>Username</th> 
+							<th>Fistname</th>
+							<th>Surname</th> 
+							<th>Email</th>
+						</tr> 
+					</thead> 
+					<tbody>
+						{% if clienttab is defined %}
+							{% for client in clienttab %}
+								<tr> 
+									<td><a href="{{ path('grc_fiche_client', { 'id': client['id'] }) }}">{{ client['id'] }}</a></td>
+									<td>{{ client['username'] }}</td>
+									<td>{{ client['firstname'] }}</td>
+									<td>{{ client['surname'] }}</td>
+									<td>{{ client['email'] }}</td>
+								</tr>
+							{% endfor %}
+						{% endif %}
+					</tbody>
+				</table>
+			</div>
+		</div>
+	</div>
+</div>
+
+<script type="text/javascript"> 
+	$(document).ready(function() { 
+		$('.client_table').DataTable( {
+		"paging": true,
+		"ordering": true, 
+		"info": true, 
+		"sDom": '<"H"lr>t<"F"ip>' 
+		}); 
+	});
+</script>
+
+{% endblock %}
