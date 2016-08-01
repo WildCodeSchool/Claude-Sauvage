@@ -3,7 +3,7 @@
 {% include "GedBundle::nav.html.twig" %}
 {% include "GedBundle::search.html.twig" %}
 <div class="col-md-10">
-	<h3>Résultat de la recherches</h3>
+	<h3>Résultat de la recherche</h3>
 	{% for flashMessage in app.session.flashbag.get('error') %}
 		<div class="alert alert-danger alert-dismissible navbar-header pagination-centered col-md-10 col-md-offset-1" role="alert">
 			<button type="button" class="close" data-dismiss="alert" aria-label="Close"><span aria-hidden="true">&times;</span></button>
@@ -33,6 +33,12 @@
 							<td>
 								{% if myfiles['type'] == 'jpeg' or myfiles['type'] == 'jpg' or myfiles['type'] == 'png' or myfiles['type'] == 'gif' %}
 									<span class="glyphicon glyphicon-picture" aria-hidden="true"></span>
+								{% elseif myfiles['type'] == 'txt' or myfiles['type'] == 'doc' %}
+									<span class="glyphicon glyphicon-file" aria-hidden="true"></span>
+								{% elseif myfiles['type'] == 'mp4' or myfiles['type'] == 'avi' %}
+									<span class="glyphicon glyphicon-film" aria-hidden="true"></span>
+								{% elseif myfiles['type'] == 'mp3' or myfiles['type'] == 'wave' %}
+									<span class=" glyphicon glyphicon-music" aria-hidden="true"></span>
 								{% else %}
 									Ico
 								{% endif %}
@@ -166,7 +172,7 @@
 	{% if grpTagTab is empty %}
 		{% else %}
 		<div class="col-md-12 search-tab">
-			<h4>Fichiers contenant le tag appartenant à les groupes :</h4>
+			<h4>Fichiers contenant le tag appartenant à mes groupes :</h4>
 			<table class="table compact stripe" id="table">
 				<thead> 
 					<tr> 

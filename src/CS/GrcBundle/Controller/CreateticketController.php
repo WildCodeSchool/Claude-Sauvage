@@ -17,7 +17,9 @@ class CreateticketController extends Controller
 {
 public function createticketAction(Request $request)
     {      
-		$ticket = new Ticket();
+		$lastticket = 0;
+
+        $ticket = new Ticket();
 		$form = $this->createForm(new TicketType(), $ticket);
 		$form->handleRequest($request);
 
@@ -63,9 +65,16 @@ public function createticketAction(Request $request)
 
             $em->persist($ticket);
             $em->flush();
+            
+            $this->get('session')->getFlashBag()->set('success', 'Ticket crée !');
 
             return $this->redirectToRoute('grc_create_ticket');
         }
+
+        $lastticket = $em->getRepository('GrcBundle:Ticket')->findOneBy(
+                array('idsender' => $userid), // Critere
+                array('date' => 'desc')        // Tri
+        );
 
 		return $this->render('GrcBundle:Default:createticket.html.twig', array(
 		'form' => $form->createView(),
@@ -73,6 +82,7 @@ public function createticketAction(Request $request)
 		'sscategories' => $sscategories,
         'username'=>$username,
         'userid' => $userid,
+        'lastticket' => $lastticket,
         ));
     }
 }

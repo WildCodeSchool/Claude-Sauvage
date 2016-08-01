@@ -39,6 +39,8 @@ public function submitcatAction(Request $request)
         $em->persist($newcategory);
         $em->flush();
 
+        $this->get('session')->getFlashBag()->set('category', 'Catégorie crée !');
+
         return $this->redirectToRoute('grc_create_cat');
     }
 public function submitsscatAction(Request $request)
@@ -55,6 +57,8 @@ public function submitsscatAction(Request $request)
         
         $em->persist($newsscategory);
         $em->flush();
+
+        $this->get('session')->getFlashBag()->set('sscategory', 'Sous-catégorie crée !');
 
         return $this->redirectToRoute('grc_create_cat');
     }

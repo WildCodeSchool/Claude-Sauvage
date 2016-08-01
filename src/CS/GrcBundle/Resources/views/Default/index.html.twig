@@ -3,39 +3,33 @@
 {% block body %}
 <div class="grc_dashboard">
 {% include "GrcBundle::Default/searchbar.html.twig" %}
-	<h1>Bienvenue sur votre outil de gestion de ticket
+	<h1>Bienvenue sur votre outil de gestion de tickets
 	</h1>
 	<div class="col-md-12 dashboard">
-		<div class="col-md-2 col-md-offset-2 tableau">
+		<div class="col-md-2 col-md-offset-2 tableau tableau1">
 			<div class="tableau-top">
 				<h2>Status</h2>
 			</div>
 			<div class="tableau-low" id="interligne">
-				<p>A traiter: <span class="rouge">{{ statstab['nbtoclass'] }}</span></p>
-				<p>En cours: <span class="orange">{{ statstab['nbinprogress'] }}</span></p>
-				<p>Cloturés: <span class="vert">{{ statstab['nbclosed'] }}</span></p>
-				<p>Archivés: <span class="gris">{{ statstab['nbarchived'] }}</span></p>
+				<p><a href="{{ path('grc_status', { 'id': 1 }) }}">Initial </a>: <span class="rouge">{{ statstab['nbtoclass'] }}</span></p>
+				<p><a href="{{ path('grc_status', { 'id': 2 }) }}">En cours </a>: <span class="orange">{{ statstab['nbinprogress'] }}</span></p>
+				<p><a href="{{ path('grc_status', { 'id': 3 }) }}">Cloturés </a>: <span class="vert">{{ statstab['nbclosed'] }}</span></p>
+				<p><a href="{{ path('grc_status', { 'id': 4 }) }}">Archivés </a>: <span class="gris">{{ statstab['nbarchived'] }}</span></p>
 			</div>
 		</div>
-		<div class="col-md-2 col-md-offset-1 tableau">
+		<div class="col-md-2 col-md-offset- tableau">
 			<div class="tableau-top">				
 				<h2>Priorités</h2>
 			</div>
 			<div class="tableau-low">				
-				<p>Très urgent: <span class="rouge">{{ statstab['nbhu'] }}</span></p>
-				<p>Urgent: <span class="rouge">{{ statstab['nburgent'] }}</span></p>
-				<p>Bloquant: <span class="orange">{{ statstab['nbblocking'] }}</span></p>
-				<p>Simple: <span class="vert">{{ statstab['nbsimple'] }}</span></p>
-				<p>Basse: <span class="vert">{{ statstab['nblow'] }}</span></p>
+				<p><a href="{{ path('grc_priority', { 'id': 1 }) }}">Très urgent </a>: <span class="rouge"> {{ statstab['nbhu'] }}</span></p>
+				<p><a href="{{ path('grc_priority', { 'id': 2 }) }}">Urgent </a>: <span class="rouge">{{ statstab['nburgent'] }}</span></p>
+				<p><a href="{{ path('grc_priority', { 'id': 3 }) }}">Bloquant </a>: <span class="orange">{{ statstab['nbblocking'] }}</span></p>
+				<p><a href="{{ path('grc_priority', { 'id': 4 }) }}">Simple </a>: <span class="vert">{{ statstab['nbsimple'] }}</span></p>
+				<p><a href="{{ path('grc_priority', { 'id': 5 }) }}">Basse </a>: <span class="vert">{{ statstab['nblow'] }}</span></p>
 			</div>
 		</div>
-		<div class="col-md-2 col-md-offset-1 tableau">
-			<div class="tableau-top">
-				<h2>Catégories</h2>
-			</div>
-			<div class="tableau-low" id="graph">
-				<p><img src="{{ asset('/img/categorie.jpg') }}"></p>
-			</div>
+		<div class="col-md-5 " id="categorychart">
 		</div>
 	</div>
 
@@ -48,7 +42,7 @@
 						<th class="col-tic">N° ticket</th>
 						<th class="col-cat">Catégorie</th>
 						<th class="col-dem">Demandeur</th>
-						<th class="col-act">Dernière action</th>
+						<th class="col-act">Réception</th>
 						<th class="col-prio">Priorité</th>
 					</tr>
 				</thead>
@@ -56,7 +50,7 @@
 					{% if newtickets is defined %}
 						{% for newticket in newtickets %}
 							<tr> 
-								<td>{{ newticket['id'] }}</td>
+								<td><a href="{{ path('ticket', { 'id': newticket['id'] }) }}">{{ newticket['id'] }}</a></td>
 								<td>{{ newticket['category'] }}</td> 
 								<td>{{ newticket['sender'] }}</td>
 								<td>{{ newticket['date'].date | date('d/m/Y h:m:s') }}</td>
@@ -64,27 +58,20 @@
 							</tr>
 						{% endfor %}
 					{% endif %}
-					<tr>
-						<td>5</td>
-						<td>Pièce manquante</td>
-						<td>Claude Sauvage</td>
-						<td>11/06/16</td>
-						<td>Urgent</td>
-					</tr>
 		   		</tbody>
 			</table>
 		</div>
 	</div>
 	<div class="col-md-12 liste">
 		<div class="col-md-8 col-md-offset-2">
-			<h3>Dernier très urgent</h3>
+			<h3>Derniers très urgent</h3>
 			<table id="table_id" class="display tab1">
 				<thead>
 					<tr>
 						<th class="col-tic">N° ticket</th>
 						<th class="col-cat">Catégorie</th>
 						<th class="col-dem">Demandeur</th>
-						<th class="col-act">Dernière action</th>
+						<th class="col-act">Réception</th>
 						<th class="col-prio">Priorité</th>
 					</tr>
 				</thead>
@@ -92,7 +79,7 @@
 					{% if hutickets is defined %}
 						{% for huticket in hutickets %}
 							<tr> 
-								<td>{{ huticket['id'] }}</td>
+								<td><a href="{{ path('ticket', { 'id': huticket['id'] }) }}">{{ huticket['id'] }}</a></td>
 								<td>{{ huticket['category'] }}</td> 
 								<td>{{ huticket['sender'] }}</td>
 								<td>{{ huticket['date'].date | date('d/m/Y h:m:s') }}</td>
@@ -100,13 +87,6 @@
 							</tr>
 						{% endfor %}
 					{% endif %}
-					<tr>
-						<td>5</td>
-						<td>Pièce manquante</td>
-						<td>Claude Sauvage</td>
-						<td>11/06/16</td>
-						<td>Très Urgent</td>
-					</tr>
 		   		</tbody>
 			</table>
 		</div>
@@ -120,7 +100,7 @@
 						<th class="col-tic">N° ticket</th>
 						<th class="col-cat">Catégorie</th>
 						<th class="col-dem">Demandeur</th>
-						<th class="col-act">Dernière action</th>
+						<th class="col-act">Réception</th>
 						<th class="col-prio">Priorité</th>
 					</tr>
 				</thead>
@@ -128,7 +108,7 @@
 					{% if urgenttickets is defined %}
 						{% for urgentticket in urgenttickets %}
 							<tr> 
-								<td>{{ urgentticket['id'] }}</td>
+								<td><a href="{{ path('ticket', { 'id': urgentticket['id'] }) }}">{{ urgentticket['id'] }}</a></td>
 								<td>{{ urgentticket['category'] }}</td> 
 								<td>{{ urgentticket['sender'] }}</td>
 								<td>{{ urgentticket['date'].date | date('d/m/Y h:m:s') }}</td>
@@ -136,13 +116,6 @@
 							</tr>
 						{% endfor %}
 					{% endif %}
-					<tr>
-						<td>5</td>
-						<td>Pièce manquante</td>
-						<td>Claude Sauvage</td>
-						<td>11/06/16</td>
-						<td>Urgent</td>
-					</tr>
 		   		</tbody>
 			</table>
 		</div>
@@ -164,7 +137,7 @@
 					{% if commentedtickets is defined %}
 						{% for commentedticket in commentedtickets %}
 							<tr> 
-								<td>{{ commentedticket['id'] }}</td>
+								<td><a href="{{ path('ticket', { 'id': commentedticket['id'] }) }}">{{ commentedticket['id'] }}</a></td>
 								<td>{{ commentedticket['category'] }}</td> 
 								<td>{{ commentedticket['sender'] }}</td>
 								<td>{{ commentedticket['date'].date | date('d/m/Y h:m:s') }}</td>
@@ -172,27 +145,83 @@
 							</tr>
 						{% endfor %}
 					{% endif %}
-					<tr>
-						<td>5</td>
-						<td>Pièce manquante</td>
-						<td>Claude Sauvage</td>
-						<td>28/06/16</td>
-						<td>Urgent</td>
-					</tr>
 		   		</tbody>
 			</table>
 		</div>
 	</div>
+	<div class="col-md-12 liste lastblock">
+
+	</div>
 </div>
 <script type="text/javascript"> 
-    $(document).ready(function() { 
-        $('.tab1').DataTable( {
-            "paging": false,
-            "ordering": false, 
-            "info": false, 
-            "sDom": '<"H"lr>t<"F"ip>' 
-        }); 
+$(document).ready(function() { 
+    $('.tab1').DataTable( {
+        "paging": false,
+        "ordering": false, 
+        "info": false, 
+        "sDom": '<"H"lr>t<"F"ip>' 
+    }); 
+});
+
+$(function () {
+    $(document).ready(function () {
+
+        $.ajax({
+                url: "{{ path('ajaxchart') }}",
+                type: 'POST',
+                success: function(data) {
+         
+       
+          var datachart = data.catchart;
+          console.log("datachart",datachart);
+              
+          $('#categorychart').highcharts({
+            chart: {
+                plotBackgroundColor: null,
+                plotBorderWidth: null,
+                plotShadow: false,
+                type: 'pie'
+            },
+			title: {
+			    text: '',
+			    style: {
+			        display: 'none'
+			    }
+			},
+			subtitle: {
+			    text: '',
+			    style: {
+			        display: 'none'
+			    }
+			},
+			exporting: { 
+				enabled: false 
+			},
+            tooltip: {
+                pointFormat: '{series.name}: <b>{point.percentage:.1f}%</b>'
+            },
+            plotOptions: {
+                pie: {
+                    allowPointSelect: true,
+                    cursor: 'pointer',
+                    dataLabels: {
+                        enabled: true,
+                        format: '<p>{point.name}</p>: {point.percentage:.0f} %',
+						color: 'black',
+            			style: { fontFamily: '\'Lato\', sans-serif', lineHeight: '18px', fontSize: '17px' }
+                    }
+                }
+            },
+            series: [{
+              type: 'pie',
+              name: 'Part de la catégorie',
+              data: datachart
+            }]
+          });
+       }});        
     });
+});    
+
 </script>
 {% endblock %}
 

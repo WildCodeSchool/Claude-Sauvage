@@ -49,6 +49,13 @@ class Comment
      */
     private $date;
 
+    /**
+     * @var \string
+     *
+     * @ORM\Column(name="author", type="string", length=255, nullable=false)
+     */
+    private $author;
+
 
     /**
      * Get id
@@ -150,5 +157,28 @@ class Comment
     public function getDate()
     {
         return $this->date;
+    }
+
+    /**
+     * Set author
+     *
+     * @param string $author
+     * @return Comment
+     */
+    public function setAuthor($author)
+    {
+        $this->author = $author;
+
+        return $this;
+    }
+
+    /**
+     * Get author
+     *
+     * @return string 
+     */
+    public function getAuthor()
+    {
+        return $this->author;
     }
 }

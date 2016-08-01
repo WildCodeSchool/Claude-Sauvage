@@ -19,7 +19,14 @@ class AddcommentController extends Controller
     {
         $em=$this->getDoctrine()->getManager();
         $user=$this->getUser();
-        
+
+        if ($this->get('security.context')->isGranted('ROLE_COM')){
+            $author = "Commercial";
+        } elseif ($this->get('security.context')->isGranted('ROLE_CLI')){
+            $author = "Client";
+        } else {
+            $author = "Other";
+        }
         $idticket=$request->request->get('idticket');
         $content=$request->request->get('content');
 
@@ -30,6 +37,9 @@ class AddcommentController extends Controller
             $comment->setIdsender($user->getId());
             $comment->setContent($content);
             $comment->setDate(new DateTime());
+            $comment->setAuthor($author);
+
+            var_dump($comment);
 
             $em->persist($comment);
             $em->flush();

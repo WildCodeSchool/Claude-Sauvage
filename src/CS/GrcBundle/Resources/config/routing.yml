@@ -15,6 +15,20 @@ grc_create_cat:
     path:     /com/createcat
     defaults: { _controller: GrcBundle:Createcat:createcat }
 
+grc_liste_client:
+    path:     /com/listeclient
+    defaults: { _controller: GrcBundle:Listeclient:listeclient }
+
+grc_status:
+    path:     /com/status/{id}
+    defaults: { _controller: GrcBundle:Status:status }
+    methods:  [GET, POST]
+
+grc_priority:
+    path:     /com/priority/{id}
+    defaults: { _controller: GrcBundle:Priority:priority }
+    methods:  [GET, POST]
+
 grc_submit_cat:
     path:     /submitcat
     defaults: { _controller: GrcBundle:Createcat:submitcat }
@@ -40,6 +54,10 @@ search:
     path:     /search
     defaults: { _controller: GrcBundle:Search:search}
 
+searchcat:
+    path:     /searchcat
+    defaults: { _controller: GrcBundle:Search:searchcat}
+
 ajaxsscat:
     path:     /ajaxsscat/
     defaults: { _controller: GrcBundle:Ajaxsscat:ajaxsscat }
@@ -48,6 +66,11 @@ ajaxsscat:
 ajaxparamticket:
     path:     /ajaxparamticket/
     defaults: { _controller: GrcBundle:Ajaxparamticket:ajaxparamticket }
+    methods:  [GET, POST]
+
+ajaxchart:
+    path:     /ajaxchart/
+    defaults: { _controller: GrcBundle:Chart:chart }
     methods:  [GET, POST]
 
 ticket_comment:

@@ -2,72 +2,96 @@
 
 {% block body %}
 
-<div class="row fiche_client">
-{% if is_granted('ROLE_CLI') %}
-<h1>Bienvenue sur votre espace client {{ clientusername }}</h1>
-{% endif %}
-{% if is_granted('ROLE_COM') %}
-<h1>Espace client de {{ clientusername }}</h1>
-{% endif %}
-	<div class="col-md-3 fiche_client_box">
-		<div class="mon_profil">
-			<h3>Mon profil</h3>
-			<table>
-				<tr>
-					<td class="">Prénom : </td>
-					<td class=""><span id="">Claude</span></td>
-				</tr>
-				<tr>
-					<td class="">Nom : </td>
-					<td class=""><span id="">Sauvage</span></td>
-				</tr>
-				<tr>
-					<td class="">Email : </td>
-					<td class=""><span id="">claude@sauvage.fr</span></td>
-				</tr>
-				<tr>
-					<td class="">Tel 1 : </td>
-					<td class=""><span id="">06 06 06 06 06</span></td>
-				</tr>
-				<tr>
-					<td class="">Tel 2 : </td>
-					<td class=""><span id="">02 02 02 02 02</span></td>
-				</tr>
-			</table>
-		</div>
-	</div>
-	<div class="col-md-6 fiche_client_box">
-		<div class="mes_tickets">
-			<h3>Mes tickets</h3>
-			<table id"table_id" class="display liste_tickets_client">
-			<thead> 
-				<tr> 
-					<th>N°Ticket</th> 
-					<th>Catégorie</th>
-					<th>Date création</th> 
-					<th>Statut</th>
-				</tr> 
-			</thead> 
-			<tbody>
-				{% if mytickets is defined %}
-					{% for ticket in mytickets %}
-						<tr> 
-							<td><a href="{{ path('ticket', { 'id': ticket.id }) }}">{{ ticket.id }}</a></td>
-							<td>{{ ticket.idcategory }}</td>
-							<td>{{ ticket.date | date('Y-m-d') }}</td>
-							<td>{{ ticket.status }}</td>
-						</tr>
-					{% endfor %}
-				{% endif %}
-			</tbody>
-		</table>
-		</div>
-	</div>
-	<div class="col-md-3 fiche_client_box">
-		<div class="ma_photo">
-			<h3>Ma photo</h3>
-			<div class="photo_profil">
+<div class="fiche_client">
+	{% if is_granted('ROLE_CLI') %}
+	<h1>Bienvenue sur votre espace client {{ clientusername }}</h1>
+	{% endif %}
+	{% if is_granted('ROLE_COM') %}
+	<h1>Espace client de {{ clientusername }}</h1>
+	{% endif %}
 
+	<div class="row fiche_client_top">
+
+		<div class="col-md-2 col-md-offset-2 fiche_client_box">
+			{% if is_granted('ROLE_CLI') %}
+			<h3>Ma photo</h3>
+			{% endif %}
+			{% if is_granted('ROLE_COM') %}
+			<h3>Photo</h3>
+			{% endif %}
+			<div class="ma_photo">
+				<div class="photo_profil">
+					<img src="{{ asset('img/profile.png') }}">
+				</div>
+			</div>
+		</div>
+
+		<div class="col-md-5 col-md-offset-1 fiche_client_box">
+			{% if is_granted('ROLE_CLI') %}
+			<h3>Mon profil</h3>
+			{% endif %}
+			{% if is_granted('ROLE_COM') %}
+			<h3>Profil</h3>
+			{% endif %}
+			<div class="mon_profil">
+				<table>
+					<tr>
+						<td class="profil_label">Prénom : </td>
+						<td class="profil_filled">{{ firstname }}</td>
+					</tr>
+					<tr>
+						<td class="profil_label">Nom : </td>
+						<td class="profil_filled">{{ surname }}</td>
+					</tr>
+					<tr>
+						<td class="profil_label">Email : </td>
+						<td class="profil_filled">{{ email }}</td>
+					</tr>
+					<tr>
+						<td class="profil_label">Tel 1 : </td>
+						<td class="profil_filled">{{ tel1 }}</td>
+					</tr>
+					<tr>
+						<td class="profil_label">Tel 2 : </td>
+						<td class="profil_filled">{{ tel2 }}</td>
+					</tr>
+				</table>
+			</div>
+		</div>
+
+	</div>
+
+	<div class="row fiche_client_bottom">
+		<div class="col-md-8 col-md-offset-2 fiche_client_box">
+			{% if is_granted('ROLE_CLI') %}
+			<h3>Mes tickets</h3>
+			{% endif %}
+			{% if is_granted('ROLE_COM') %}
+			<h3>Tickets</h3>
+			{% endif %}
+			<div class="mes_tickets">
+				<table id"table_id" class="display liste_tickets_client">
+				<thead> 
+					<tr> 
+						<th>N°Ticket</th> 
+						<th>Catégorie</th>
+						<th>Date création</th> 
+						<th>Statut</th>
+					</tr> 
+				</thead> 
+				<tbody>
+					{% if tickettab is defined %}
+						{% for ticket in tickettab %}
+							<tr> 
+								<td><a href="{{ path('ticket', { 'id': ticket['id'] }) }}">{{ ticket['id'] }}</a></td>
+								<td>{{ ticket['category'] }}</td>
+								<td>{{ ticket['date'] | date('Y-m-d') }}</td>
+								<td>{{ ticket['status'] }}</td>
+							</tr>
+						{% endfor %}
+					{% endif %}
+				</tbody>
+			</table>
 			</div>
 		</div>
 	</div>

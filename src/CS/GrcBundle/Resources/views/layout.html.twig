@@ -10,7 +10,9 @@
   
         <script type="text/javascript" src="{{ asset('js/jquery-2.2.3.min.js') }}" ></script>
         <script type="text/javascript" src="{{ asset('js/bootstrap.min.js') }}" ></script>
-        <script type="text/javascript" charset="utf8" src="{{ asset('https://cdn.datatables.net/1.10.12/js/jquery.dataTables.js') }}"></script>   
+        <script type="text/javascript" charset="utf8" src="{{ asset('https://cdn.datatables.net/1.10.12/js/jquery.dataTables.js') }}"></script>
+        <script src="{{ asset('https://code.highcharts.com/highcharts.js')}}"></script>
+        <script src="{{ asset('https://code.highcharts.com/modules/exporting.js')}}"></script>   
         <link rel="icon" type="image/x-icon" href="{{ asset('favicon.ico') }}" />
     </head>
 
@@ -37,7 +39,7 @@
                           {% endif %}
                           {% if is_granted('ROLE_CLI') %}
                           <li>
-                          <a href="{{ path('grc_fiche_client', { 'id': userid }) }}"><button type="button" class="ajout-fichier btn btn-default navbar-btn" data-toggle="" data-target="#addfile"><span class="glyphicon glyphicon-home" aria-hidden="true"></span>Home</button></a>
+                          <a href="{{ path('grc_fiche_client', { 'id': userid }) }}"><button type="button" class="ajout-fichier btn btn-default navbar-btn" data-toggle="" data-target="#addfile"><span class="glyphicon glyphicon-home" aria-hidden="true"></span> Home</button></a>
                           </li>
                           {% endif %}
                           {% if is_granted('ROLE_COM') %}
@@ -55,6 +57,11 @@
                           <a href="{{ path('liste') }}"><button type="button" class="ajout-fichier btn btn-default navbar-btn" data-toggle="modal" data-target="#addfile"><span class="glyphicon glyphicon-list-alt" aria-hidden="true"></span> All tickets</button>
                           </li></a> 
                           {% endif %}
+                          {% if is_granted('ROLE_COM') %}
+                          <li>
+                          <a href="{{ path('grc_liste_client') }}"><button type="button" class="ajout-fichier btn btn-default navbar-btn" data-toggle="modal" data-target="#addfile"><span class="glyphicon glyphicon-list-alt" aria-hidden="true"></span> Clients list</button>
+                          </li></a> 
+                          {% endif %}
                       </ul>
                       <ul class="nav navbar-nav navbar-right">
                         <li><a id="username" href="#">Bienvenue {{username}}</a></li>
@@ -68,6 +75,9 @@
             </nav> 
             {% block body %}
             {% endblock %}
+            <div class="page_footer">
+             
+            </div>
         </br>
     </body>
 </html>

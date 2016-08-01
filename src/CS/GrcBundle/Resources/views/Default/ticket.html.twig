@@ -81,14 +81,14 @@
 			</div>
 		</div>
 		<p><span class="sous_titre_com">Historique des échanges: </span></p>
-		{% if listcomments is defined %}	
-			{% for comment in listcomments %}
+		
+		{% if commenttab is defined %}	
+			{% for comment in commenttab %}
 				<div class="commentaire">
 					<div class="commentaire_entete">
-						<p>De: Sender n° {{ comment.idsender }}<span>Date: {{ comment.date | date('d-m-Y') }} à {{ comment.date | date('H:i:s') }}</span></p>
+						<p>De: {{ comment['usernamecom'] }}<span>Date: {{ comment['date'] | date('d-m-Y') }} à {{ comment['date'] | date('H:i:s') }}</span></p>
 					</div>
-					<p>{{ comment.content }}</p>
-					<p><b>Pièce jointe: </b>IMG_23456.jpg</p>
+					<p>{{ comment['content'] }}</p>
 				</div>
 			{% endfor %}
 		{% endif %}
