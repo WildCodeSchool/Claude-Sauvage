@@ -8,6 +8,7 @@ use Symfony\Component\HttpFoundation\RedirectResponse;
 use Symfony\Component\HttpFoundation\Response;
 use CS\GrcBundle\Entity\Ticket;
 use CS\GrcBundle\Form\TicketType;
+use CS\GrcBundle\Entity\Grccategory;
 use DateTime;
 
 class ListController extends Controller
@@ -19,7 +20,8 @@ class ListController extends Controller
     	$user = $this->container->get('security.context')->getToken()->getUser();
         $username = $user->getUsername();
         $userid = $user->getId();
-
+        
+        $listcategories = $em->getRepository('GrcBundle:Grccategory')->findAll();
 
         if ($this->get('security.context')->isGranted('ROLE_COM')){
             //comptes du haut de dashboard
@@ -227,6 +229,7 @@ class ListController extends Controller
         		'urgenttickets'=>$urgentticketstab,
         		'commentedtickets'=>$commentedticketstab,
         		'statstab'=>$statstab,
+                'listcategories'=>$listcategories,
         		));
 
         } else {

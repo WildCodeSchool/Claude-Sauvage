@@ -54,6 +54,10 @@ search:
     path:     /search
     defaults: { _controller: GrcBundle:Search:search}
 
+searchcat:
+    path:     /searchcat
+    defaults: { _controller: GrcBundle:Search:searchcat}
+
 ajaxsscat:
     path:     /ajaxsscat/
     defaults: { _controller: GrcBundle:Ajaxsscat:ajaxsscat }

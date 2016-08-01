@@ -3,7 +3,7 @@
 {% block body %}
 <div class="grc_dashboard">
 {% include "GrcBundle::Default/searchbar.html.twig" %}
-	<h1>Bienvenue sur votre outil de gestion de ticket
+	<h1>Bienvenue sur votre outil de gestion de tickets
 	</h1>
 	<div class="col-md-12 dashboard">
 		<div class="col-md-2 col-md-offset-2 tableau tableau1">
@@ -149,11 +149,8 @@
 			</table>
 		</div>
 	</div>
-	<div class="col-md-12 liste lastlist">
-		<div class="col-md-8 col-md-offset-2" id="mycatchart">
+	<div class="col-md-12 liste lastblock">
 
-
-		</div>
 	</div>
 </div>
 <script type="text/javascript"> 
@@ -209,7 +206,7 @@ $(function () {
                     cursor: 'pointer',
                     dataLabels: {
                         enabled: true,
-                        format: '<b>{point.name}</b>: {point.percentage:.1f} %',
+                        format: '<p>{point.name}</p>: {point.percentage:.0f} %',
 						color: 'black',
             			style: { fontFamily: '\'Lato\', sans-serif', lineHeight: '18px', fontSize: '17px' }
                     }
