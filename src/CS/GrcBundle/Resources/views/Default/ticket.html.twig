@@ -86,7 +86,7 @@
 			{% for comment in commenttab %}
 				<div class="commentaire">
 					<div class="commentaire_entete">
-						<p>De: {{ comment['username'] }}<span>Date: {{ comment['date'] | date('d-m-Y') }} à {{ comment['date'] | date('H:i:s') }}</span></p>
+						<p>De: {{ comment['usernamecom'] }}<span>Date: {{ comment['date'] | date('d-m-Y') }} à {{ comment['date'] | date('H:i:s') }}</span></p>
 					</div>
 					<p>{{ comment['content'] }}</p>
 				</div>
