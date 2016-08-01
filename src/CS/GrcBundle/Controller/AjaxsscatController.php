@@ -32,6 +32,10 @@ class AjaxsscatController extends Controller
                 );
         }
 
+        if(empty($sscatlist)){
+            $sscatlist= 0 ;
+        }
+
     $response = new JsonResponse();
     return $response->setData(array('sscatlist' => $sscatlist));
     }

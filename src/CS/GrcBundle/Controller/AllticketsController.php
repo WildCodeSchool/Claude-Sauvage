@@ -10,8 +10,8 @@ use Symfony\Component\HttpFoundation\RedirectResponse;
 use Symfony\Component\HttpFoundation\Response;
 use CS\GrcBundle\Entity\Ticket;
 use CS\GrcBundle\Form\TicketType;
-use CS\GrcBundle\Entity\Comment;
-use CS\GrcBundle\Form\CommentType;
+use CS\GrcBundle\Entity\Grccategory;
+
 use DateTime;
 
 class AllticketsController extends Controller
@@ -28,13 +28,16 @@ class AllticketsController extends Controller
     $userid = $user->getId();
     $username = $user->getUsername();
     
+    $listcategories = $em->getRepository('GrcBundle:Grccategory')->findAll();
     $alltickets=$em->getRepository('GrcBundle:Ticket')->findAll();
 
     foreach ($alltickets as $ticket) {
             //recuperer l'ID du ticket
             $idticket=$ticket->getId();    
             //recuperer l'ID du ticket
-            $iddemandeur=$ticket->getIdsender(); 
+            $iddemandeur = $ticket->getIdsender(); 
+            $sender = $em->getRepository('AppBundle:User')->findOneById($iddemandeur);
+            $usernameticket = $sender->getUsername();
             //recuperer la date de creation du ticket
             $dateticket=$ticket->getDate();
             //recuperer la priorité
@@ -63,7 +66,7 @@ class AllticketsController extends Controller
                 "idticket"=>$idticket,
                 "catname"=>$catname,
                 "sscatname"=>$sscatname,
-                "iddemandeur"=>$iddemandeur,
+                "usernameticket"=>$usernameticket,
                 "dateticket"=>$dateticket,
                 "prioticket"=>$prioticket,
                 "statusticket"=>$statusticket
@@ -75,6 +78,7 @@ class AllticketsController extends Controller
         }
 
     return $this->render('GrcBundle:Default:liste.html.twig', array(
+        'listcategories'=>$listcategories,
         'ticketslist'=>$ticketslist,
         'username'=>$username,
         "userid"=>$userid,

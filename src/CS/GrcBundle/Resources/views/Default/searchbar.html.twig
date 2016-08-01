@@ -1,33 +1,74 @@
 <section>
 	<div class="searchbar row">
-		<div class="col-md-3 col-md-offset-2">
-	    	<form class="form-inline" method="post" action="{{ path('search') }}">
-	    		<div class="form-group">
-	    			<input type="text" placeholder="Rechercher" class="form-control search_field" name="keyword" size="35">
-	    		</div>
-	    		<button class="btn btn-default" type="submit">ok</button>
-			</form>
-		</div>
-		<div class="col-md-6 col-md-offset-1">
-			<form class="form-inline" method="post" action="">
-				<div class="form-group">
-					<select class="form-control search-select" name="Catégorie">
-						<option>Toutes les catégories
-						<option>Catégorie 1
-						<option>Catégorie 2
-						<option>Catégorie 3
-					</select>
-				</div>
-				<div class="form-group">
-					<select class="form-control search-select" name="Sous-catégorie">
-						<option>Toutes les sous-catégories
-						<option>Sous-catégorie 1
-						<option>Sous-catégorie 2
-						<option>Sous-catégorie 3
-					</select>
-				</div>
-				<button class="btn btn-default" type="submit">ok</button>
-			</form>
+		<div class="col-md-12">
+			<div class="col-md-3 col-md-offset-2 search_form_block">
+		    	<form class="form-inline" method="post" action="{{ path('search') }}">
+		    		<div class="form-group">
+		    			<input type="text" placeholder="Rechercher" class="form-control search_field" name="keyword" size="35">
+		    		</div>
+		    		<button class="btn btn-default" type="submit">ok</button>
+				</form>
+			</div>
+			<div class="col-md-6 col-md-offset-1 search_form_block">
+				<form class="form-inline" method="post" action="{{ path('searchcat') }}">
+					<div class="form-group">
+						<select class="form-control search-select" id="categorysearch" name="categorysearch">
+								<option value="0">--Catégorie--</option>
+								{% for category in listcategories %}
+									<option value="{{ category.id }}">{{ category.name }}</option>
+								{% endfor %}						
+						</select>
+					</div>
+					<div class="form-group">
+						<select class="form-control search-select" id="sscategorysearch" name="sscategorysearch">
+								<option value="0">--Sous-catégorie--</option>		
+						</select>
+					</div>
+					<button class="btn btn-default" type="submit">ok</button>
+				</form>
+			</div>
 		</div>
 	</div>
 </section>
+<script type="text/javascript"> 
+	$(document).ready(function() {     	
+    	
+    	$("#categorysearch").val(0);
+		$("#sscategorysearch").attr('disabled', 'disabled');
+
+    	$("#categorysearch").change(function() {
+
+		var categorie = $(this).val();
+            
+			if ( categorie != 0 ) {
+
+				$.ajax({
+				type: 'POST',
+				url: "{{ path('ajaxsscat') }}",
+				data: {categorie: categorie},
+				dataType : 'json',
+				beforeSend: function() {
+					console.log('On charge');
+					$("#sscategorysearch option").remove();
+					$("#sscategorysearch").append($('<option>',{ value : 0 , text: "-- Sous-catégorie--" }));
+					$("#sscategorysearch").attr('disabled', 'disabled');
+				},
+				success: function(data) {
+				console.log('Requete ok',data);
+					$.each(data.sscatlist, function(index,value) {
+						$("#sscategorysearch").append($('<option>',{ value : value.id , text: value.name }));
+						$("#sscategorysearch").removeAttr('disabled');
+					});
+
+				},
+				error: function() {
+				alert('La requête n\'a pas abouti'); }
+				});
+			} else {
+				$("#sscategorysearch option").remove();
+				$("#sscategorysearch").append($('<option>',{ value : 0 , text: "-- Sous-catégorie--" }));
+				$("#sscategorysearch").attr('disabled', 'disabled');
+			}
+    	});
+    });
+</script>

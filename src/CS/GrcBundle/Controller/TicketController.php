@@ -67,6 +67,27 @@ public function ticketAction(Request $request, Ticket $ticket, $id)
                 array('date'=>'desc')
             );
 
+            
+            foreach ($listcomments as $ticketcoms)
+            {
+                $date = $ticketcoms->getDate();
+                $content = $ticketcoms->getContent();
+
+                $commentsender= $em->getRepository('AppBundle:User')->findOneById($ticketcoms->getIdsender());
+                $username = $commentsender->getUsername();
+
+                $commenttab[]=array(
+                    'date'=>$date,
+                    'content'=>$content,
+                    'username'=>$username,
+                );
+            }
+
+            if (empty($commenttab)){
+                $commenttab = 0;
+            }
+
+
 
             return $this->render('GrcBundle:Default:ticket.html.twig', array(
                 'ticket'=>$ticket,
@@ -79,12 +100,14 @@ public function ticketAction(Request $request, Ticket $ticket, $id)
                 'mypath' =>$mypath,
                 'myoriginalname' =>$myoriginalname,
                 'listcomments'=>$listcomments,
+                'commenttab'=>$commenttab,
                 'liststatus'=>$liststatus,
                 'listpriorities'=>$listpriorities,
                 'listcategories'=>$listcategories,
                 'listsscategories'=>$listsscategories,
                 'username'=>$username,
                 ));
+        
         } else {
             $url = $this -> generateUrl('grc_fiche_client', array( 'id'=>$currentuserid ));
             $response = new RedirectResponse($url);

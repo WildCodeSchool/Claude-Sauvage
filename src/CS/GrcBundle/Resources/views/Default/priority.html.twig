@@ -1,0 +1,55 @@
+{% extends 'GrcBundle::layout.html.twig' %}
+
+{% block body %}
+
+
+	
+<div class="container_liste_client">
+	<h1>Liste des tickets par priorités</h1>
+	<div class="row container_fluid_client">	
+		<div class="col-md-8 col-md-offset-2 liste_client">
+			<h3>Priorité: {{mypriority}} </h3>
+			<div class="ma_liste_client">
+				<table id"table_id" class="display client_table">
+					<thead> 
+						<tr>
+							<th>Id</th>  
+							<th>Catégorie</th> 
+							<th>Sous-catégorie</th>
+							<th>Username</th> 
+							<th>Date création</th>
+							<th>Status</th>
+						</tr> 
+					</thead> 
+					<tbody>
+						{% if listepriority is defined %}
+							{% for priority in listepriority %}
+								<tr> 
+									<td><a href="{{ path('ticket', { 'id': priority['ticketid'] }) }}">{{ priority['ticketid'] }}</a></td>
+									<td>{{ priority['ticketcat'] }}</td>
+									<td>{{ priority['ticketsscat'] }}</td>
+									<td>{{ priority['ticketidsender'] }}</td>
+									<td>{{ priority['ticketdate'] | date('Y-m-d') }}</td>
+									<td>{{ priority['ticketstatus'] }}</td>
+								</tr>
+							{% endfor %}
+						{% endif %}
+					</tbody>
+				</table>
+			</div>
+		</div>
+	</div>
+</div>
+
+<script type="text/javascript"> 
+	$(document).ready(function() { 
+		$('.client_table').DataTable( {
+		"paging": true,
+		"ordering": true, 
+		"info": true, 
+		"sDom": '<"H"lr>t<"F"ip>' 
+		}); 
+	});
+</script>
+
+{% endblock %}

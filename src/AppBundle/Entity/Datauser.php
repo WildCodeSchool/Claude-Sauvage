@@ -56,6 +56,20 @@ class Datauser
      */
     private $title;
 
+    /**
+     * @var string
+     *
+     * @ORM\Column(name="tel1", type="text", nullable=true)
+     */
+    private $tel1;
+
+    /**
+     * @var string
+     *
+     * @ORM\Column(name="tel2", type="text", nullable=true)
+     */
+    private $tel2;
+
 
     /**
      * Get id
@@ -180,5 +194,51 @@ class Datauser
     public function getTitle()
     {
         return $this->title;
+    }
+
+    /**
+     * Set tel1
+     *
+     * @param string $tel1
+     * @return Datauser
+     */
+    public function setTel1($tel1)
+    {
+        $this->title = $tel1;
+
+        return $this;
+    }
+
+    /**
+     * Get tel1
+     *
+     * @return string 
+     */
+    public function getTel1()
+    {
+        return $this->tel1;
+    }
+
+    /**
+     * Set tel2
+     *
+     * @param string $tel2
+     * @return Datauser
+     */
+    public function setTel2($tel2)
+    {
+        $this->title = $tel2;
+
+        return $this;
+    }
+
+    /**
+     * Get tel2
+     *
+     * @return string 
+     */
+    public function getTel2()
+    {
+        return $this->tel2;
     }
 }

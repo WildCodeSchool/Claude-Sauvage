@@ -12,4 +12,16 @@ use Doctrine\ORM\EntityRepository;
  */
 class CommentRepository extends EntityRepository
 {
+	public function newcomments()
+	{
+    	$qb = $this->createQueryBuilder('u');
+    	$qb->select('u')
+    		->where('u.author = ?3')
+			->orderBy('u.date', 'DESC')
+			->setFirstResult(0)
+   			->setMaxResults(5)
+   			->setParameter(3, "Client");
+
+    return $qb->getQuery()->getResult();
+	}
 }
