@@ -5,6 +5,7 @@ namespace CS\GedBundle\Controller;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Symfony\Component\HttpFoundation\Request;
+use Symfony\Component\HttpFoundation\RedirectResponse;
 use CS\GedBundle\Entity\Gedfiles;
 use CS\GedBundle\Form\GedfilesType;
 use AppBundle\Entity\User;
@@ -26,15 +27,26 @@ class AdminController extends Controller
 		$em=$this->getDoctrine()->getManager();
 		$user=$this->getUser();
 
-		//liste de tous les fichiers
-		$gedfiles= $em->getRepository('GedBundle:Gedfiles')->findAll();
+		//liste de tous les utilisateurs
+		$otherusers= $em->getRepository('AppBundle:User')->findAll();
 
 		return $this->render('GedBundle:admin:admindashboard.html.twig', array(
 			'user'=>$user,
-			'files'=>$gedfiles,
+			'otherusers'=>$otherusers,
 			));
 	}
+	public function removeUserAction (Request $request)
+	{
+		$em=$this->getDoctrine()->getManager();
+		$iduser=$request->request->get('iduser');
 
+		$user=$em->getRepository('AppBundle:User')->findOneById($iduser);
+		$em->remove($user);
+		$em->flush();
+		$url = $this -> generateUrl('ged_admin_dashboard');
+        $response = new RedirectResponse($url);
+        return $response;
+	}
 	// fonction d'ajout de catégories et sous-catégories ( gedadmin/newcategory/ )
 	public function addCategoryAction (Request $request)
 	{
@@ -98,5 +110,44 @@ class AdminController extends Controller
 			'user'=>$user,
 			'checkpage'=>'newcategory'
 			));
+	}
+	public function removeCategoryAction (Request $request)
+	{
+		$em=$this->getDoctrine()->getManager();
+		$user=$this->getUser();
+		$removecat=$request->request->get('removecat');
+		$removesscat=$request->request->get('removesscat');
+		var_dump($removecat);
+		if(($removecat!=null && $removecat!='0' && !empty($removecat)) && $removesscat == null )
+		{
+			$category=$em->getRepository('GedBundle:Category')->findOneById($removecat);
+			$em->remove($category);
+			$em->flush();
+			$files=$em->getRepository('GedBundle:Gedfiles')->findByIdcategory($removecat);
+			foreach ($files as $file)
+			{
+				$file->setIdcategory(1);
+				$file->setIdsouscategory(null);
+				$em->persist($file);
+				$em->flush();
+			}
+		}
+		elseif(($removecat!=null || $removecat!='0' || !empty($removecat)) && $removesscat != null)
+		{
+			$sscategory=$em->getRepository('GedBundle:Souscategory')->findOneById($removesscat);
+			$em->remove($sscategory);
+			$em->flush();
+			$files=$em->getRepository('GedBundle:Gedfiles')->findByIdsouscategory($removesscat);
+			foreach ($files as $file)
+			{
+				$file->setIdsouscategory(null);
+				$em->persist($file);
+				$em->flush();
+			}
+		}
+		
+		$url = $this -> generateUrl('ged_addcategory');
+        $response = new RedirectResponse($url);
+        return $response;
 	}
 }

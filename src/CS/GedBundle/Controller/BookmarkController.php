@@ -153,6 +153,7 @@ class BookmarkController extends Controller
             $type=$fav->getType();
             $date=$fav->getDate();
             $name=$fav->getOriginalName();
+            $idowner=$fav->getIdowner();
 
             $category=$em->getRepository('GedBundle:Category')->findOneById($fav->getIdcategory())->getName();
 
@@ -215,6 +216,7 @@ class BookmarkController extends Controller
                 "name"=>$name,
                 'comments'=>$nbCom,
                 'groupMemberName'=>$tabInfoGroup,
+                "idowner"=>$idowner
                 );
         }
         if(empty($tabfav))

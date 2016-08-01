@@ -73,6 +73,7 @@ class ListController extends Controller
 	    	$type=$fav->getType();
 	    	$date=$fav->getDate();
 	    	$name=$fav->getOriginalName();
+            $idowner=$fav->getIdowner();
 	    	//trouver la categorie ou souscategorie du fichier
     		$category=$em->getRepository('GedBundle:Category')->findOneById($fav->getIdcategory())->getName();
 	    	//on recupere tous les tags correspondants au fichier
@@ -102,7 +103,8 @@ class ListController extends Controller
 	    		"type"=>$type,
 	    		"category"=>$category,
 	    		"date"=>$date,
-	    		"name"=>$name
+	    		"name"=>$name,
+                "idowner"=>$idowner,
 	    		);
     	}
     	if(empty($tabfav))
@@ -151,6 +153,7 @@ class ListController extends Controller
 			    	$type=$oneupl->getType();
 			    	$date=$oneupl->getDate();
 			    	$name=$oneupl->getOriginalName();
+                    $idowner=$oneupl->getIdowner();
 			    	//trouver la categorie du fichier
 			   
 		    		$categorytab=$em->getRepository('GedBundle:Category')->findOneById($oneupl->getIdcategory());
@@ -182,7 +185,8 @@ class ListController extends Controller
 			    		"type"=>$type,
 			    		"category"=>$category,
 			    		"date"=>$date,
-			    		"name"=>$name
+			    		"name"=>$name,
+                        "idowner"=>$idowner,
 			    		);
 
 
@@ -217,6 +221,7 @@ class ListController extends Controller
 	    			$idfile=$file->getId();
 	    			$date=$file->getDate();
 	    			$name=$file->getOriginalName();
+                    $idowner=$file->getIdowner();
 
 	    			//recuperation de la categorie
 
@@ -253,7 +258,8 @@ class ListController extends Controller
 				    		"type"=>$type,
 				    		"category"=>$category,
 				    		"date"=>$date,
-				    		"name"=>$name
+				    		"name"=>$name,
+                            "idowner"=>$idowner,
 				    		);
 		    			}
 		    		}
@@ -266,7 +272,8 @@ class ListController extends Controller
 				    		"type"=>$type,
 				    		"category"=>$category,
 				    		"date"=>$date,
-				    		"name"=>$name
+				    		"name"=>$name,
+                            "idowner"=>$idowner,
 				    		);
 			    	}
 	    		}
@@ -352,6 +359,7 @@ class ListController extends Controller
 	    			$path = $file->getPath();
 	    			$date = $filecom->getDate();
 	    			$name = $file->getOriginalName();
+                    $idowner=$file->getIdowner();
 	    			//recuperation de la categorie
 
 					$categorytab=$em->getRepository('GedBundle:Category')->findOneById($file->getIdcategory());
@@ -385,8 +393,8 @@ class ListController extends Controller
 		    		"type"=>$type,
 		    		"category"=>$category,
 		    		"date"=>$date,
-		    		"name"=>$name
-		    	
+		    		"name"=>$name,
+                    "idowner"=>$idowner,
 		    		);
     			}
     		}
@@ -567,6 +575,9 @@ class ListController extends Controller
 	    	//récuperation du nom du ficher.
 	    	$pathFile = $myfile->getPath();
 
+            //recup idowner
+            $idowner = $myfile->getIdowner();
+
 	    	//récuperation de la date.
 	    	$dateFile = $myfile->getDate();
 
@@ -651,6 +662,7 @@ class ListController extends Controller
 				    			'tagnames'=>$tabTags,
 				    			'comments'=>$nbCom,
 				    			'bookmark'=>$bookmarkfile,
+                                'idowner'=>$idowner,
 	    					);
     	}
 
@@ -791,6 +803,7 @@ class ListController extends Controller
     }
 
     //fonction upload et recupération des catégories
+    //gestion des parametres de fichiers a definir
     public function parametersAction(Request $request)
     {
     	//récuperation & atribution de l entitiy manager.
