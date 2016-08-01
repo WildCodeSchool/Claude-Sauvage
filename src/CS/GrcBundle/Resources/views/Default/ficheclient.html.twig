@@ -13,7 +13,12 @@
 	<div class="row fiche_client_top">
 
 		<div class="col-md-2 col-md-offset-2 fiche_client_box">
+			{% if is_granted('ROLE_CLI') %}
 			<h3>Ma photo</h3>
+			{% endif %}
+			{% if is_granted('ROLE_COM') %}
+			<h3>Photo</h3>
+			{% endif %}
 			<div class="ma_photo">
 				<div class="photo_profil">
 					<img src="{{ asset('img/profile.png') }}">
@@ -22,7 +27,12 @@
 		</div>
 
 		<div class="col-md-5 col-md-offset-1 fiche_client_box">
+			{% if is_granted('ROLE_CLI') %}
 			<h3>Mon profil</h3>
+			{% endif %}
+			{% if is_granted('ROLE_COM') %}
+			<h3>Profil</h3>
+			{% endif %}
 			<div class="mon_profil">
 				<table>
 					<tr>
@@ -53,7 +63,12 @@
 
 	<div class="row fiche_client_bottom">
 		<div class="col-md-8 col-md-offset-2 fiche_client_box">
+			{% if is_granted('ROLE_CLI') %}
 			<h3>Mes tickets</h3>
+			{% endif %}
+			{% if is_granted('ROLE_COM') %}
+			<h3>Tickets</h3>
+			{% endif %}
 			<div class="mes_tickets">
 				<table id"table_id" class="display liste_tickets_client">
 				<thead> 
