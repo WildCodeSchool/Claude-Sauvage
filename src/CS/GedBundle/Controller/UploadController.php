@@ -13,12 +13,13 @@ use CS\GedBundle\Entity\Souscategory;
 use CS\GedBundle\Entity\Linktag;
 use CS\GedBundle\Entity\Gedtag;
 use DateTime;
-
+// controller gérant la liste de "mes uploads"
 class UploadController extends Controller
 {
+    //fonction d'
     public function uploadListAction(Request $request)
     {
-        //récuperation & atribution de l entitiy manager.
+        //récuperation & atribution de l entity manager.
         $em=$this->getDoctrine()->getManager();
 
         //récuperation de l'utilisateur courant.
@@ -72,6 +73,10 @@ class UploadController extends Controller
 
             $pathDir = $this->container->getParameter('kernel.root_dir').'/../web/uploads';
             $file->move($pathDir, $fileName);
+            
+            if($type==null){
+                $type = 'txt';
+            }
 
             $gedfiles->setType($type);
             $gedfiles->setPath($fileName);
@@ -164,18 +169,10 @@ class UploadController extends Controller
                     if (empty($tabInfoGroup)){
                         $tabInfoGroup = 1;
                     }
-
-                    //trouver la categorie ou souscategorie du fichier
-                    // if (!empty($oneupl->getIdsouscategory()))
-                    // {
-                    //  $categorytab=$em->getRepository('GedBundle:Souscategory')->findOneById($oneupl->getIdsouscategory());
-                    //  $category=$categorytab->getName();
-                    // }
-                    // else
-                    // {
+                    //on recupere la categorie du fichier
                     $categorytab=$em->getRepository('GedBundle:Category')->findOneById($oneupl->getIdcategory());
                     $category=$categorytab->getName();
-                    // }
+
                     //on recupere tous les tags correspondants au fichier
                     $linktag = $em->getRepository('GedBundle:Linktag')->findByIdfile($idupl);
                     $tagnames = [];

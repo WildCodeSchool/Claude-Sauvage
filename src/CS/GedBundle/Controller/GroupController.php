@@ -15,16 +15,21 @@ use CS\GedBundle\Form\GedfilesType;
 use CS\GedBundle\Entity\Category;
 use DateTime;
 
+//controller des fonctions relatives aux groupes (création/ edition/ suppression/ ajout de commentaires)
 class GroupController extends Controller
 {
+	//fonction de la page de creation de groupe (affichage du formulaire /creation)
 	public function createGroupAction (Request $request)
 	{
+		//recuperation du nom donné au groupe
 		$name = $request->request->get('name');
 		$checkpage = "newgroup";
+		//récuperation de l'entity manager et de l'utilisateur courant
 		$em=$this->getDoctrine()->getManager();
 		$user=$this->getUser();
 		$iduser=$user->getId();
 		
+		//si le nom du groupe est bien entré on crée le groupe et on y ajoute l'utilisateur courant
 		if (!empty($name))
 		{
 			$group = new Groupe();
@@ -41,7 +46,7 @@ class GroupController extends Controller
 			$em->flush(); 
 
 			$idgroup=$group->getId();
-			
+			//renvoi sur la page d'edition du groupe nouvellement créé
 			$url = $this -> generateUrl('ged_editgroup', array( 'id'=>$idgroup ));
         	$response = new RedirectResponse($url);
         	return $response;
@@ -66,6 +71,11 @@ class GroupController extends Controller
             $fileName = md5(uniqid()).'.'.$file->guessExtension();
 
             $pathDir = $this->container->getParameter('kernel.root_dir').'/../web/uploads';
+            
+            if($type==null){
+                $type = 'txt';
+            }
+
             $file->move($pathDir, $fileName);
 
             $gedfiles->setType($type);
@@ -83,24 +93,26 @@ class GroupController extends Controller
             return $this->redirectToRoute('ged_homepage');
 
         }
-
 		return $this->render('GedBundle::newgroup.html.twig',array(
 			'form'=>$form->createView(),
 			'user'=>$user,
 			'checkpage'=>$checkpage,
 			));
 	}
-
+	//fonction d'affichage de la page d'edition de groupe (renommage et suppression)
 	public function editGroupAction (Request $request, $id)
 	{
+		//récuperation de l'entity manager et de l'utilisateur courant
 		$em = $this->getDoctrine()->getManager();
 		$user = $this->getUser();
+		//recuperation des infos du groupe
 		$group = $em->getRepository('GedBundle:Groupe')->findOneById($id);
 		$idgroup=$id;
+		//recuperation des champs des formulaires
 		$groupname=$request->request->get('groupname');
 		$userremove=$request->request->get('userremove');
 		$groupremove=$request->request->get('groupremove');
-
+		//recuperation des utilisateurs du groupe
 		$linkgroup=$em->getRepository('GedBundle:Linkgroup')->findByIdgroup($idgroup);
 		$groupmembers = [];
 		if(!empty($linkgroup))
@@ -137,6 +149,11 @@ class GroupController extends Controller
             $fileName = md5(uniqid()).'.'.$file->guessExtension();
 
             $pathDir = $this->container->getParameter('kernel.root_dir').'/../web/uploads';
+
+            if($type==null){
+                $type = 'txt';
+            }
+            
             $file->move($pathDir, $fileName);
 
             $gedfiles->setType($type);
@@ -156,7 +173,7 @@ class GroupController extends Controller
         }
 
 
-
+        //si le nom du groupe est rempli on le change
 		if(!empty($groupname))
 		{
 			$group->setName($groupname);
@@ -164,16 +181,20 @@ class GroupController extends Controller
 			$em->flush();
 		}
 
+		//fonction de suppression du groupe
 		if(!empty($groupremove))
 		{
+			//on supprime les infos du groupe
 			$groupe=$em->getRepository('GedBundle:Groupe')->findOneById($idgroup);
 			$em->remove($groupe);
 			$em->flush();
+			//on supprime les liens utilisateurs / groupe
 			$linkgroup=$em->getRepository('GedBundle:Linkgroup')->findByIdgroup($idgroup);
 			foreach ($linkgroup as $onemember) {
 				$em->remove($onemember);
 				$em->flush();
 			}
+			//on renvoi sur le dashboard
 			$url = $this -> generateUrl('ged_homepage');
         	$response = new RedirectResponse($url);
         	return $response;
@@ -187,12 +208,16 @@ class GroupController extends Controller
 			'group'=>$group,
 		));
 	}
+	//fonction d'ajout d'utilisateurs (ajax)
 	public function addUserAction(Request $request)
 	{
+		//récuperation de l'entity manager
 		$em=$this->getDoctrine()->getManager();
+		//recuperation du nom d'user et de l'idgroup
 		$useradd=$request->request->get('useradd');
 		$idgroup=$request->request->get('idgroup');
 
+		//si le nom d'utilisateur à bien été rentré on crée un lien user/group
 		if(!empty($useradd))
 		{
 			$otheruser=$em->getRepository('AppBundle:User')->findOneByUsername($useradd);
@@ -215,18 +240,22 @@ class GroupController extends Controller
 				$usertab=0;
 			}
 		}
-
+		//on renvoie une reponse pour l'ajax
         $response = new JsonResponse();
         return $response->setData(array('newuser' => $usertab));
 
 	}
+
+	//fonction de suppression d'utilisateurs d'un groupe
 	public function removeUserAction(Request $request)
 	{
+		//récuperation de l'entity manager
 		$em=$this->getDoctrine()->getManager();
+		//recuperation du nom d'user et de l'idgroup
 		$username=$request->request->get('username');
 		$idgroup=$request->request->get('idgroup');
-		var_dump($username);
-		var_dump($idgroup);
+
+		//on supprime le lien user/groupe
 		$user=$em->getRepository('AppBundle:User')->findOneByUsername($username);
 		$linkgroup=$em->getRepository('GedBundle:Linkgroup')->findOneBy(array(
 			'iduser'=>$user->getId(),
@@ -235,6 +264,7 @@ class GroupController extends Controller
 		$em->remove($linkgroup);
 		$em->flush();
 		
+		//on renvoie sur la page d'edition
 		$url = $this -> generateUrl('ged_editgroup', array( 'id'=>$idgroup ));
         $response = new RedirectResponse($url);
         return $response;

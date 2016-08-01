@@ -16,14 +16,17 @@ use CS\GedBundle\Entity\Gedtag;
 use CS\GedBundle\Entity\Trash;
 use DateTime;
 
+// controller gérant la fonction de suppression des fichiers (ajout à la corbeille / recuperation et suppression definitive)
 class DeleteController extends Controller
 {
 	public function showTrashbinAction (Request $request)
 	{
+		//récuperation de l'entity manager et de l'utilisateur courant
 		$em=$this->getDoctrine()->getManager();
 		$user=$this->getUser();
+		//récuperation des fichiers de la corbeille
 		$trashs=$em->getRepository('GedBundle:Trash')->findAll();
-		//récupération des Category.
+		//récupération des Categories.
         $categories = $em->getRepository('GedBundle:Category')->findAll();
 
         //récuperation des sous-catégories.
@@ -34,7 +37,7 @@ class DeleteController extends Controller
 
         	if (!empty($categoryInfos)){
 
-        		//On place les sous-catégorie dans un tableau si elle sont définie.
+        		//On place les sous-catégories dans un tableau si elles sont définies.
 				foreach ($categoryInfos as $categoryInfo) {
 
         			$categoryName=$categoryInfo->getName();
@@ -67,6 +70,11 @@ class DeleteController extends Controller
             $fileName = md5(uniqid()).'.'.$file->guessExtension();
 
             $pathDir = $this->container->getParameter('kernel.root_dir').'/../web/uploads';
+
+            if($type==null){
+                $type = 'txt';
+            }
+            
             $file->move($pathDir, $fileName);
             $gedfiles->setType($type);
             $gedfiles->setPath($fileName);
@@ -94,10 +102,13 @@ class DeleteController extends Controller
 
 	public function deleteFileAction (Request $request, $id)
 	{
+		//récuperation de l'entity manager et de l'utilisateur courant
 		$em=$this->getDoctrine()->getManager();
 		$user=$this->getUser();
+		// recuperation du fichier a supprimer
 		$file=$em->getRepository('GedBundle:Gedfiles')->findOneById($id);
 		
+		// creation du fichier corbeille
 		$trash = new Trash();
 		$trash->setIdowner($file->getIdowner());
 		$trash->setType($file->getType());
@@ -107,6 +118,7 @@ class DeleteController extends Controller
 		$trash->setIdgroup($file->getIdgroup());
 		$trash->setOriginalname($file->getOriginalname());
 		
+		//suppresion des commentaires du fichier
 		$comments=$em->getRepository('GedBundle:Gedcom')->findByIdfile($id);
 		foreach ($comments as $comment)
 		{
@@ -114,6 +126,7 @@ class DeleteController extends Controller
 			$em->flush();
 		}	
 
+		//suppression des tags du fichier
 		$tags=$em->getRepository('GedBundle:Linktag')->findByIdfile($id);
 		foreach ($tags as $tag)
 		{
@@ -121,6 +134,7 @@ class DeleteController extends Controller
 			$em->flush();
 		}
 
+		//suppression de l'attribut "favori"
 		$favs=$em->getRepository('GedBundle:Linkbookmark')->findByIdfile($id);
 		foreach ($favs as $fav)
 		{
@@ -133,7 +147,7 @@ class DeleteController extends Controller
 		$em->remove($file);
 		$em->flush();
 		
-
+		//renvoi sur le dashboard 
 		$url = $this -> generateUrl('ged_homepage');
         $response = new RedirectResponse($url);
         return $response;
@@ -141,10 +155,13 @@ class DeleteController extends Controller
 
 	public function recoverFileAction (Request $request, $id)
 	{
+		//récuperation de l'entity manager et de l'utilisateur courant
 		$em=$this->getDoctrine()->getManager();
 		$user=$this->getUser();
+		// recuperation du fichier à recuperer
 		$trash=$em->getRepository('GedBundle:Trash')->findOneById($id);
 		
+		//on recrée l'entrée de l'entité Gedfiles correspondante au fichier en question
 		$file = new Gedfiles();
 		$file->setIdowner($trash->getIdowner());
 		$file->setType($trash->getType());
@@ -158,9 +175,11 @@ class DeleteController extends Controller
 		$em->persist($file);
 		$em->flush();
 
+		//on supprime le fichier de la corbeille
 		$em->remove($trash);
 		$em->flush();
 
+		//renvoi sur le dashboard
 		$url = $this -> generateUrl('ged_homepage');
         $response = new RedirectResponse($url);
         return $response;
@@ -168,16 +187,20 @@ class DeleteController extends Controller
 
 	public function deleteOfDoomAction (Request $request, $id)
 	{
+		//récuperation de l'entity manager et de l'utilisateur courant
 		$em=$this->getDoctrine()->getManager();
 		$user=$this->getUser();
+
+		//on prend le fichier ciblé
 		$trash=$em->getRepository('GedBundle:Trash')->findOneById($id);
+		//si l'utilisateur est bien le propriétaire du fichier la suppression definitive se fait
 		if($user->getId() == $trash->getIdowner())
 		{
 			unlink('./uploads/'.$trash->getPath());
 			$em->remove($trash);
 			$em->flush();
 		}
-		
+		//renvoi sur le dashboard
 		$url = $this -> generateUrl('ged_homepage');
         $response = new RedirectResponse($url);
         return $response;

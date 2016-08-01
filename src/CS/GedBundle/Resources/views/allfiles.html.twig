@@ -4,6 +4,7 @@
 {% include "GedBundle::search.html.twig" %}
 <div class="col-md-10">
 	<h3 style="text-align:center;">Tous les fichiers</h3>
+{# 	definition du tableau pour datatables #}
 	<table class="table compact stripe" id="table">
 		<thead> 
 			<tr> 
@@ -18,6 +19,7 @@
 			</tr> 
 		</thead> 
 		<tbody>
+{# 			liste de mes fichiers #}
 			{% if tabMyFiles is defined %}
 				{% for myfiles in tabMyFiles %}
 					<tr> 
@@ -70,6 +72,7 @@
 					</tr>
 				{% endfor %}
 			{% endif %}
+{# 			liste des fichiers de mes groupes #}
 			{% if tabGroupFiles is defined %}
 				{% for groupfiles in tabGroupFiles %}
 					{% if groupfiles['idowner'] != user.id %}
@@ -125,8 +128,10 @@
 			{% endif %}
 		</tbody>
 	</table>
+{# 	fin de la table datatables #}
 </div>
-<script type="text/javascript"> 
+<script type="text/javascript">
+// script de datatables : parametrage du tri du tableau 
 $(document).ready(function() { 
 	$('table').DataTable( { 
 		"paging": false,

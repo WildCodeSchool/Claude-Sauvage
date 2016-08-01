@@ -8,6 +8,7 @@ use CS\GedBundle\Entity\Gedfiles;
 
 class DownloadController extends Controller
 {
+    //fonction de téléchargement d'un fichier
     public function downloadAction($name)
     {
         $request = $this->get('request');

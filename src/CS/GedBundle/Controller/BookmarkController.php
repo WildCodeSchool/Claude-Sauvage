@@ -15,11 +15,14 @@ use CS\GedBundle\Entity\Linktag;
 use CS\GedBundle\Entity\Gedtag;
 use DateTime;
 
+// controller gérant toutes les actions des favoris  (affichage, creation et suppression de la liste de favoris)
 class BookmarkController extends Controller
 {
     /**
      * @Route("/bookmark", name="ged_bookmark")
      */
+
+    //fonction ajax d'ajout d'un fichier aux favoris ou permettant d'enlever cet attribut
     public function bookmarkAction(Request $request)
     {
         $em = $this->getDoctrine()->getManager();
@@ -52,6 +55,7 @@ class BookmarkController extends Controller
 
         return $response->setData(array('response' => $verifFav));
     }
+    //fonction d'affichage de la liste des favoris
     public function bookmarkListAction(Request $request)
     {
         //récuperation & atribution de l entitiy manager.
@@ -108,6 +112,11 @@ class BookmarkController extends Controller
             $fileName = md5(uniqid()).'.'.$file->guessExtension();
 
             $pathDir = $this->container->getParameter('kernel.root_dir').'/../web/uploads';
+            
+            if($type==null){
+                $type = 'txt';
+            }
+
             $file->move($pathDir, $fileName);
 
             $gedfiles->setType($type);

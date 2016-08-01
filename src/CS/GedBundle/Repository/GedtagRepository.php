@@ -12,15 +12,13 @@ use Doctrine\ORM\EntityRepository;
  */
 class GedtagRepository extends EntityRepository
 {
-	public function tagSearch($word, $id)
+	public function tagSearch($word)
 	{
 		$queryBuilder = $this->createQueryBuilder('f');
 
 		$queryBuilder
 			->where('f.name LIKE :word')
-			->setParameter('word', '%'.$word.'%')
-			->andWhere('f.id = :id')
-			->setParameter('id', $id);
+			->setParameter('word', '%'.$word.'%');
 
 		// On récupère la Query à partir du QueryBuilder
 	    $query = $queryBuilder->getQuery();

@@ -14,11 +14,13 @@ use CS\GedBundle\Entity\Linktag;
 use CS\GedBundle\Entity\Gedtag;
 use DateTime;
 
+//controller gérant la liste de fichiers "partagés avec moi"
 class ShareController extends Controller
 {
+    //fonction d'affichage de la liste
     public function sharedAction(Request $request)
     {
-        //récuperation & atribution de l entitiy manager.
+        //récuperation & atribution de l entity manager.
         $em=$this->getDoctrine()->getManager();
 
         //récuperation de l'utilisateur courant.
@@ -73,6 +75,10 @@ class ShareController extends Controller
             $pathDir = $this->container->getParameter('kernel.root_dir').'/../web/uploads';
             $file->move($pathDir, $fileName);
 
+            if($type==null){
+                $type = 'txt';
+            }
+
             $gedfiles->setType($type);
             $gedfiles->setPath($fileName);
             $gedfiles->setIdowner($user->getId());
@@ -87,103 +93,7 @@ class ShareController extends Controller
 
             return $this->redirectToRoute('ged_homepage');
         }
-
-        $listowner=$em->getRepository('GedBundle:Gedfiles')->findByIdowner($iduser);
-        foreach ($listowner as $file) {
-            
-            $type=$file->getType();
-            $path=$file->getPath();
-            $idfile=$file->getId();
-            $date=$file->getDate();
-            $name=$file->getOriginalName();
-
-            //on recupére si il est en favoris
-            $bookmarkfile = $em->getRepository('GedBundle:Linkbookmark')->findOneByIdfile($file->getId());
-
-            if (empty($bookmarkfile)){
-            $bookmarkfile = 0;
-            }
-
-            else{
-                $bookmarkfile = 1;
-            }
-
-            //on compte les commentaires liés a un fichier.
-            $comments =$em->getRepository('GedBundle:Gedcom')->findByIdfile($file->getId());
-
-            //on compte le nombre de commentaires.
-            if (empty($comments)){
-                $nbCom = 0;
-            }
-            else {
-                $nbCom = count($comments);
-            }
-
-            //on recupere les partages
-            $groupMembers = $em->getRepository('GedBundle:Linkgroup')->findByIdgroup($file->getIdgroup());
         
-            $tabInfoGroup=[];
-            foreach ($groupMembers as $groupMember) {
-                $groupMemberId = $groupMember->getIduser();
-                $groupMemberInfo = $em->getRepository('AppBundle:User')->findOneById($groupMemberId);
-                $groupMemberName = $groupMemberInfo->getUsername();
-
-                $tabInfoGroup[] = array(
-                        'groupMemberName'=>$groupMemberName,
-                );
-            }
-
-            // if (empty($file->getIdsouscategory() ) )
-            // {
-
-            $categorytab=$em->getRepository('GedBundle:Category')->findOneById($file->getIdcategory());
-            $category=$categorytab->getName();
-            // }
-            // else
-            // {
-            //  $categorytab=$em->getRepository('GedBundle:Souscategory')->findOneById($file->getIdsouscategory());
-            //  $category=$categorytab->getName();
-            // }
-            $linktag = $em->getRepository('GedBundle:Linktag')->findByIdfile($idfile);
-            $tagnames=[];
-            foreach ($linktag as $tag) {
-                //on recupere l'id du premier tag
-                $idtag=$tag->getIdtag();
-                //on recupere la ligne de la table Gedtag correspondante à l'id d'au dessus
-                $infostag=$em->getRepository('GedBundle:Gedtag')->findOneById($idtag);
-                //on recupere le nom du tag et on met tout ca dans un tableau
-                $tagname=$infostag->getName();
-                $tagnames[]=array(
-                    'id'=>$idtag,
-                    'name'=>$tagname,
-                    );
-                //on fout tout dans un tableau et on a des favoris tout neufs
-            }
-
-            if(empty($tagnames))
-            {
-                $tagnames=1;
-            }
-
-            //s'il n'existe pas de groupe, on assigne 1
-            if (empty($tabInfoGroup)){
-                $tabInfoGroup = 1;
-            }
-            
-            $tabpart[]=array(
-                "idfile"=>$idfile,
-                "tagnames"=>$tagnames,
-                "path"=>$path,
-                "type"=>$type,
-                "category"=>$category,
-                "date"=>$date,
-                "name"=>$name,
-                'bookmark'=>$bookmarkfile,
-                'comments'=>$nbCom,
-                'groupMemberName'=>$tabInfoGroup,
-            );            
-        }
-
         // recup des groupes de l'utilisateur courant
         $listgroups=$em->getRepository('GedBundle:Linkgroup')->findByIduser($iduser);
         foreach ($listgroups as $groupfiles) {
@@ -201,7 +111,7 @@ class ShareController extends Controller
                     $date=$file->getDate();
                     $name=$file->getOriginalName();
 
-                    $bookmarkfile = $em->getRepository('GedBundle:Linkbookmark')->findOneByIdfile($file->getId());
+                    $bookmarkfile = $em->getRepository('GedBundle:Linkbookmark')->findBy(array('idfile'=>$file->getId(), 'iduser'=>$user->getId()));
 
                     if (empty($bookmarkfile)){
                     $bookmarkfile = 0;
@@ -235,18 +145,10 @@ class ShareController extends Controller
                                 'groupMemberName'=>$groupMemberName,
                         );
                     }
-
-                    // if (empty($file->getIdsouscategory() ) )
-                    // {
-
+                    // recuperation des categories
                     $categorytab=$em->getRepository('GedBundle:Category')->findOneById($file->getIdcategory());
                     $category=$categorytab->getName();
-                    // }
-                    // else
-                    // {
-                    //  $categorytab=$em->getRepository('GedBundle:Souscategory')->findOneById($file->getIdsouscategory());
-                    //  $category=$categorytab->getName();
-                    // }
+
                     $linktag = $em->getRepository('GedBundle:Linktag')->findByIdfile($idfile);
                     $tagnames=[];
                     foreach ($linktag as $tag) {

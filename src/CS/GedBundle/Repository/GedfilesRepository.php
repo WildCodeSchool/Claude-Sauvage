@@ -20,8 +20,7 @@ class GedfilesRepository extends EntityRepository
 			->where('f.originalname LIKE :word')
 			->setParameter('word', '%'.$word.'%')
 			->andWhere('f.idowner = :id')
-			->setParameter('id', $id)
-			->setMaxResults(3);
+			->setParameter('id', $id);
 
 		// On récupère la Query à partir du QueryBuilder
 	    $query = $queryBuilder->getQuery();
@@ -31,6 +30,182 @@ class GedfilesRepository extends EntityRepository
 
 		// On retourne ces résultats
 	    return $results;
+	}
+
+	public function nameTypeSearch($word, $id, $types)
+	{
+		$tabquery=[];
+
+		$tabresult =[];
+
+		$queryBuilder = $this->createQueryBuilder('f');
+
+		$ids = array();
+		foreach ( $types as $o ){
+		    $ids = (string)$o;
+
+			$queryBuilder
+				->where('f.originalname LIKE :word')
+				->setParameter('word', '%'.$word.'%')
+				->andWhere('f.idowner = :id')
+				->setParameter('id', $id)
+				->andWhere('f.type = :type')
+				->setParameter('type', $ids);
+				
+
+			// On récupère la Query à partir du QueryBuilder
+		    $query = $queryBuilder->getQuery();
+
+	    	// On pouse les resultat dans un tableau.
+	    	array_push($tabquery, $queryBuilder->getQuery()->getResult());
+
+		}
+
+	    // On récupère les résultats à partir de la Query
+	    
+	    foreach ($tabquery as $tabs) {
+			foreach ($tabs as $tab) {
+				array_push($tabresult, $tab);
+			}
+		}
+
+		// On retourne ces résultats
+	    return $tabresult;
+	}
+
+	public function categorySearch($word, $id, $cat)
+	{
+		$queryBuilder = $this->createQueryBuilder('f');
+
+		$queryBuilder
+			->where('f.originalname LIKE :word')
+			->setParameter('word', '%'.$word.'%')
+			->andWhere('f.idowner = :id')
+			->setParameter('id', $id)
+			->andWhere('f.idcategory = :cat')
+			->setParameter('cat', $cat);
+
+		// On récupère la Query à partir du QueryBuilder
+	    $query = $queryBuilder->getQuery();
+
+	    // On récupère les résultats à partir de la Query
+	    $results = $query->getResult();
+
+		// On retourne ces résultats
+	    return $results;
+	}
+
+	public function categoryTypeSearch($word, $id, $cat, $types)
+	{
+		$tabquery=[];
+
+		$tabresult =[];
+
+		$queryBuilder = $this->createQueryBuilder('f');
+
+		$ids = array();
+		foreach ( $types as $o ){
+		    $ids = (string)$o;
+
+			$queryBuilder
+				->where('f.originalname LIKE :word')
+				->setParameter('word', '%'.$word.'%')
+				->andWhere('f.idowner = :id')
+				->setParameter('id', $id)
+				->andWhere('f.idcategory = :cat')
+				->setParameter('cat', $cat)
+				->andWhere('f.type = :type')
+				->setParameter('type', $ids);
+				
+
+			// On récupère la Query à partir du QueryBuilder
+		    $query = $queryBuilder->getQuery();
+
+	    	// On pouse les resultat dans un tableau.
+	    	array_push($tabquery, $queryBuilder->getQuery()->getResult());
+
+		}
+
+	    // On récupère les résultats à partir de la Query
+	    
+	    foreach ($tabquery as $tabs) {
+			foreach ($tabs as $tab) {
+				array_push($tabresult, $tab);
+			}
+		}
+
+		// On retourne ces résultats
+	    return $tabresult;
+	}
+
+	public function sscategorySearch($word, $id, $cat, $sscat)
+	{
+		$queryBuilder = $this->createQueryBuilder('f');
+
+		$queryBuilder
+			->where('f.originalname LIKE :word')
+			->setParameter('word', '%'.$word.'%')
+			->andWhere('f.idowner = :id')
+			->setParameter('id', $id)
+			->andWhere('f.idcategory = :cat')
+			->setParameter('cat', $cat)
+			->andWhere('f.idsouscategory = :sscat')
+			->setParameter('sscat', $sscat);
+
+		// On récupère la Query à partir du QueryBuilder
+	    $query = $queryBuilder->getQuery();
+
+	    // On récupère les résultats à partir de la Query
+	    $results = $query->getResult();
+
+		// On retourne ces résultats
+	    return $results;
+	}
+
+	public function sscategoryTypeSearch($word, $id, $cat, $sscat, $types)
+	{
+
+		$tabquery=[];
+
+		$tabresult =[];
+
+		$queryBuilder = $this->createQueryBuilder('f');
+
+		$ids = array();
+		foreach ( $types as $o ){
+		    $ids = (string)$o;
+
+			$queryBuilder
+				->where('f.originalname LIKE :word')
+				->setParameter('word', '%'.$word.'%')
+				->andWhere('f.idowner = :id')
+				->setParameter('id', $id)
+				->andWhere('f.idcategory = :cat')
+				->setParameter('cat', $cat)
+				->andWhere('f.idsouscategory = :sscat')
+				->setParameter('sscat', $sscat)
+				->andWhere('f.type = :type')
+				->setParameter('type', $ids);
+				
+
+			// On récupère la Query à partir du QueryBuilder
+		    $query = $queryBuilder->getQuery();
+
+	    	// On pouse les resultat dans un tableau.
+	    	array_push($tabquery, $queryBuilder->getQuery()->getResult());
+
+		}
+
+	    // On récupère les résultats à partir de la Query
+	    
+	    foreach ($tabquery as $tabs) {
+			foreach ($tabs as $tab) {
+				array_push($tabresult, $tab);
+			}
+		}
+
+		// On retourne ces résultats
+	    return $tabresult;
 	}
 
 	public function grpNameSearch($word, $idgrp)
@@ -51,5 +226,177 @@ class GedfilesRepository extends EntityRepository
 
 		// On retourne ces résultats
 	    return $results;
+	}
+
+	public function grpNameTypeSearch($word, $idgrp, $types)
+	{
+		$tabquery=[];
+
+		$tabresult =[];
+
+		$queryBuilder = $this->createQueryBuilder('f');
+
+		$ids = array();
+		foreach ( $types as $o ){
+		    $ids = (string)$o;		
+
+			$queryBuilder
+				->where('f.originalname LIKE :word')
+				->setParameter('word', '%'.$word.'%')
+				->andWhere('f.idgroup = :id')
+				->setParameter('id', $idgrp)
+				->andWhere('f.type = :type')
+				->setParameter('type', $ids);
+				
+
+			// On récupère la Query à partir du QueryBuilder
+		    $query = $queryBuilder->getQuery();
+
+	    	// On pouse les resultat dans un tableau.
+	    	array_push($tabquery, $queryBuilder->getQuery()->getResult());
+
+		}
+	    
+	    foreach ($tabquery as $tabs) {
+			foreach ($tabs as $tab) {
+				array_push($tabresult, $tab);
+			}
+		}
+
+		// On retourne ces résultats
+	    return $tabresult;
+	}
+
+	public function categoryGrpSearch($word, $idgrp, $cat)
+	{
+		$queryBuilder = $this->createQueryBuilder('f');
+
+		$queryBuilder
+			->where('f.originalname LIKE :word')
+			->setParameter('word', '%'.$word.'%')
+			->andWhere('f.idgroup = :id')
+			->setParameter('id', $idgrp)
+			->andWhere('f.idcategory = :cat')
+			->setParameter('cat', $cat);
+
+		// On récupère la Query à partir du QueryBuilder
+	    $query = $queryBuilder->getQuery();
+
+	    // On récupère les résultats à partir de la Query
+	    $results = $query->getResult();
+
+		// On retourne ces résultats
+	    return $results;
+	}
+	public function categoryGrpTypeSearch($word, $idgrp, $cat, $types)
+	{
+		$tabquery=[];
+
+		$tabresult =[];
+
+		$queryBuilder = $this->createQueryBuilder('f');
+
+		$ids = array();
+		foreach ( $types as $o ){
+		    $ids = (string)$o;		
+
+			$queryBuilder
+				->where('f.originalname LIKE :word')
+				->setParameter('word', '%'.$word.'%')
+				->andWhere('f.idgroup = :id')
+				->setParameter('id', $idgrp)
+				->andWhere('f.idcategory = :cat')
+				->setParameter('cat', $cat)
+				->andWhere('f.type = :type')
+				->setParameter('type', $ids);
+				
+
+			// On récupère la Query à partir du QueryBuilder
+		    $query = $queryBuilder->getQuery();
+
+	    	// On pouse les resultat dans un tableau.
+	    	array_push($tabquery, $queryBuilder->getQuery()->getResult());
+
+		}
+
+	    // On récupère les résultats à partir de la Query
+	    
+	    foreach ($tabquery as $tabs) {
+			foreach ($tabs as $tab) {
+				array_push($tabresult, $tab);
+			}
+		}
+
+		// On retourne ces résultats
+	    return $tabresult;
+	}
+
+	public function sscategoryGrpSearch($word, $idgrp, $cat, $sscat)
+	{
+		$queryBuilder = $this->createQueryBuilder('f');
+
+		$queryBuilder
+			->where('f.originalname LIKE :word')
+			->setParameter('word', '%'.$word.'%')
+			->andWhere('f.idgroup = :id')
+			->setParameter('id', $idgrp)
+			->andWhere('f.idcategory = :cat')
+			->setParameter('cat', $sscat)
+			->andWhere('f.idsouscategory = :sscat')
+			->setParameter('sscat', $sscat);
+
+		// On récupère la Query à partir du QueryBuilder
+	    $query = $queryBuilder->getQuery();
+
+	    // On récupère les résultats à partir de la Query
+	    $results = $query->getResult();
+
+		// On retourne ces résultats
+	    return $results;
+	}
+
+	public function sscategoryGrpTypeSearch($word, $idgrp, $cat, $sscat, $types)
+	{
+		$tabquery=[];
+
+		$tabresult =[];
+
+		$queryBuilder = $this->createQueryBuilder('f');
+
+		$ids = array();
+		foreach ( $types as $o ){
+		    $ids = (string)$o;		
+
+			$queryBuilder
+				->where('f.originalname LIKE :word')
+				->setParameter('word', '%'.$word.'%')
+				->andWhere('f.idgroup = :id')
+				->setParameter('id', $idgrp)
+				->andWhere('f.idcategory = :cat')
+				->setParameter('cat', $sscat)
+				->andWhere('f.idsouscategory = :sscat')
+				->setParameter('sscat', $sscat)
+				->andWhere('f.type = :type')
+				->setParameter('type', $ids);
+				
+
+			// On récupère la Query à partir du QueryBuilder
+		    $query = $queryBuilder->getQuery();
+
+	    	// On pouse les resultat dans un tableau.
+	    	array_push($tabquery, $queryBuilder->getQuery()->getResult());
+
+		}
+
+	    // On récupère les résultats à partir de la Query
+	    
+	    foreach ($tabquery as $tabs) {
+			foreach ($tabs as $tab) {
+				array_push($tabresult, $tab);
+			}
+		}
+
+		// On retourne ces résultats
+	    return $tabresult;
 	}
 }

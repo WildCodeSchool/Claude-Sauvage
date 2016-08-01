@@ -3,6 +3,8 @@
 {% include "GedBundle::nav.html.twig" %}
 {% include "GedBundle::search.html.twig" %}
 <div class="col-md-10">
+	{# liste des fichiers a parametrer #}
+
 	<h3 style="text-align:center;">Fichiers à définir</h3>
 	<table class="table compact stripe" id="table">
 		<thead> 
@@ -127,6 +129,7 @@
 	</table>
 </div>
 <script type="text/javascript"> 
+//script datatables
 $(document).ready(function() { 
 	$('table').DataTable( { 
 		"paging": false,

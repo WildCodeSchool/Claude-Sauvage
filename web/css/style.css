@@ -78,7 +78,7 @@ select:focus > option:checked {
 }
 
 .search-bar{
-	padding:10px 0 10px 40px; 
+	padding:10px 0; 
 	background-color:#f1f1f1;
 }
 
@@ -120,8 +120,16 @@ select:focus > option:checked {
 /*--------------------------------- Navbar left --------------------------------- */
 
 .nav-left{
-	padding: 55px 0 0 0;
+	padding:0;
 	background-color:#f1f1f1;
+}
+
+.nav-left p{
+	margin: 3px;
+}
+.nav-left strong{
+	padding-left: 10px;
+	font-size: 2 0px;
 }
 
 .nav-left .glyphicon-folder-open{
@@ -330,21 +338,42 @@ tr:hover td{
 	border: 1px solid #c9c9c9;	
 }
 
-.existing-com
-{
-	height:500px;
-	overflow: auto;
+@media all and (max-height:899px){
+	.existing-com
+	{
+		height:400px;
+		overflow: auto;
+	}
 }
-
+@media all and (max-height:899px){
+	.existing-com
+	{
+		height:500px;
+		overflow: auto;
+	}
+}
+.comment-head
+{
+	color: #bf5c00;
+	font-weight: bolder;
+}
+.comment-body
+{
+	color: #000000;
+	background-color: #FFFFFF;
+	border: 0px;
+	padding: 0px;
+}
 .one-comment
 {
-	background-color: #fba858;
+	background-color: #FFFFFF;
 	margin:5px;
 	margin-top: 10px;
 	border-radius: 3px;
 	font-size: 15px;
 	padding: 3px;
 	padding-left: 7px;
+	border: solid #909090 1px;
 }
 .showform
 {
@@ -368,7 +397,19 @@ tr:hover td{
 	margin-left: 3%;
 	width: 94%;
 }
-/*--------------------------------- tout les fichiers ---------------------------------*/
+/*--------------------------------- Resultat recherche ---------------------------------*/
+
+.search-tab
+{
+	margin-bottom: 20px;
+}
+
+.glyphicon-alert
+{
+	right: 10px;
+	top:5px;
+	font-size: 20px;
+}
 
 /*----------------------------------paramètres fichiers -------------------------------*/
 
