@@ -452,6 +452,27 @@ tr:hover td{
 	margin-bottom:5px;
 }
 
+.styled-select2 {
+	width: 240px;
+	height: 34px;
+	overflow: hidden;
+	z-index: 1;
+	background: url(../img/down_arrow_select.jpg) no-repeat right #fff;
+	border: 1px solid #ccc;
+}
+
+.styled-select2 select {
+	background: transparent;
+	width: 262px;
+	padding: 5px;
+	font-size: 16px;
+	line-height: 1;
+	border: 0;
+	border-radius: 0;
+	height: 34px;
+	-webkit-appearance: none;
+}
+
 .parameters-tag
 {
 	margin-top: 50px;

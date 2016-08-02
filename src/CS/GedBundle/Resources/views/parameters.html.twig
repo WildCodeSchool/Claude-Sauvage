@@ -7,7 +7,7 @@
 		<form action=" {{ path('ged_parameters_file', {'id': id} ) }}" method="post">
 			<div class="col-md-4 col-md-offset-4 parameters-category" style="text-align:center">
 				<label for="addcat">Définir la catégorie:</label>
-		    	<div class="styled-select category-list">
+		    	<div class="styled-select2 category-list">
 			    	<select class="form-control search-select" id="categories" name="addcat">
 			    		<option value="0" >Toutes les catégories</option>
 			    		{% for categorie in categories %}
@@ -17,7 +17,7 @@
 						{% endfor %}
 				    </select>
 				</div>
-		    	<div class="styled-select category-list">
+		    	<div class="styled-select2 category-list">
 			    	<select class="form-control" name="addsscat" id="sscategories" disabled>
 					    <option value="0" name="addsscat">Toutes les sous-catégories</option>
 				    </select>
