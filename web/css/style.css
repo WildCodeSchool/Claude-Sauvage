@@ -33,6 +33,11 @@
 	padding:7px 10px!important;
 }
 
+.glyphicon-plus-user{
+	font-size:10px;
+	top:0px;
+}
+
 /* --------------------------------- flashbag alert ---------------------------------*/
 
 .alert{
@@ -279,6 +284,7 @@ tr:hover td{
 .bold{
 	font-weight: bold;
 }
+
 /*--------------------------------- tout les fichiers ---------------------------------*/
 
 #table .glyphicon-star-empty, #table .glyphicon-star{
@@ -417,6 +423,47 @@ tr:hover td{
 {
 	display:none;
 }
+
+#tag_auto{
+	background-color: #f1f1f1;
+	display:none;
+	border:#d1d1d1 solid 1px;
+	position: absolute;
+	z-index: 2;
+	margin-top:-3px;
+}
+
+
+#tag_auto p:hover{
+	background-color: #FBA858;
+}
+
+#tag_auto p{
+	padding:2px 0;
+	margin-bottom:5px;
+}
+
+
+
+#auto{
+	background-color: #fff;
+	
+	margin-top: 33px;
+	
+	padding:0;
+}
+
+
+
+
+
+
+
+
+
+
+
+
 .parameters-tag
 {
 	margin-top: 50px;

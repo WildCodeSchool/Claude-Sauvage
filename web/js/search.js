@@ -148,8 +148,7 @@ $("document").ready(function() {
 		}
 		else if( !$(e.target).is(auto)&& !$.contains(auto[0],e.target) ) {
 			// masque #ma_div en fondu
-			auto.fadeOut();
-		
+			auto.fadeOut();		
 		}
-	});	
+	});
 });

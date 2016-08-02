@@ -66,4 +66,95 @@ $(document).ready(function(){
 	else{
 		$("#addtagfield").attr('disabled', 'disabled');
 	};
+
+	// suggestion tag.
+	$("#addtagfield").keyup(function() {
+		var tag = $(this).val();
+		
+		if((tag.length)>=3){
+			var count = 0;
+			$.ajax({
+				type: 'POST',
+				url: auto_tag,
+				data: {recherche: tag},
+				dataType : 'json',
+
+				beforeSend: function() {
+					console.log('Requete en cours');
+					$("#tag_auto p").remove();
+					$("#tag_auto h5").remove();
+					$("#tag_auto").css("display", "none");
+				},
+
+				success: function(data) {					
+					console.log('Requete ok',data);
+					$("#tag_auto").css("display", "block");
+					if (data.tagTab.length!=0){
+						count = 0;
+						$("#tag_auto").append($('<h5>',{ text: 'Mes Tags' }).addClass('bold'));
+						$.each(data.tagTab, function(index,value) {
+							if (count<3){
+								$("#tag_auto").append($('<p>',{ text: value.name }));
+								count ++;
+							}
+						});
+					}
+					if (data.grpTagTab.length!=0){
+						count = 0;
+						$("#tag_auto").append($('<h5>',{ text: 'Tags de mes groupes' }).addClass('bold'));
+						$.each(data.grpTagTab, function(index,value) {
+							if (count<3){
+								$("#tag_auto").append($('<p>',{ text: value.name }));
+								count ++;
+							}
+						});
+					}
+					$("#tag_auto p").click(function(){
+						var remplace = $(this).text();
+						$("#addtagfield").val(remplace);
+					});
+					if(data.tagTab.length==0 && data.grpTagTab.length==0){
+						$("#tag_auto h5").remove();
+						$("#tag_auto").append($('<h5>',{ text: 'Aucun résultat' }));
+					}
+				},
+
+				error: function() {
+					console.log('Requete fail');
+				},
+			});
+		}
+		else{
+			$("#tag_auto p").remove();
+			$("#tag_auto h5").remove();
+			$("#tag_auto").css("display", "none");
+		}
+	});
+	
+	//fondu au clique en dehors du cadre.
+	// var tag_auto = $('#tag_auto');
+	// var addtagfield = $('#addtagfield');
+
+	// $(document.body).click(function(e) {
+	// 	// Si ce n'est pas #ma_div ni un de ses enfants
+	// 	if ( $(e.target).is(addtagfield) ){
+			
+	// 	}
+	// 	else if( !$(e.target).is(tag_auto)&& !$.contains(tag_auto[0],e.target) ) {
+	// 		// masque #ma_div en fondu
+	// 		tag_auto.fadeOut();	
+	// 	}
+	// });
+
+	var tag_auto = $('#tag_auto');
+	// var test = $('#addtagfield');
+
+	$('html').click(function(event){
+		if(event.target.id == 'addtagfield') {
+			tag_auto.fadeIn();
+		}
+		else{
+			tag_auto.fadeOut();
+		}
+	});
 });

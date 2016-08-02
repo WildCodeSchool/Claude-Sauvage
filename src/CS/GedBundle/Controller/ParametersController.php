@@ -274,4 +274,206 @@ class ParametersController extends Controller
         return $response->setData(array('tabtag' => $tabtag));
 
     }
+
+    //autocompletion tag (ajax)
+    public function autocompletionAction(Request $request)
+    {
+        $em=$this->getDoctrine()->getManager();
+        $user =$this->getUser()->getId();
+
+        $searchRecherche=$request->request->get('recherche');
+
+        //RECHERCHE POUR L' UTILISATEUR - Fichiers
+
+        //RECHERCHE POUR L' UTILISATEUR - Tags
+
+        //on recherche tout les tag ayant la valeur
+        $allTag = $em->getRepository('GedBundle:Gedtag')->tagSearch($searchRecherche);
+        //on defini un tableau
+        $tagTab = [];
+        //pour chaque occurrence
+        foreach ($allTag as $tag) {
+            //prendre Id
+            $idTag = $tag->getId();
+            //et le nom
+            $nameTag = $tag->getName();
+
+            //rechercher les lien pour chaque id du tag
+            $links = $em->getRepository('GedBundle:Linktag')->findByIdtag($idTag);
+
+            //si les liens on ete trouvé
+            if($links!=null){            
+                //pour chaque occurrence de liens
+                foreach ($links as $link) {
+                    //recupére Id du fichier corespondant
+                    $idFile = $link->getIdfile();
+
+                    //puis faire une requete pour savoir si idowner = user
+                    $file = $em->getRepository('GedBundle:Gedfiles')->findOneBy(
+                        array(
+                            'idowner'=>$user,
+                            'id'=>$idFile,
+                        )
+                    );
+                    //si la recherche aboutis le tag est donc bien au fichier du user
+                    if($file!=null){
+                        //si tabTag et defini
+                        if($tagTab!=null){
+                            $count=0;
+                            //pourchaque entre dans le tableau tagTab
+                            foreach ($tagTab as $tag) {
+                                //on recupere id 
+                                $name = $tag['name'];
+
+                                //pour chaque entré du tableau et on le compare au nom du tag (ligne 76)
+                                if($name==$nameTag){
+                                    $count++;
+                                }
+                            }
+                            //si le compteur et toujour a 0 ses que le tag n est pas dans le tableau
+                            if($count==0){
+                                //l'ajoute donc
+                                $tagTab[] = array(
+                                    'name' => $nameTag,
+                                );
+                            }
+                        }
+                        //sinon remplir le tableau
+                        if($tagTab==null){
+                            $tagTab[]=array(
+                                'name' => $nameTag,
+                            );
+                        }                       
+                    }
+                }
+            }
+        }
+
+        //RECHERCHE POUR LES GROUPES - Fichiers & Tag
+
+        //on recherche dans quels groupe l'utilisateur est
+        $linkGroups = $em->getRepository('GedBundle:Linkgroup')->findByIduser($user);
+        
+        //si on un resultat
+        if($linkGroups!=null){
+            $groupTab = [];
+            //pour chaque resultat, ajout les dans un tableau
+            foreach ($linkGroups as $group) {
+                $idGrp = $group->getIdgroup();
+                array_push($groupTab, $idGrp);
+            }
+
+            //Tags
+
+            $grpTagTab = [];
+            //pour chaque group contenu dans mon tableau
+            foreach ($groupTab as $group) {
+                //on recherche tout les tag ayant la valeur
+                $allTag = $em->getRepository('GedBundle:Gedtag')->tagSearch($searchRecherche);
+                
+                //pour chaque occurrence
+                foreach ($allTag as $tag) {
+                    //prendre Id
+                    $idTag = $tag->getId();
+                    //et le nom
+                    $nameTag = $tag->getName();
+
+                    //rechercher les lien pour chaque id du tag
+                    $links = $em->getRepository('GedBundle:Linktag')->findByIdtag($idTag);
+
+                    //si les liens on ete trouvé
+                    if($links!=null){            
+                        //pour chaque occurrence de liens
+                        foreach ($links as $link) {
+                            //recupére Id du fichier corespondant
+                            $idFile = $link->getIdfile();
+
+                            //puis faire une requete pour savoir si idgroup = group
+                            $file = $em->getRepository('GedBundle:Gedfiles')->findOneBy(
+                                array(
+                                    'idgroup'=>$group,
+                                    'id'=>$idFile,
+                                )
+                            );
+                            //si la recherche aboutis le tag est donc bien au fichier du group
+                            if($file!=null){
+                                //si grpTabTag et defini
+                                if($grpTagTab!=null){
+                                    $count=0;
+
+                                    // pourchaque entre dans le tableau groupTab
+                                    foreach ($grpTagTab as $tag) {
+                                        //on recupere le nom
+                                        $name = $tag['name'];
+
+                                        //pour chaque entré du tableau et on le compare au nom du tag (ligne 76)
+                                        if($name==$nameTag){
+                                            $count++;
+                                        }
+                                    }
+                                    //si tabTag et defini
+                                    if($tagTab!=null){
+                                        foreach ($tagTab as $tag) {
+                                            //on recupere le nom
+                                            $name = $tag['name'];
+
+                                            //pour chaque entré du tableau et on le compare au nom du tag (ligne 76)
+                                            if($name==$nameTag){
+                                                $count++;
+                                            }
+                                        }
+                                    }
+                                    //si le compteur et toujour a 0 ses que le tag n est pas dans le tableau
+                                    if($count==0){
+                                        //l'ajoute donc
+                                        $grpTagTab[] = array(
+                                            'name' => $nameTag,
+                                        );
+                                    }
+                                }
+                                //si tabTag et defini
+                                if($tagTab!=null){
+                                    $count=0;
+                                    foreach ($tagTab as $tag) {
+                                        //on recupere le nom
+                                        $name = $tag['name'];
+
+                                        //pour chaque entré du tableau et on le compare au nom du tag (ligne 76)
+                                        if($name==$nameTag){
+                                            $count++;
+                                        }
+                                    }
+                                    //si le compteur et toujour a 0 ses que le tag n est pas dans le tableau
+                                    if($count==0){
+                                        //l'ajoute donc
+                                        $grpTagTab[] = array(
+                                            'name' => $nameTag,
+                                        );
+                                    }
+                                }
+                                //sinon tabTag et grpTagTab n'est pas defini remplir le tableau
+                                if(($grpTagTab==null)&&($tagTab==null)){
+                                    $grpTagTab[]=array(
+                                        'name' => $nameTag,
+                                    );
+                                }                      
+                            }
+                        }
+                    }
+                }
+            }
+        }
+
+        if(!isset($tagTab)){
+            $tagTab=[];
+        }
+        
+        if(!isset($grpTagTab)){
+            $grpTagTab=[];
+        }
+
+        $response = new JsonResponse();
+        
+        return $response->setData(array('tagTab' => $tagTab, 'grpTagTab' => $grpTagTab,));
+    }
 }

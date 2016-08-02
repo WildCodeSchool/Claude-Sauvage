@@ -23,8 +23,12 @@
                     </button>
                     <a class="home btn btn-default navbar-btn" href="{{ path('ged_homepage') }}" title="Tous les fichiers"><span class="glyphicon glyphicon-home" aria-hidden="true"></span></a>
                     <button type="button" class="ajout-fichier btn btn-default navbar-btn" data-toggle="modal" data-target="#addfile"><span class="glyphicon glyphicon-plus" aria-hidden="true"></span>  Ajouter un document</button>
+                    <a href="{{ path('ged_group')}}"class="ajout-fichier btn btn-default navbar-btn" >
+                        <span class="glyphicon glyphicon-user" aria-hidden="true"></span> Mes groupes
+                    </a>
                     {% if checkpage is not defined or checkpage != "newgroup" %}
                         <a href="{{ path('ged_newgroup')}}"class="ajout-fichier btn btn-default navbar-btn" >
+                            <span class="glyphicon-plus-user glyphicon glyphicon-plus" aria-hidden="true"></span>
                             <span class="glyphicon glyphicon-user" aria-hidden="true"></span> Créer un groupe
                         </a>
                     {% endif %}

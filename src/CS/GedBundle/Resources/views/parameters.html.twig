@@ -28,7 +28,8 @@
 		<div class="col-md-4 col-md-offset-4 parameters-tag">
 			<div>
 				<label>Ajouter des tags:</label>
-				<input id="addtagfield"/>
+				<input id="addtagfield" autocomplete="off"/>
+				<div id="tag_auto" class="col-md-5 col-md-offset-4"></div>
 				<button id="addtagbtn" class="btn btn-default">Ajouter</button>
 			</div>
 			<label>Ou supprimer des tags existants:</label>
@@ -52,6 +53,7 @@
 	var idfile = "{{ id }}";
 	var tagremove="{{ path('ged_removetag') }}";
 	var tagadd="{{ path('ged_addtag') }}";
+	var auto_tag="{{ path('ged_auto_tag') }}";
 	var path =  "{{ path('ged_ajax_sscat_search') }}";
 	var isdeleted=0;
 </script>

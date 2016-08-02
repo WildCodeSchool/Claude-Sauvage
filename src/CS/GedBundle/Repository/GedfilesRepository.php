@@ -61,6 +61,8 @@ class GedfilesRepository extends EntityRepository
 
 		}
 
+		var_dump($tabquery);exit;
+
 	    // On récupère les résultats à partir de la Query
 	    
 	    foreach ($tabquery as $tabs) {

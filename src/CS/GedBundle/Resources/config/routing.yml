@@ -84,6 +84,12 @@ ged_removetag:
     methods: [GET, POST]
 
 #route ajax creation de tag
+ged_auto_tag:
+    path:    /parameters/tag/autocompletion
+    defaults: { _controller: GedBundle:Parameters:autocompletion }
+    methods: [GET, POST]
+
+#route ajax creation de tag
 ged_addtag:
     path:    /parameters/tag/add
     defaults: { _controller: GedBundle:Parameters:addTag }
@@ -106,6 +112,11 @@ ged_download:
     defaults: { _controller: GedBundle:Download:download}
 
 #groupes
+#liste de mes groupes
+ged_group:
+    pattern:  /group
+    defaults: { _controller:GedBundle:Group:group }
+
 #creation de groupe
 ged_newgroup:
     path:     /newgroup

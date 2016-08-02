@@ -18,6 +18,115 @@ use DateTime;
 //controller des fonctions relatives aux groupes (création/ edition/ suppression/ ajout de commentaires)
 class GroupController extends Controller
 {
+	//fonction de liste de mes groupes
+	public function groupAction (Request $request)
+	{
+		//récuperation de l'entity manager
+		$em=$this->getDoctrine()->getManager();
+		//De l'utilisateur courant
+		$user=$this->getUser();
+		$iduser=$user->getId();
+
+		// recuperation des liens de groupes
+		$linksgroup = $em->getRepository('GedBundle:Linkgroup')->findByIduser($iduser);
+			
+		$grptab = [];
+
+		foreach ($linksgroup as $link){
+
+			//recuperation des groupses que user à crée
+			$group = $em->getRepository('GedBundle:Groupe')->findOneBy( array(
+				'id'=>$link->getIdgroup(),
+				'idcreator'=>$iduser,
+			));
+			
+			if($group!=null){
+
+				$grpId = $group->getId();
+				$grpName = $group->getName();
+
+				$grptab [] = array(
+					'id'=>$grpId,
+					'name'=>$grpName,
+				);
+			}
+		}
+
+		//récupération des Category.
+        $categories = $em->getRepository('GedBundle:Category')->findAll();
+
+        //récuperation des sous-catégories.
+        $categoryTab = [];
+        foreach ($categories as $category) {
+
+            $categoryInfos = $em->getRepository('GedBundle:Souscategory')->findByIdcategory($category->getId());
+
+            if (!empty($categoryInfos)){
+
+                //On place les sous-catégorie dans un tableau si elle sont définie.
+                foreach ($categoryInfos as $categoryInfo) {
+
+                    $categoryName=$categoryInfo->getName();
+                    $categoryId=$categoryInfo->getIdcategory();
+                    $ssCategory=$categoryInfo->getId();
+            
+                    $categoryTab[] = array(
+                        'category' => $categoryName,
+                        'id' => $categoryId,
+                        'ssid'=>$ssCategory,
+                    );
+                }
+            }
+        }
+
+		//fonction d'upload 
+        $gedfiles = new Gedfiles();
+
+        $form = $this->createForm(GedfilesType::class, $gedfiles);
+        $form->handleRequest($request);
+
+        if ($form->isSubmitted() && $form->isValid()) {            
+            $originalgetting=$form->getNormData()->getPath('originalName');
+            $originalname=$originalgetting->getClientOriginalName();
+
+            $file = $gedfiles->getPath();
+            
+            $type = $file->guessExtension();
+
+            $fileName = md5(uniqid()).'.'.$file->guessExtension();
+
+            $pathDir = $this->container->getParameter('kernel.root_dir').'/../web/uploads';
+            
+            if($type==null){
+                $type = 'txt';
+            }
+
+            $file->move($pathDir, $fileName);
+
+            $gedfiles->setType($type);
+            $gedfiles->setPath($fileName);
+            $gedfiles->setIdowner($user->getId());
+            $gedfiles->setIdCategory(1);
+            $gedfiles->setDate( new DateTime());
+            $gedfiles->setOriginalname($originalname);
+
+            $em->persist($gedfiles);
+            $em->flush();
+
+            $this->get('session')->getFlashBag()->set('success', 'Fichier envoyé');
+
+            return $this->redirectToRoute('ged_homepage');
+        }
+
+		return $this->render('GedBundle::group.html.twig',array(
+			'form'=>$form->createView(),
+			'user'=>$user,
+			'grptab'=>$grptab,
+			'categories' => $categories,
+            'categoryTab'=> $categoryTab,
+		));
+	}
+
 	//fonction de la page de creation de groupe (affichage du formulaire /creation)
 	public function createGroupAction (Request $request)
 	{
