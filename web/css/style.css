@@ -418,9 +418,10 @@ tr:hover td{
 }
 
 /*----------------------------------paramètres fichiers -------------------------------*/
-.table{
-	/*text-align: center;*/
+#tag_auto h5{
+	margin: 3px;
 }
+
 
 .table td:nth-child(1){
 	 text-align:left;
