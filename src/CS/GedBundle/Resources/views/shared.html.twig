@@ -21,11 +21,18 @@
 			{% if tabpart is defined %}
 				{% for partaged in tabpart %}
 					<tr>
-						<td>{% if partaged['type'] == 'jpeg' or partaged['type'] == 'jpg' or partaged['type'] == 'png' or partaged['type'] == 'gif' %}
-							<span class="glyphicon glyphicon-picture" aria-hidden="true"></span>
-						{% else %}
-							Ico
-						{% endif %}
+						<td>
+							{% if partaged['type'] == 'jpeg' or partaged['type'] == 'jpg' or partaged['type'] == 'png' or partaged['type'] == 'gif' %}
+								<span class="glyphicon glyphicon-picture" aria-hidden="true"></span>
+							{% elseif partaged['type'] == 'txt' or partaged['type'] == 'doc' %}
+								<span class="glyphicon glyphicon-file" aria-hidden="true"></span>
+							{% elseif partaged['type'] == 'mp4' or partaged['type'] == 'avi' %}
+								<span class="glyphicon glyphicon-film" aria-hidden="true"></span>
+							{% elseif partaged['type'] == 'mp3' or partaged['type'] == 'wave' %}
+								<span class=" glyphicon glyphicon-music" aria-hidden="true"></span>
+							{% else %}
+								Ico
+							{% endif %}
 						</td>
 						<td><a data-toggle="tooltip" data-placement="bottom" title="
 							Partagé avec: {% if partaged['groupMemberName'] != 1 %}

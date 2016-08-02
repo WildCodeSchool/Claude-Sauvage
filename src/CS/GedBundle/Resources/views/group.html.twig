@@ -2,7 +2,7 @@
 {% block body %}
 {% include "GedBundle::nav.html.twig" %}
 {% include "GedBundle::search.html.twig" %}
-<div class="col-md-10 tab-cel ">
+<div class="col-md-4 tab-cel col-md-offset-3">
 	<h3>Mes groupes</h3>
 	<table class="table compact stripe" id="table">
 		<thead> 
@@ -36,13 +36,11 @@ $(document).ready(function() {
 		"columnDefs": [
 			{ 
 				"orderable": false,
-				"targets": [3,4]
+				"targets": [1]
 			},
-			{
-                "targets": [ 5 ],
-                "visible": false,
-                "searchable": false
-            },],
+		
+			{ "width": "20%", "targets": 1 },
+		],
 	} );
 } );
 </script>

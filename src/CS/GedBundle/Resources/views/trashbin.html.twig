@@ -5,8 +5,7 @@
 		<h3 style="text-align:center;">Poubelle</h3>
 		<table class="table compact stripe" id="table">
 			<thead> 
-				<tr> 
-					<th></th> 
+				<tr>
 					<th>Nom du fichier</th>
 					<th>Récupérer</th>
 					<th>Supprimer définitivement</th>
@@ -31,7 +30,13 @@ $(document).ready(function() {
 		"paging": false,
 		"info": false,
 		"sDom": '<"H"lr>t<"F"ip>',
-		"order": [[0, "asc"]]
+		"order": [[0, "asc"]],
+		"columnDefs": [
+			{ 
+				"orderable": false,
+				"targets": [1,2]
+			},
+		],
 	} );
 });
 	</script>

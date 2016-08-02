@@ -25,6 +25,12 @@
 						<td>
 							{% if myfiles['type'] == 'jpeg' or myfiles['type'] == 'jpg' or myfiles['type'] == 'png' or myfiles['type'] == 'gif' %}
 								<span class="glyphicon glyphicon-picture" aria-hidden="true"></span>
+							{% elseif myfiles['type'] == 'txt' or myfiles['type'] == 'doc' %}
+								<span class="glyphicon glyphicon-file" aria-hidden="true"></span>
+							{% elseif myfiles['type'] == 'mp4' or myfiles['type'] == 'avi' %}
+								<span class="glyphicon glyphicon-film" aria-hidden="true"></span>
+							{% elseif myfiles['type'] == 'mp3' or myfiles['type'] == 'wave' %}
+								<span class=" glyphicon glyphicon-music" aria-hidden="true"></span>
 							{% else %}
 								Ico
 							{% endif %}
@@ -76,8 +82,14 @@
 					{% if groupfiles['idowner'] != user.id %}
 						<tr> 
 							<td>
-								{% if groupfiles['type'] == 'jpeg' or groupfiles['type'] == 'jpg' or groupfiles['type'] == 'png' or groupfiles['type'] == 'gif' %}
+								{% if groupfiles['type'] == 'jpeg' or groupfiles['type'] == 'jpg' or groupfiles['type'] == 'png' or myfiles['type'] == 'gif' %}
 									<span class="glyphicon glyphicon-picture" aria-hidden="true"></span>
+								{% elseif groupfiles['type'] == 'txt' or groupfiles['type'] == 'doc' %}
+									<span class="glyphicon glyphicon-file" aria-hidden="true"></span>
+								{% elseif groupfiles['type'] == 'mp4' or groupfiles['type'] == 'avi' %}
+									<span class="glyphicon glyphicon-film" aria-hidden="true"></span>
+								{% elseif groupfiles['type'] == 'mp3' or groupfiles['type'] == 'wave' %}
+									<span class=" glyphicon glyphicon-music" aria-hidden="true"></span>
 								{% else %}
 									Ico
 								{% endif %}

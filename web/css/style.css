@@ -130,7 +130,7 @@ select:focus > option:checked {
 }
 
 .nav-left p{
-	margin: 3px;
+	margin: 6px;
 }
 .nav-left strong{
 	padding-left: 10px;
@@ -418,6 +418,13 @@ tr:hover td{
 }
 
 /*----------------------------------paramètres fichiers -------------------------------*/
+.table{
+	/*text-align: center;*/
+}
+
+.table td:nth-child(1){
+	 text-align:left;
+}
 
 .tagdisplay
 {
@@ -431,6 +438,7 @@ tr:hover td{
 	position: absolute;
 	z-index: 2;
 	margin-top:-3px;
+	left:6px;
 }
 
 
@@ -442,27 +450,6 @@ tr:hover td{
 	padding:2px 0;
 	margin-bottom:5px;
 }
-
-
-
-#auto{
-	background-color: #fff;
-	
-	margin-top: 33px;
-	
-	padding:0;
-}
-
-
-
-
-
-
-
-
-
-
-
 
 .parameters-tag
 {

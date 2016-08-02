@@ -21,11 +21,18 @@
             {% if uploads is defined %}
                 {% for upload in uploads %}
                     <tr>
-                        <td>{% if upload['type'] == 'jpeg' or upload['type'] == 'jpg' or upload['type'] == 'png' or upload['type'] == 'gif' %}
-                            <span class="glyphicon glyphicon-picture" aria-hidden="true"></span>
-                        {% else %}
-                            Ico
-                        {% endif %}
+                        <td>
+                            {% if upload['type'] == 'jpeg' or upload['type'] == 'jpg' or upload['type'] == 'png' or upload['type'] == 'gif' %}
+                                <span class="glyphicon glyphicon-picture" aria-hidden="true"></span>
+                            {% elseif upload['type'] == 'txt' or upload['type'] == 'doc' %}
+                                <span class="glyphicon glyphicon-file" aria-hidden="true"></span>
+                            {% elseif upload['type'] == 'mp4' or upload['type'] == 'avi' %}
+                                <span class="glyphicon glyphicon-film" aria-hidden="true"></span>
+                            {% elseif upload['type'] == 'mp3' or upload['type'] == 'wave' %}
+                                <span class=" glyphicon glyphicon-music" aria-hidden="true"></span>
+                            {% else %}
+                                Ico
+                            {% endif %}
                         </td>
                         <td><a data-toggle="tooltip" data-placement="bottom" title="
                             Partagé avec: {% if upload['groupMemberName'] != 1 %}

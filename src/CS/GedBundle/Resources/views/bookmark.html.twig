@@ -22,11 +22,18 @@
 			{% if tabfav is defined %}
 				{% for favorite in tabfav %}
 					<tr> 
-						<td>{% if favorite['type'] == 'jpeg' or favorite['type'] == 'jpg' or favorite['type'] == 'png' or favorite['type'] == 'gif' %}
-							<span class="glyphicon glyphicon-picture" aria-hidden="true"></span>
-						{% else %}
-							Ico
-						{% endif %}
+						<td>
+							{% if favorite['type'] == 'jpeg' or favorite['type'] == 'jpg' or favorite['type'] == 'png' or myfiles['type'] == 'gif' %}
+								<span class="glyphicon glyphicon-picture" aria-hidden="true"></span>
+							{% elseif favorite['type'] == 'txt' or favorite['type'] == 'doc' %}
+								<span class="glyphicon glyphicon-file" aria-hidden="true"></span>
+							{% elseif favorite['type'] == 'mp4' or favorite['type'] == 'avi' %}
+								<span class="glyphicon glyphicon-film" aria-hidden="true"></span>
+							{% elseif favorite['type'] == 'mp3' or favorite['type'] == 'wave' %}
+								<span class=" glyphicon glyphicon-music" aria-hidden="true"></span>
+							{% else %}
+								Ico
+							{% endif %}
 						</td>
 						<td><a data-toggle="tooltip" data-placement="bottom" title="
 								Partagé avec: {% if favorite['groupMemberName'] != 1 %}

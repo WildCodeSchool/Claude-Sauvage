@@ -130,24 +130,8 @@ $(document).ready(function(){
 			$("#tag_auto").css("display", "none");
 		}
 	});
-	
-	//fondu au clique en dehors du cadre.
-	// var tag_auto = $('#tag_auto');
-	// var addtagfield = $('#addtagfield');
-
-	// $(document.body).click(function(e) {
-	// 	// Si ce n'est pas #ma_div ni un de ses enfants
-	// 	if ( $(e.target).is(addtagfield) ){
-			
-	// 	}
-	// 	else if( !$(e.target).is(tag_auto)&& !$.contains(tag_auto[0],e.target) ) {
-	// 		// masque #ma_div en fondu
-	// 		tag_auto.fadeOut();	
-	// 	}
-	// });
 
 	var tag_auto = $('#tag_auto');
-	// var test = $('#addtagfield');
 
 	$('html').click(function(event){
 		if(event.target.id == 'addtagfield') {

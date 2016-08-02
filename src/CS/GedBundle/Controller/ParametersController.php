@@ -293,8 +293,6 @@ class ParametersController extends Controller
 
         $searchRecherche=$request->request->get('recherche');
 
-        //RECHERCHE POUR L' UTILISATEUR - Fichiers
-
         //RECHERCHE POUR L' UTILISATEUR - Tags
 
         //on recherche tout les tag ayant la valeur
@@ -359,7 +357,7 @@ class ParametersController extends Controller
             }
         }
 
-        //RECHERCHE POUR LES GROUPES - Fichiers & Tag
+        //RECHERCHE POUR LES GROUPES - Tag
 
         //on recherche dans quels groupe l'utilisateur est
         $linkGroups = $em->getRepository('GedBundle:Linkgroup')->findByIduser($user);
