@@ -7,3 +7,11 @@ ged_admin_dashboard:
 ged_addcategory:
     path:    /newcategory
     defaults: { _controller: GedBundle:Admin:addCategory }
+
+ged_removecategory:
+    path:    /removecategory
+    defaults: { _controller: GedBundle:Admin:removeCategory }
+
+ged_removeUser:
+    path:    /removeuser
+    defaults: { _controller: GedBundle:Admin:removeUser }

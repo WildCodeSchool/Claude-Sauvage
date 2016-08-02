@@ -11,7 +11,7 @@ ged:
     prefix:   /ged
 gedadmin:
     resource: "@GedBundle/Resources/config/adminrouting.yml"
-    prefix:   /gedadmin
+    prefix:   /admin
 
 app:
     resource: "@AppBundle/Controller/"
@@ -19,7 +19,7 @@ app:
 
 # Import des route fos_user register
 register:
-    path:     /gedamin/register
+    path:     /admin/register
     defaults: { _controller: AppBundle:Registration:register }
 
 # Import des route fos_user login

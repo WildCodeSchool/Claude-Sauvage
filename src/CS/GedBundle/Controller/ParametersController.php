@@ -5,6 +5,7 @@ namespace CS\GedBundle\Controller;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Symfony\Component\HttpFoundation\JsonResponse;
+use Symfony\Component\HttpFoundation\RedirectResponse;
 use Symfony\Component\HttpFoundation\Request;
 use CS\GedBundle\Entity\Gedfiles;
 use CS\GedBundle\Form\GedfilesType;
@@ -26,103 +27,112 @@ class ParametersController extends Controller
         //récupération de l'entity manager et de l'utilisateur courant
 		$em = $this->getDoctrine()->getManager();
         $user = $this->getUser();
-        //recupération des categories et sous categories 
-        $category= $em->getRepository('GedBundle:Category')->findAll();
-        $souscategory=$em->getRepository('GedBundle:Souscategory')->findAll();
-        
-        $linktags = $em->getRepository('GedBundle:Linktag')->findByIdfile($id);
-        //compte des tags du fichier
-        foreach ($linktags as $linktag)
-        {
-            $tag=$em->getRepository('GedBundle:Gedtag')->findOneById($linktag->getIdtag());
-            $name=$tag->getName();
-            $tabtag[]=array(
-                'name'=>$name,
-                'idlinktag'=>$linktag->getId(),
-                );
-        }
-        if (empty($tabtag)) {
-            $tabtag=1;
-        }
-        if(empty($category))
-        {
-            $category=0;
-        }
-       if(empty($souscategory))
-        {
-            $souscategory=0;
-        }
-        //recupération du fichier et des tags
         $file = $em->getRepository('GedBundle:Gedfiles')->findOneById($id);
-        $filename=$file->getOriginalname();
-        $linktags = $em->getRepository('GedBundle:Linktag')->findByIdfile($id);
-        //compte des tags du fichier
-        //ajout de categories (recupération des champs contenant les noms)
-        $addcat= $request->request->get('addcat');
-        $addsscat= $request->request->get('addsscat');
-        
-        //ajout de categorie
-        if(!empty($addcat) && $addcat != 0)
+        if ($user->getId()==$file->getIdowner())
         {
-            $newcategory=$em->getRepository('GedBundle:Gedfiles')->findOneById($id);
-            $newcategory->setIdcategory($addcat);
-            $em->persist($newcategory);
-            $em->flush();
-        }
-        //ajout de sous categorie
-        if(!empty($addsscat) && $addsscat != 0)
-        {
-            $newsscategory=$em->getRepository('GedBundle:Gedfiles')->findOneById($id);
-            $newsscategory->setIdsouscategory($addsscat);
-            $em->persist($newsscategory);
-            $em->flush();
-        }
-
-
-        //fonction d'upload
-        $gedfiles = new Gedfiles();
-        $form = $this->createForm(GedfilesType::class, $gedfiles);
-        $form->handleRequest($request);
-
-        if ($form->isSubmitted() && $form->isValid()) {
+            //recupération des categories et sous categories 
+            $category= $em->getRepository('GedBundle:Category')->findAll();
+            $souscategory=$em->getRepository('GedBundle:Souscategory')->findAll();
             
-            $file = $gedfiles->getPath();
-            
-            $type = $file->guessExtension();
-
-            $fileName = md5(uniqid()).'.'.$file->guessExtension();
-
-            $pathDir = $this->container->getParameter('kernel.root_dir').'/../web/uploads';
-
-            if($type==null){
-                $type = 'txt';
+            $linktags = $em->getRepository('GedBundle:Linktag')->findByIdfile($id);
+            //compte des tags du fichier
+            foreach ($linktags as $linktag)
+            {
+                $tag=$em->getRepository('GedBundle:Gedtag')->findOneById($linktag->getIdtag());
+                $name=$tag->getName();
+                $tabtag[]=array(
+                    'name'=>$name,
+                    'idlinktag'=>$linktag->getId(),
+                    );
             }
+            if (empty($tabtag)) {
+                $tabtag=1;
+            }
+            if(empty($category))
+            {
+                $category=0;
+            }
+           if(empty($souscategory))
+            {
+                $souscategory=0;
+            }
+            //recupération du fichier et des tags
+            $file = $em->getRepository('GedBundle:Gedfiles')->findOneById($id);
+            $filename=$file->getOriginalname();
+            $linktags = $em->getRepository('GedBundle:Linktag')->findByIdfile($id);
+            //compte des tags du fichier
+            //ajout de categories (recupération des champs contenant les noms)
+            $addcat= $request->request->get('addcat');
+            $addsscat= $request->request->get('addsscat');
             
-            $file->move($pathDir, $fileName);
-
-            $gedfiles->setType($type);
-            $gedfiles->setPath($fileName);
-            $gedfiles->setIdowner($user->getId());
-            $gedfiles->setIdCategory(1);
-            $gedfiles->setDate( new DateTime());
-
-            $em->persist($gedfiles);
-            $em->flush();
-
-            $this->get('session')->getFlashBag()->set('success', 'Fichier envoyé');
-
-            return $this->redirectToRoute('ged_homepage');
+            //ajout de categorie
+            if(!empty($addcat) && $addcat != 0)
+            {
+                $newcategory=$em->getRepository('GedBundle:Gedfiles')->findOneById($id);
+                $newcategory->setIdcategory($addcat);
+                $em->persist($newcategory);
+                $em->flush();
+            }
+            //ajout de sous categorie
+            if(!empty($addsscat) && $addsscat != 0)
+            {
+                $newsscategory=$em->getRepository('GedBundle:Gedfiles')->findOneById($id);
+                $newsscategory->setIdsouscategory($addsscat);
+                $em->persist($newsscategory);
+                $em->flush();
             }
 
-        return $this->render('GedBundle::parameters.html.twig', array(
-            'form' => $form->createView(),
-            'user'=>$user,
-            'id'=>$id,
-            'categories'=>$category,
-            'souscategories'=>$souscategory,
-            'tabtag'=>$tabtag,
-            'filename'=>$filename,
-        ));
+            //fonction d'upload
+            $gedfiles = new Gedfiles();
+            $form = $this->createForm(GedfilesType::class, $gedfiles);
+            $form->handleRequest($request);
+
+            if ($form->isSubmitted() && $form->isValid()) {
+                
+                $file = $gedfiles->getPath();
+                
+                $type = $file->guessExtension();
+
+                $fileName = md5(uniqid()).'.'.$file->guessExtension();
+
+                $pathDir = $this->container->getParameter('kernel.root_dir').'/../web/uploads';
+
+                if($type==null){
+                    $type = 'txt';
+                }
+                
+                $file->move($pathDir, $fileName);
+
+                $gedfiles->setType($type);
+                $gedfiles->setPath($fileName);
+                $gedfiles->setIdowner($user->getId());
+                $gedfiles->setIdCategory(1);
+                $gedfiles->setDate( new DateTime());
+
+                $em->persist($gedfiles);
+                $em->flush();
+
+                $this->get('session')->getFlashBag()->set('success', 'Fichier envoyé');
+
+                return $this->redirectToRoute('ged_homepage');
+                }
+
+            return $this->render('GedBundle::parameters.html.twig', array(
+                'form' => $form->createView(),
+                'user'=>$user,
+                'id'=>$id,
+                'categories'=>$category,
+                'souscategories'=>$souscategory,
+                'tabtag'=>$tabtag,
+                'filename'=>$filename,
+            ));
+        }
+        else
+        {
+            $url = $this -> generateUrl('ged_homepage');
+            $response = new RedirectResponse($url);
+            return $response;
+        }
     }
     //fonction de suppression de tags (ajax)
     public function removeTagAction (Request $request)

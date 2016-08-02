@@ -126,6 +126,9 @@ class CategoryController extends Controller
 	    	//récuperation du nom original.
 	    	$nameFile=$myfile->getOriginalName();
 
+	    	//recup idowner
+	    	$idowner=$myfile->getIdowner();
+
 	    	//récuperation des favoris.
 	    	$bookmarkfile = $em->getRepository('GedBundle:Linkbookmark')->findBy(array('idfile'=>$myfile->getId(), 'iduser'=>$user->getId()));
 
@@ -205,6 +208,7 @@ class CategoryController extends Controller
 				    			'tagnames'=>$tabTags,
 				    			'comments'=>$nbCom,
 				    			'bookmark'=>$bookmarkfile,
+				    			'idowner'=>$idowner,
 	    					);
     	}
 

@@ -74,12 +74,12 @@ public function ticketAction(Request $request, Ticket $ticket, $id)
                 $content = $ticketcoms->getContent();
 
                 $commentsender= $em->getRepository('AppBundle:User')->findOneById($ticketcoms->getIdsender());
-                $username = $commentsender->getUsername();
+                $usernamecom = $commentsender->getUsername();
 
                 $commenttab[]=array(
                     'date'=>$date,
                     'content'=>$content,
-                    'username'=>$username,
+                    'usernamecom'=>$usernamecom,
                 );
             }
 

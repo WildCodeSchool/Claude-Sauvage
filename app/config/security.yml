@@ -34,4 +34,3 @@ security:
         - { path: ^/grc/com/, role: ROLE_COM }
         - { path: ^/ged, role: ROLE_USER }
         - { path: ^/grc, role: ROLE_USER }
-        - { path: ^/gedadmin, role: ROLE_ADMIN }

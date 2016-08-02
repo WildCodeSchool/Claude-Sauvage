@@ -1,7 +1,68 @@
 {% extends "GedBundle:admin:adminlayout.html.twig" %}
 {% block body %}
-{# liste des fichiers #}
-	{% for file in files %}
-		<p>{{ file.originalname }}</p>
-	{% endfor %}
+	{# debut modal userremove #}
+	<div class="modal fade" id="modal-removeuser" tabindex="-1" role="dialog" aria-labelledby="myModalLabel">
+		<div class="modal-dialog" role="document">
+			<div class="modal-content">
+				<div class="modal-header">
+					<button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+					<h4 class="modal-title" id="myModalLabel">Supprimer un utilisateur</h4>
+				</div>
+				<form action="{{ path('ged_removeUser') }}" method="post">
+					<div class="modal-body">
+						<p id="msgdelete"></p>
+						<input name="iduser" id="userinput" style="display:none"/>
+					</div>
+					<div class="modal-footer">
+						<button type="button" class="btn btn-default" data-dismiss="modal">Annuler</button>
+						<input type="submit" class="btn btn-default" id="removelink" value="Valider"/>
+					</div>
+				</form>
+			</div>
+		</div>
+	</div>
+	{# fin modal #}
+	{# liste des users #}
+	<div class="col-md-4 col-md-offset-4 admin-db-table">
+		<table class="table compact stripe" id="table">
+			<thead>
+				<tr>
+					<th>Id</th> 
+					<th>Nom d'utilisateur</th>
+					<th>Supprimer</th>
+				</tr>
+			</thead>
+			<tbody>
+				{% for otheruser in otherusers %}
+					<tr>
+							<td>{{ otheruser.id }}</td>
+						{% if otheruser.id == user.id %}
+							<td>{{ otheruser.username }} : Administrateur</td>
+							<td><span class="btn glyphicon glyphicon-ban-circle"></span></td>
+						{% else %}
+							<td>{{ otheruser.username }}</td>
+							<td><span data-toggle="modal" data-target="#modal-removeuser" class="btn glyphicon glyphicon-remove removeuserbtn" id="{{otheruser.id}}"></span></td>
+						{% endif %}
+					</tr>
+				{% endfor %}
+			</tbody>
+		</table>
+	</div>
+	<div class="col-md-4">
+	</div>
+	<script type="text/javascript">
+		// script de datatables : parametrage du tri du tableau 
+		$(document).ready(function() { 
+			$('table').DataTable( { 
+				"paging": false,
+				"info": false,
+				"sDom": '<"H"lr>t<"F"ip>',
+				"order": [[1, "asc"]]
+			} );
+		} );
+		$(function () {
+		  $('[data-toggle="tooltip"]').tooltip()
+		});
+	</script>
+	<script type="text/javascript" src="{{ asset('js/admin.js') }}"></script>
 {% endblock %}

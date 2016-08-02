@@ -1,7 +1,7 @@
 {% extends "GedBundle::layout.html.twig" %}
 {% block body %}
 	{% include "GedBundle::nav.html.twig" %}
-	<div class="col-md-10 tab-cel ">
+	<div class="col-md-5 col-md-offset-2 tab-cel ">
 		<h3 style="text-align:center;">Poubelle</h3>
 		<table class="table compact stripe" id="table">
 			<thead> 
@@ -31,7 +31,7 @@ $(document).ready(function() {
 		"paging": false,
 		"info": false,
 		"sDom": '<"H"lr>t<"F"ip>',
-		"order": [[1, "asc"]]
+		"order": [[0, "asc"]]
 	} );
 });
 	</script>

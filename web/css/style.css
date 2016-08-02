@@ -521,3 +521,46 @@ tr:hover td{
 	padding: 5px;
 	border-radius: 5px;
 }
+
+/*-------------------------Admin pages----------------------------------------*/
+
+.admin-db-table
+{
+	margin-top: 30px;
+	border-left: solid 1px black;
+	border-right: solid 1px black;
+}
+.admin-cat
+{
+	background-color: #FBA858;
+	margin-top: 20px;
+	padding:10px;
+	border-radius: 5px;
+}
+
+.styled-select-admin select {
+	background: transparent;
+	width: 231px;
+	padding: 5px;
+	font-size: 16px;
+	line-height: 1;
+	border: 0;
+	border-radius: 0;
+	height: 34px;
+	-webkit-appearance: none;
+}
+
+.styled-select-admin {
+	width: 231px;
+	height: 34px;
+	margin-left:29%;
+	overflow: hidden;
+	z-index: 1;
+	background: url(../img/down_arrow_select.jpg) no-repeat right #fff;
+	border: 1px solid #ccc;
+}
+.btn-admin
+{
+	margin-left: 40%;
+	width: 20%;
+}

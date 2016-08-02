@@ -1,39 +1,72 @@
 {% extends "GedBundle:admin:adminlayout.html.twig" %}
 {% block body %}
 	{# liste des categories #}
-	{% for category in categories %}
-		<ul>
-			<li><ul>{{ category.name }}
-			{% for sscategory in category.sscategories %}
-				<li>{{ sscategory.name }}</li>
-			{% endfor %}
-			</ul></li>
-		</ul>
-	{% endfor %}
+
+	<div class="col-md-3 admin-cat">
+		<h2 class="file-title">Liste des catégories</h2>
+		{% for category in categories %}
+			<ul>
+				<li>{{ category.name }}<ul>
+				{% for sscategory in category.sscategories %}
+					<li>{{ sscategory.name }}</li>
+				{% endfor %}
+				</ul></li>
+			</ul>
+		{% endfor %}
+	</div>
+
 {# 	formulaires de creation de categories et sous categories #}
-	<div>
+	<div class="col-md-4 admin-cat col-md-offset-1">
+		<h2 class="file-title">Ajouter une Catégorie</h2>
 		<form action="{{ path('ged_addcategory') }}" method="post" >
 			<label for="newcat">Nouvelle Categorie</label>
 			<input id="newcat" name="newcategory"/>
 			<input type="submit" value="Ajouter" class="btn btn-default"/>
 		</form>
 	</div>
-	<div>
+	<div class="col-md-4 admin-cat col-md-offset-1">
+		<h2 class="file-title">Ajouter une Sous-catégorie</h2>
 		<form action="{{ path('ged_addcategory') }}" method="post" >
 			<label for="catlist">Choisir une catégorie</label>
-			<select id="catlist" name="categoryselected" >
-				{% for category in categories %}
-					{% if category.id != 1 %}
-						<option>
-							{{ category.name }}
-						</option>
-					{% endif %}
-				{% endfor %}
-			</select>
+			<div class="styled-select-admin">
+				<select id="catlist" name="categoryselected">
+					{% for category in categories %}
+						{% if category.id != 1 %}
+							<option>
+								{{ category.name }}
+							</option>
+						{% endif %}
+					{% endfor %}
+				</select>
+			</div>
 			<br/>
 			<input name="newsscategory"/>
-			<input type="submit" value="ajouter une sous-catégorie" class="btn btn-default"/>
+			<input type="submit" value="Ajouter une sous-catégorie" class="btn btn-default"/>
+		</form>
+	</div>
+	<div class="col-md-4 admin-cat col-md-offset-4">
+		<h2 class="file-title">Supprimer une catégorie / sous-catégorie</h2>
+		<form action="{{ path('ged_removecategory') }}" method="post" >
+			<div class="styled-select-admin">
+		    	<select class="form-control search-select" id="categories" name="removecat">
+		    		<option value="0" >Toutes les catégories</option>
+		    		{% for categorie in categories %}
+						{% if categorie.name != 'brouillon' and categorie.name != 'Brouillon' and categorie.name != 'corbeille' %}
+						    <option value="{{ categorie.id }}" name="removecat">{{ categorie.name }}</option>
+						{% endif %}
+					{% endfor %}
+			    </select>
+			</div>
+	    	<div class="styled-select-admin">
+		    	<select class="form-control" name="removesscat" id="sscategories" disabled>
+				    <option value="0" name="removesscat">Toutes les sous-catégories</option>
+			    </select>
+			</div>
+			<input type="submit" value="Supprimer" class="btn btn-default btn-admin"/>
 		</form>
 	</div>
 {# 	fin des formulaires #}
+<script type="text/javascript">
+	var path =  "{{ path('ged_ajax_sscat_search') }}";
+</script>
 {% endblock %}
