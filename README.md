@@ -20,6 +20,8 @@ Ce projet comporte deux Bundles construits pour Symfony 2.8:
 
 -  Base de Données mySQL
 
+-  [Bootstrap](http://getbootstrap.com/)
+
 
 # Installation
 
@@ -41,20 +43,50 @@ $ cd Claude-Sauvage/
 
 $ composer install
 
-$ php app/console doctrine:database:create
-
 $ composer update
 ```
 
---> construire la base de données
+--> mettre à jour la base de données
 
 ```
 $ php app/console doctrine:schema:update --force
+```
+
+--> créer la catégorie "brouillon"
+
+```
+$ ged:init
 ```
 
 ### Gestion des droits
 
 
 ```
-sudo chmod 777 web/uploads/
+$ sudo chmod 777 -R web/uploads/
 ```
+
+--> créer un administrateur
+
+```
+$ fos:user:create adminuser --super-admin
+```
+
+#Informations utiles
+
+### À propos de FOS_USER
+
+Le bundle FOS_USER de ce projet à été mis en place dans AppBundle, les appels sont donc effectués vis à vis de ce bundle.
+
+### Dépendances des Bundles GED/GRC
+
+Les deux Bundles ont été conçus pour être le moins dépendant possible.
+
+Ils nécessitent cependant des fichiers de configuration:
+
+- dans ./app/config/ 
+
+`routing.yml` , `security.yml`
+
+- dans ./web/
+
+les dossiers css/ fonts/ img/ js/ uploads/
