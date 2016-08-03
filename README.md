@@ -20,6 +20,8 @@ Ce projet comporte deux Bundles construits pour Symfony 2.8:
 
 -  Base de Données mySQL
 
+-  [Bootstrap](http://getbootstrap.com/)
+
 
 # Installation
 
