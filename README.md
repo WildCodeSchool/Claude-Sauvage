@@ -83,7 +83,7 @@ Ils nécessitent cependant des fichiers de configuration:
 
 - dans ./app/config/ 
 
-'routing.yml' , 'security.yml'
+`routing.yml` , `security.yml`
 
 - dans ./web/
 
