@@ -41,20 +41,37 @@ $ cd Claude-Sauvage/
 
 $ composer install
 
-$ php app/console doctrine:database:create
-
 $ composer update
 ```
 
---> construire la base de données
+--> mettre à jour la base de données
 
 ```
 $ php app/console doctrine:schema:update --force
+```
+
+--> créer la catégorie 'brouillon'
+
+```
+ged:init
 ```
 
 ### Gestion des droits
 
 
 ```
-sudo chmod 777 web/uploads/
+$ sudo chmod 777 web/uploads/
 ```
+
+--> créer un administrateur
+
+```
+$ fos:user:create adminuser --super-admin
+```
+
+#Informations utiles
+
+### À propos de FOS_USER
+
+le bundle FOS_USER de ce projet à été mis en place dans AppBundle, les appels sont donc effectués vis à vis de ce bundle.
+

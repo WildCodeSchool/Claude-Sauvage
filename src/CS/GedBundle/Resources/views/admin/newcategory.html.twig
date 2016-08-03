@@ -1,18 +1,24 @@
 {% extends "GedBundle:admin:adminlayout.html.twig" %}
 {% block body %}
 	{# liste des categories #}
-
 	<div class="col-md-3 admin-cat">
 		<h2 class="file-title">Liste des catégories</h2>
+		<ol>
 		{% for category in categories %}
-			<ul>
-				<li>{{ category.name }}<ul>
-				{% for sscategory in category.sscategories %}
-					<li>{{ sscategory.name }}</li>
-				{% endfor %}
-				</ul></li>
-			</ul>
+				<li>
+					{% if category.name == 'brouillon' %}
+						{{ category.name }}
+					{% else %}
+						{{ category.name }}
+					{% endif %}
+					<ol>
+						{% for sscategory in category.sscategories %}
+							<li>{{ sscategory.name }}</li>
+						{% endfor %}
+					</ol>
+				</li>
 		{% endfor %}
+		</ol>
 	</div>
 
 {# 	formulaires de creation de categories et sous categories #}
