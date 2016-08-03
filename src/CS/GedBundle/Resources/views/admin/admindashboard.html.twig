@@ -38,7 +38,7 @@
 							<td>{{ otheruser.id }}</td>
 						{% if otheruser.id == user.id %}
 							<td>{{ otheruser.username }} : Administrateur</td>
-							<td><span class="btn glyphicon glyphicon-ban-circle"></span></td>
+							<td><span class="btn glyphicon glyphicon-ban-circle disabled"></span></td>
 						{% else %}
 							<td>{{ otheruser.username }}</td>
 							<td><span data-toggle="modal" data-target="#modal-removeuser" class="btn glyphicon glyphicon-remove removeuserbtn" id="{{otheruser.id}}"></span></td>
