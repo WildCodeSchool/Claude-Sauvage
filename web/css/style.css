@@ -35,7 +35,8 @@
 
 .glyphicon-plus-user{
 	font-size:10px;
-	top:0px;
+	top: -1px;
+	right: -5px;
 }
 
 /* --------------------------------- flashbag alert ---------------------------------*/
