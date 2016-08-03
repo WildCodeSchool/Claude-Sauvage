@@ -60,7 +60,7 @@ $ ged:init
 
 
 ```
-$ sudo chmod 777 web/uploads/
+$ sudo chmod 777 -R web/uploads/
 ```
 
 --> créer un administrateur
@@ -73,5 +73,18 @@ $ fos:user:create adminuser --super-admin
 
 ### À propos de FOS_USER
 
-le bundle FOS_USER de ce projet à été mis en place dans AppBundle, les appels sont donc effectués vis à vis de ce bundle.
+Le bundle FOS_USER de ce projet à été mis en place dans AppBundle, les appels sont donc effectués vis à vis de ce bundle.
 
+### Dépendances des Bundles GED/GRC
+
+Les deux Bundles ont été conçus pour être le moins dépendant possible.
+
+Ils nécessitent cependant des fichiers de configuration:
+
+- dans ./app/config/ 
+
+'routing.yml' , 'security.yml'
+
+- dans ./web/
+
+les dossiers css/ fonts/ img/ js/ uploads/
