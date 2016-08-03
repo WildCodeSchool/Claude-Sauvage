@@ -50,10 +50,10 @@ $ composer update
 $ php app/console doctrine:schema:update --force
 ```
 
---> créer la catégorie 'brouillon'
+--> créer la catégorie "brouillon"
 
 ```
-ged:init
+$ ged:init
 ```
 
 ### Gestion des droits
